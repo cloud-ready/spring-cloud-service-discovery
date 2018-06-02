@@ -8,7 +8,7 @@
 version: '2.1'
 services:
   eureka-peer1.local:
-    image: ${DOCKER_REGISTRY:-coloudready}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
+    image: ${DOCKER_REGISTRY:-cloudready}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
     restart: always
     command: []
     container_name: eureka-peer1.local
@@ -39,14 +39,14 @@ services:
     - SERVER_PORT=8761
     - SPRING_APPLICATION_NAME=eureka-cluster
     - SPRING_CLOUD_CLIENT_HOSTNAME=eureka-peer1.local
-    - SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS}
+    - SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.11}
     - SPRING_PROFILES_ACTIVE=development.env,port_nonsecure,peer_awareness
     #extra_hosts:
-    #- "eureka-peer1.local:${HOST_IP_ADDRESS}"
-    #- "eureka-peer2.local:${HOST_IP_ADDRESS}"
-    #- "eureka-peer3.local:${HOST_IP_ADDRESS}"
+    #- "eureka-peer1.local:${HOST_IP_ADDRESS:-172.16.238.11}"
+    #- "eureka-peer2.local:${HOST_IP_ADDRESS:-172.16.238.12}"
+    #- "eureka-peer3.local:${HOST_IP_ADDRESS:-172.16.238.13}"
   eureka-peer2.local:
-    image: ${DOCKER_REGISTRY:-home1oss}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
+    image: ${DOCKER_REGISTRY:-cloudready}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
     restart: always
     command: []
     container_name: eureka-peer2.local
@@ -77,14 +77,14 @@ services:
     - SERVER_PORT=8762
     - SPRING_APPLICATION_NAME=eureka-cluster
     - SPRING_CLOUD_CLIENT_HOSTNAME=eureka-peer2.local
-    - SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS}
+    - SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.12}
     - SPRING_PROFILES_ACTIVE=development.env,port_nonsecure,peer_awareness
     #extra_hosts:
-    #- "eureka-peer1.local:${HOST_IP_ADDRESS}"
-    #- "eureka-peer2.local:${HOST_IP_ADDRESS}"
-    #- "eureka-peer3.local:${HOST_IP_ADDRESS}"
+    #- "eureka-peer1.local:${HOST_IP_ADDRESS:-172.16.238.11}"
+    #- "eureka-peer2.local:${HOST_IP_ADDRESS:-172.16.238.12}"
+    #- "eureka-peer3.local:${HOST_IP_ADDRESS:-172.16.238.13}"
   eureka-peer3.local:
-    image: ${DOCKER_REGISTRY:-home1oss}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
+    image: ${DOCKER_REGISTRY:-cloudready}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
     restart: always
     command: []
     container_name: eureka-peer3.local
@@ -115,12 +115,12 @@ services:
     - SERVER_PORT=8763
     - SPRING_APPLICATION_NAME=eureka-cluster
     - SPRING_CLOUD_CLIENT_HOSTNAME=eureka-peer3.local
-    - SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS}
+    - SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.13}
     - SPRING_PROFILES_ACTIVE=development.env,port_nonsecure,peer_awareness
     #extra_hosts:
-    #- "eureka-peer1.local:${HOST_IP_ADDRESS}"
-    #- "eureka-peer2.local:${HOST_IP_ADDRESS}"
-    #- "eureka-peer3.local:${HOST_IP_ADDRESS}"
+    #- "eureka-peer1.local:${HOST_IP_ADDRESS:-172.16.238.11}"
+    #- "eureka-peer2.local:${HOST_IP_ADDRESS:-172.16.238.12}"
+    #- "eureka-peer3.local:${HOST_IP_ADDRESS:-172.16.238.13}"
 
 volumes:
   volume-eureka-peer1.local: {}

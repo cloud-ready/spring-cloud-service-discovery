@@ -4,11 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!--<parent>-->
-    <!--<groupId>ai.advance</groupId>-->
-    <!--<artifactId>advai-maven-build-java8</artifactId>-->
-    <!--<version>0.0.1-SNAPSHOT</version>-->
-    <!--</parent>-->
     <parent>
         <groupId>cn.home1</groupId>
         <artifactId>maven-build-java8</artifactId>
@@ -17,6 +12,7 @@
 
     <artifactId>spring-cloud-eureka-server</artifactId>
     <description>spring-cloud-eureka-server</description>
+    <!--<groupId>cn.home1</groupId>-->
     <name>spring-cloud-eureka-server</name>
     <packaging>jar</packaging>
     <url>https://github.com/cloud-ready/spring-cloud-eureka-server</url>
@@ -39,7 +35,8 @@
     <properties>
         <spring-boot.version>1.5.12.RELEASE</spring-boot.version>
 
-
+        <repositories.releases.updatePolicy>always</repositories.releases.updatePolicy>
+        <repositories.snapshots.updatePolicy>always</repositories.snapshots.updatePolicy>
     </properties>
 
     <build>
@@ -188,4 +185,14 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>OSSRH-snapshots</id>
+            <name>central snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <releases><enabled>false</enabled></releases>
+            <snapshots><enabled>true</enabled><updatePolicy>${repositories.snapshots.updatePolicy}</updatePolicy></snapshots>
+        </repository>
+    </repositories>
 </project>

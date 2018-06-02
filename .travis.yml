@@ -1,0 +1,46 @@
+
+addons:
+  apt:
+    packages:
+    - aria2
+    #- gnupg
+    - gnupg2
+    - graphviz
+    - openssl
+before_install:
+- aria2c --file-allocation=none -c -x 10 -s 10 -m 0 --console-log-level=notice --log-level=notice --summary-interval=0 -o apache-maven-3.5.3-bin.zip https://archive.apache.org/dist/maven/maven-3/3.5.3/binaries/apache-maven-3.5.3-bin.zip && unzip -qq apache-maven-3.5.3-bin.zip
+- export M2_HOME=$PWD/apache-maven-3.5.3
+- export PATH=$M2_HOME/bin:$PATH
+branches:
+  only:
+  - master
+  - develop
+  - /^feature\/.*$/
+  - /^hotfix\/.*$/
+  - /^release\/.*$/
+  - /^v\d+\.\d+(\.\d+)?(-\S*)?/
+cache:
+  directories:
+  - "$HOME/.cache"
+  - "$HOME/.gradle"
+  - "$HOME/.m2"
+  - "$HOME/.sonar/cache"
+
+dist: trusty
+env:
+  global:
+  # i.e. CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/master/src/main/ci-script/lib_ci.sh
+  - CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/master/src/main/ci-script/lib_ci.sh
+  - CI_OPT_INFRASTRUCTURE=opensource
+  - MAVEN_SKIP_RC=true
+group: edge
+install: true
+jdk:
+- oraclejdk8
+#- oraclejdk9
+language: java
+script:
+- bash ci.sh mvn clean install sonar:sonar site deploy site-deploy
+services:
+- docker
+sudo: required

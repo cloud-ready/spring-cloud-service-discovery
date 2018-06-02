@@ -8,7 +8,7 @@
 version: '2.1'
 services:
   eureka.local:
-    image: ${DOCKER_REGISTRY:-coloudready}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
+    image: ${DOCKER_REGISTRY:-cloudready}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
     restart: always
     command: []
     container_name: ${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
