@@ -1,0 +1,48 @@
+# Run local standalone node
+#
+# edit '/etc/hosts', add following lines:
+# 127.0.0.1 eureka.local
+
+
+
+version: '2.1'
+services:
+  eureka.local:
+    image: ${DOCKER_REGISTRY:-coloudready}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
+    restart: always
+    command: []
+    container_name: ${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
+    networks:
+    - oss-network
+    ports:
+    - "${EUREKA_INSTANCE_NONSECUREPORT:-8761}:8761"
+    volumes:
+    - volume-eureka:/root/.data
+    - volume-eureka:/tmp
+    environment:
+    - EUREKA_CLIENT_FETCHREGISTRY=false
+    - EUREKA_CLIENT_REGISTERWITHEUREKA=false
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka.local:${SERVER_PORT:-8761}/eureka/
+    - EUREKA_INSTANCE_HOSTNAME=${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
+    #- EUREKA_INSTANCE_IP_ADDRESS=${HOST_IP_ADDRESS:-127.0.0.1}
+    - EUREKA_INSTANCE_PREFER_IP_ADDRESS=${EUREKA_INSTANCE_PREFER_IP_ADDRESS:-false}
+    - EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT=${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:-1}
+    - EUREKA_INSTANCE_NONSECUREPORT=${EUREKA_INSTANCE_NONSECUREPORT:-8761}
+    - PEER=standalone
+    - SECURITY_BASIC_ENABLED=${SECURITY_BASIC_ENABLED:-false}
+    - SECURITY_USER_NAME=${SECURITY_USER_NAME:-user}
+    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-user_pass}
+    - SERVER_PORT=${SERVER_PORT:-8761}
+    - SPRING_APPLICATION_NAME=eureka-standalone
+    - SPRING_CLOUD_CLIENT_HOSTNAME=${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
+    #- SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS:-127.0.0.1}
+    - SPRING_PROFILES_ACTIVE=development.env,port_nonsecure,standalone
+
+volumes:
+  volume-eureka: {}
+
+networks:
+  default:
+    external: true
+    name: oss-network

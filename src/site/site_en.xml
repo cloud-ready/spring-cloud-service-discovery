@@ -1,0 +1,38 @@
+<!-- do not ref to parent, can not find parent's site_en.xml on maven central's staging repository -->
+<!-- see: https://tcollignon.github.io/2016/10/24/Unable-to-locate-site-descriptor-maven-site-plugin-problem.html -->
+<!-- see: http://maven.apache.org/plugins/maven-site-plugin/maven-3.html#Site_descriptor_attachment -->
+<project name="spring-cloud-eureka-server" combine.self="override">
+
+    <bannerLeft>
+        <name>${project.name}</name>
+    </bannerLeft>
+
+    <!--
+    https://maven.apache.org/plugins/maven-site-plugin/examples/sitedescriptor.html
+    https://maven.apache.org/skins/index.html
+    http://maven.apache.org/skins/maven-fluido-skin/
+    https://github.com/apache/maven-skins/blob/trunk/maven-fluido-skin/src/site/site.xml
+    -->
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.5</version>
+    </skin>
+
+    <custom>
+        <fluidoSkin>
+            <topBarEnabled>true</topBarEnabled>
+            <sideBarEnabled>true</sideBarEnabled>
+            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+        </fluidoSkin>
+    </custom>
+
+    <body>
+        <!--menu ref="parent" /-->
+        <menu name="DOCUMENTATION">
+            <item href="README.html" name="README" />
+        </menu>
+        <menu ref="modules" />
+        <menu ref="reports" inherit="bottom" />
+    </body>
+</project>

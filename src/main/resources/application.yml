@@ -1,0 +1,599 @@
+
+logging.level.: ${LOGGING_LEVEL_:INFO}
+logging:
+  file: ${LOGGING_FILE:eureka}.log
+  path: ${LOGGING_PATH:${user.home}/.data/eureka/logs}
+  level:
+    jndi: ${LOGGING_LEVEL_:INFO}
+    org.springframework.beans.factory.annotation.InjectionMetadata: ${LOGGING_LEVEL_:INFO}
+    org.springframework.beans.factory.support.DefaultListableBeanFactory: ${LOGGING_LEVEL_:INFO}
+    org.springframework.core.env.MutablePropertySources: ${LOGGING_LEVEL_:INFO}
+    org.springframework.core.env.PropertySourcesPropertyResolver: ${LOGGING_LEVEL_:INFO}
+    org.springframework.jndi: ${LOGGING_LEVEL_:INFO}
+    org.springframework.core.type.classreading.AnnotationAttributesReadingVisitor: INFO
+    org.springframework.web.context.support.StandardServletEnvironment: ${LOGGING_LEVEL_:INFO}
+    springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator: WARN
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      base-path: /
+      # By default, only 'health' and 'info' are accessible via web
+      exposure:
+        include: '*'
+
+security:
+  basic:
+    enabled: ${SECURITY_BASIC_ENABLED:false}
+  user:
+    name: ${SECURITY_USER_NAME:user}
+    password: ${SECURITY_USER_PASSWORD:user_pass}
+
+server.port: ${SERVER_PORT:8761}
+
+spring.application:
+  # every instance in cluster must ues same spring.application.name
+  # Peer Awareness Mode: 'eureka-cluster'
+  # Standalone Mode: 'eureka-standalone'
+  name: ${SPRING_APPLICATION_NAME:eureka-standalone}
+  # bug: https://github.com/spring-cloud/spring-cloud-netflix/issues/788
+
+spring.cloud:
+  client.hostname: ${SPRING_CLOUD_CLIENT_HOSTNAME:} #:eureka.local
+  client.ip-address: ${SPRING_CLOUD_CLIENT_IP_ADDRESS:} #:127.0.0.1
+  inetutils:
+    ignoredInterfaces:
+    - docker0
+    - eno.*
+    - tun.*
+    - veth.*
+    - virbr.*
+
+eureka.client:
+#  # Indicates whether server can redirect a client request to a backup server/cluster.
+#  # If set to false, the server will handle the request directly,
+#  # If set to true, it may send HTTP redirect to the client, with a new server location.
+#  # default: false
+#  allow-redirects: false
+#  # Gets the list of availability zones (used in AWS data centers) for the region in which this instance resides.
+#  # The changes are effective at runtime at the next registry fetch cycle as specified by registryFetchIntervalSeconds.
+#  # default: <blank-value>
+#  #availability-zones:
+#  # Gets the name of the implementation which implements BackupRegistry to fetch the registry information
+#  # as a fall back option for only the first time when the eureka client starts.
+#  # This may be needed for applications which needs additional resiliency for registry information without which it cannot operate.
+#  # default: <blank-value>
+#  #backup-registry-impl:
+#  # Cache refresh executor exponential back off related property.
+#  # It is a maximum multiplier value for retry delay, in case where a sequence of timeouts occurred.
+#  # default: 10
+#  cache-refresh-executor-exponential-back-off-bound: 10
+#  # The thread pool size for the cacheRefreshExecutor to initialise with
+#  # default: 2
+#  cache-refresh-executor-thread-pool-size: 2
+#  # EurekaAccept name for client data accept
+#  # default: <blank-value>
+#  #client-data-accept:
+#  # This is a transient config and once the latest codecs are stable, can be removed (as there will only be one)
+#  # default: <blank-value>
+#  #decoder-name:
+#  # Indicates whether the eureka client should disable fetching of delta and should rather resort to getting the full registry information.
+#  # Note that the delta fetches can reduce the traffic tremendously, because the rate of change with the eureka server is normally much lower than the rate of fetches.
+#  # The changes are effective at runtime at the next registry fetch cycle as specified by registryFetchIntervalSeconds
+#  # default: false
+#  disable-delta: false
+#  # Get a replacement string for Dollar sign <code>$</code> during serializing/deserializing information in eureka server.
+#  # default: _-
+#  #dollar-replacement: _-
+#  # Flag to indicate that the Eureka client is enabled.
+#  # default: true
+#  #   client是否可用, 通常测试时不需要启用真实服务时需要
+#  enabled: true
+#  # This is a transient config and once the latest codecs are stable, can be removed (as there will only be one)
+#  # default: <blank-value>
+#  #encoder-name:
+#  # Get a replacement string for underscore sign <code>_</code> during serializing/deserializing information in eureka server.
+#  # default: __
+#  #escape-char-replacement: __
+#  # Indicates how much time (in seconds) that the HTTP connections to eureka server can stay idle before it can be closed.
+#  # In the AWS environment, it is recommended that the values is 30 seconds or less,
+#  # since the firewall cleans up the connection information after a few mins leaving the connection hanging in limbo
+#  # default: 30
+#  #   单位s, 一个到Eureka的Http连接在关闭前可以保持Idle状态的最大时间
+#  eureka-connection-idle-timeout-seconds: 30
+#  # default eureka
+#  eureka-server-u-r-l-context: eureka
+#  # Indicates how long to wait (in seconds) before a connection to eureka server needs to timeout.
+#  # Note that the connections in the client are pooled by org.apache.http.client.HttpClient and
+#  # this setting affects the actual connection creation and also the wait time to get the connection from the pool.
+#  # default: 5
+#  eureka-server-connect-timeout-seconds: 5
+#  # Gets the DNS name to be queried to get the list of eureka servers.
+#  # This information is not required if the contract returns the service urls by implementing serviceUrls.
+#  # The DNS mechanism is used when useDnsForFetchingServiceUrls is set to true and
+#  # the eureka client expects the DNS to configured a certain way so that it can fetch changing eureka servers dynamically.
+#  # The changes are effective at runtime.
+#  # default: <blank-value>
+#  #eureka-server-d-n-s-name:
+#  # Gets the port to be used to construct the service url to contact eureka server when the list of eureka servers come from the DNS.
+#  # This information is not required if the contract returns the service urls eurekaServerServiceUrls(String).
+#  # The DNS mechanism is used when useDnsForFetchingServiceUrls is set to true and
+#  # the eureka client expects the DNS to configured a certain way so that it can fetch changing eureka servers dynamically.
+#  # The changes are effective at runtime.
+#  # default: <blank-value>
+#  #eureka-server-port:
+#  # Indicates how long to wait (in seconds) before a read from eureka server needs to timeout.
+#  # default: 8
+#  #   单位s, 读数据超时时长
+#  eureka-server-read-timeout-seconds: 8
+#  # Gets the total number of connections that is allowed from eureka client to all eureka servers.
+#  # default: 200
+#  #   Client到Eureka的最大连接数
+#  eureka-server-total-connections: 200
+#  # Gets the total number of connections that is allowed from eureka client to a eureka server host.
+#  # default: 50
+#  #   Client到单个Eureka的最大链接数
+#  eureka-server-total-connections-per-host: 50
+#  # Gets the URL context to be used to construct the service url to contact eureka server when the list of eureka servers come from the DNS.
+#  # This information is not required if the contract returns the service urls from eurekaServerServiceUrls.
+#  # The DNS mechanism is used when useDnsForFetchingServiceUrls is set to true and
+#  # the eureka client expects the DNS to configured a certain way so that it can fetch changing eureka servers dynamically.
+#  # The changes are effective at runtime.
+#  # default: <blank-value>
+#  #eureka-server-u-r-l-context:
+#  # Indicates how often(in seconds) to poll for changes to eureka server information.
+#  # Eureka servers could be added or removed and this setting controls how soon the eureka clients should know about it.
+#  # default: 0
+#  #   单位s, 客户端拉取Eureka的状态变化(Instances增删)的时间间隔
+#  eureka-service-url-poll-interval-seconds: 0
+  # Indicates whether this client should fetch eureka registry information from eureka server.
+  # default: true
+  #   是否从Eureka获取集群Instances信息
+  fetch-registry: ${EUREKA_CLIENT_FETCHREGISTRY:false}
+#  # Comma separated list of regions for which the eureka registry information will be fetched.
+#  # It is mandatory to define the availability zones for each of these regions as returned by availabilityZones.
+#  # Failing to do so, will result in failure of discovery client startup.
+#  # default: <blank-value>
+#  #fetch-remote-regions-registry:
+#  # Indicates whether to get the applications after filtering the applications for instances with only InstanceStatus UP states.
+#  # default: true
+#  #   是否只给出处于存活(UP)状态的应用
+#  filter-only-up-instances: true
+#  # Indicates whether the content fetched from eureka server has to be compressed whenever it is supported by the server.
+#  # The registry information from the eureka server is compressed for optimum network traffic.
+#  # default: true
+#  #   如果Eureka服务端支持, Client从Eureka获取gzip压缩过的数据
+#  g-zip-content: true
+  # see: https://github.com/spring-cloud/spring-cloud-netflix/blob/v1.4.4.RELEASE/spring-cloud-netflix-eureka-client/src/main/java/org/springframework/cloud/netflix/eureka/EurekaDiscoveryClientConfiguration.java
+  healthcheck.enabled: true
+#  # Heartbeat executor exponential back off related property.
+#  # It is a maximum multiplier value for retry delay, in case where a sequence of timeouts occurred.
+#  # default: 10
+#  heartbeat-executor-exponential-back-off-bound: 10
+#  # The thread pool size for the heartbeatExecutor to initialise with
+#  # default: 2
+#  #   向Eureka发送心跳的线程池大小
+#  heartbeat-executor-thread-pool-size: 2
+#  # Indicates how long initially (in seconds) to replicate instance info to the eureka server
+#  # default: 40
+#  #   单位s, 启动后, 间隔多少时间后开始复制instance info到Eureka
+#  initial-instance-info-replication-interval-seconds: 40
+#  # Indicates how often(in seconds) to replicate instance changes to be replicated to the eureka server.
+#  # default: 30
+#  #   单位s, 每间隔多少时间复制instance info变动到Eureka
+#  instance-info-replication-interval-seconds: 30
+#  # Indicates whether to log differences between the eureka server and the eureka client in terms of registry information.
+#  # Eureka client tries to retrieve only delta changes from eureka server to minimize network traffic.
+#  # After receiving the deltas, eureka client reconciles the information from the server to verify it has not missed out some information.
+#  # Reconciliation failures could happen when the client has had network issues communicating to server.
+#  # If the reconciliation fails, eureka client gets the full registry information.
+#  # While getting the full registry information, the eureka client can log the differences between the client and the server and this setting controls that.
+#  # The changes are effective at runtime at the next registry fetch cycle as specified by registryFetchIntervalSecondsr
+#  # default: false
+#  #   是否记录Eureka与Client之间关于注册信息的差异
+#  log-delta-diff: false
+#  # If set to true, local status updates via ApplicationInfoManager will trigger on-demand (but rate limited) register/updates to remote eureka servers
+#  # default: true
+#  #   通过ApplicationInfoManager修改的状态变化是否更新到Eureka
+#  on-demand-update-status-change: true
+#  # Indicates whether or not this instance should try to use the eureka server in the same zone for latency and/or other reason.
+#  # Ideally eureka clients are configured to talk to servers in the same zone
+#  # The changes are effective at runtime at the next registry fetch cycle as specified by registryFetchIntervalSeconds
+#  # default: true
+#  #   倾向使用于Client处在同一Zone内的Eureka
+#  prefer-same-zone-eureka: true
+#  # default: <blank-value>
+#  #property-resolver:
+#  # Gets the proxy host to eureka server if any.
+#  # default: <blank-value>
+#  #proxy-host:
+#  # Gets the proxy password if any.
+#  # default: <blank-value>
+#  #roxy-password:
+#  # Gets the proxy port to eureka server if any.
+#  # default: <blank-value>
+#  #proxy-port:
+#  # Gets the proxy user name if any.
+#  # default: <blank-value>
+#  #proxy-user-name:
+  # Gets the region (used in AWS datacenters) where this instance resides.
+  # default: us-east-1
+  region: ${EUREKA_CLIENT_REGION:us-east-1}
+  # Indicates whether or not this instance should register its information with eureka server for discovery by others.
+  # In some cases, you do not want your instances to be discovered whereas you just want do discover other instances.
+  # default: true
+  #   是否将服务发布到Eureka
+  register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:false}
+#  # Indicates how often(in seconds) to fetch the registry information from the eureka server.
+#  # default: 30
+#  #   单位s, 间隔多长时间从Eureka获取注册信息
+#  registry-fetch-interval-seconds: 30
+  # Indicates whether the client is only interested in the registry information for a single VIP.
+  # default: <blank-value>
+  #registry-refresh-single-vip-address:
+  # Map of availability zone to list of fully qualified URLs to communicate with eureka server.
+  # Each value can be a single URL or a comma separated list of alternative locations.
+  # Typically the eureka server URLs carry protocol,host,port,context and version information if any.
+  # Example: http://ec2-256-156-243-129.compute-1.amazonaws.com:7001/eureka/
+  # The changes are effective at runtime at the next service url refresh cycle as specified by eurekaServiceUrlPollIntervalSeconds.
+  # default: <blank-value>
+  service-url:
+    #   Note:
+    #   Peer Awareness Mode: eureka.client.service-url.defaultZone's hosts affect DS Replicas value on dashboard
+    #   Standalone Mode: Notice that the serviceUrl is pointing to the same host as the local instance.
+    #   Note: must use 'defaultZone' here, otherwise cluster peers can not find replicas (can not see each other).
+    #   默认注册服务地址, 多个地址之间用','分隔
+    defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://${security.user.name}:${security.user.password}@${EUREKA_INSTANCE_HOSTNAME:eureka.local}:${server.port}/eureka/}
+#  # default: <blank-value>
+#  #transport:
+#  # Indicates whether the eureka client should use the DNS mechanism to fetch a list of eureka servers to talk to.
+#  # When the DNS name is updated to have additional servers, that information is used immediately after
+#  # the eureka client polls for that information as specified in eurekaServiceUrlPollIntervalSeconds.
+#  # Alternatively, the service urls can be returned serviceUrls, but the users should implement their own mechanism to return the updated list in case of changes.
+#  # The changes are effective at runtime.
+#  # default: false
+#  #use-dns-for-fetching-service-urls:
+
+#eureka.dashboard:
+#  # Flag to enable the Eureka dashboard. Default true.
+#  # default: true
+#  #   是否开启Dashboard
+#  enabled: true
+#  # The path to the Eureka dashboard (relative to the servlet path). Defaults to "/".
+#  # default: /
+#  #   Dashboard路径
+#  path: /
+
+eureka.instance:
+#  # Gets the AWS autoscaling group name associated with this instance.
+#  # This information is specifically used in an AWS environment to automatically put an instance out of service after the instance is launched and it has been disabled for traffic..
+#  # default: <blank-value>
+#  #a-s-g-name:
+#  # Get the name of the application group to be registered with eureka.
+#  # default: <blank-value>
+#  #   注册在Eureka上的应用组名
+#  #app-group-name:
+  # Get the name of the application to be registered with eureka.
+  # default: unknown
+  #   注册在Eureka上的应用名, 集群内全部结点必须一致
+  appname: ${SPRING_APPLICATION_NAME:eureka-standalone}
+#  # Returns the data center this instance is deployed. This information is used to get some AWS specific instance information if the instance is deployed in AWS.
+#  # default: <blank-value>
+#  #data-center-info:
+#  # default: []
+#  #default-address-resolution-order: []
+#  # default: <blank-value>
+#  #environment:
+#  # Gets the relative health check URL path for this instance.
+#  # The health check page URL is then constructed out of the hostname and the type of communication - secure or unsecure as specified in securePort and nonSecurePort.
+#  # It is normally used for making educated decisions based on the health of the instance - for example,
+#  # it can be used to determine whether to proceed deployments to an entire farm or stop the deployments without causing further damage.
+#  #   健康检查URL的ContextPath
+#  # default: /health
+#  health-check-url-path: /health
+#  # Gets the absolute home page URL for this instance.
+#  # The users can provide the homePageUrlPath if the home page resides in the same instance talking to eureka,
+#  # else in the cases where the instance is a proxy for some other server, users can provide the full URL.
+#  # If the full URL is provided it takes precedence.
+#  # It is normally used for informational purposes for other services to use it as a landing page.
+#  # The full URL should follow the format http://${eureka.hostname}:7001/ where the value ${eureka.hostname} is replaced at runtime.
+#  # default: <blank-value>
+#  #   实例URL
+#  #home-page-url:
+#  # Gets the relative home page URL Path for this instance. The home page URL is then constructed out of the hostName and the type of communication - secure or unsecure.
+#  # It is normally used for informational purposes for other services to use it as a landing page.
+#  # default: /
+#  #   实例URL的ContextPath
+#  home-page-url-path: /
+#  # default: <blank-value>
+#  #host-info:
+  # The hostname if it can be determined at configuration time (otherwise it will be guessed from OS primitives).
+  # default: <blank-value>
+  #   eureka.instance.hostname affect Status->instances's url href (not text) value on dashboard
+  hostname: ${EUREKA_INSTANCE_HOSTNAME:eureka.local}
+#  # default: <blank-value>
+#  #inet-utils:
+#  # Initial status to register with remote Eureka server.
+#  # default: <blank-value>
+#  #   注册到Eureka时的初始状态
+#  #initial-status:
+#  # Indicates whether the instance should be enabled for taking traffic as soon as it is registered with eureka.
+#  # Sometimes the application might need to do some pre-processing before it is ready to take traffic.
+#  # default: false
+#  #   实例注册后是否可以立刻提供服务, 通常注册后在提供服务前还需要做些预处理
+#  instance-enabled-onit: false
+  # Get the IPAdress of the instance.
+  # This information is for academic purposes only as
+  # the communication from other instances primarily happen using the information supplied in {@link #getHostName(boolean)}.
+  # default: <blank-value>
+  #   如果未找到IP地址, 集群结点间无法互相注册
+  ip-address: ${EUREKA_INSTANCE_IP_ADDRESS:}
+#  # Indicates the time in seconds that the eureka server waits since it received the last heartbeat
+#  # before it can remove this instance from its view and there by disallowing traffic to this instance.
+#  # Setting this value too long could mean that the traffic could be routed to the instance
+#  # even though the instance is not alive.
+#  # Setting this value too small could mean, the instance may be taken out of traffic because of temporary network glitches.
+#  # This value to be set to atleast higher than the value specified in leaseRenewalIntervalInSeconds.
+#  # default: 90
+#  #   单位s, 实例可被Eureka移除的秒数, 从Eureka最后一次收到实例心跳消息计算
+#  lease-expiration-duration-in-seconds: 90
+#  # Indicates how often (in seconds) the eureka client needs to send heartbeats to eureka server to indicate that it is still alive.
+#  # If the heartbeats are not received for the period specified in leaseExpirationDurationInSeconds,
+#  # eureka server will remove the instance from its view, there by disallowing traffic to this instance.
+#  # Note that the instance could still not take traffic if it implements HealthCheckCallback and then decides to make itself unavailable.
+#  # default: 30
+#  #   单位s, Client发送心跳的时间间隔
+#  lease-renewal-interval-in-seconds: 30
+#  # Get the namespace used to find properties. Ignored in Spring Cloud.
+#  # default: eureka
+#  #   查找属性时使用的名称空间, spring-cloud中已忽略
+#  namespace: eureka
+  # Flag to say that, when guessing a hostname, the IP address of the server should be used in preference to the hostname reported by the OS.
+  # default: false
+  #   当猜测hostname时, 是否优先使用IP地址
+  prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS:false}
+#  registry:
+#    # Value used in determining when leases are cancelled, default to 1 for standalone. Should be set to 0 for peer replicated eurekas
+#    # default: 1
+#    default-open-for-traffic-count: ${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:1}
+#    # default: 1
+#    expected-number-of-renews-per-min: 1
+#  # Gets the absolute status page URL path for this instance.
+#  # The users can provide the statusPageUrlPath if the status page resides in the same instance talking to eureka,
+#  # else in the cases where the instance is a proxy for some other server, users can provide the full URL.
+#  # If the full URL is provided it takes precedence.
+#  # It is normally used for informational purposes for other services to find about the status of this instance.
+#  # Users can provide a simple HTML indicating what is the current status of the instance.
+#  # default: <blank-value>
+#  #   状态页URL, 到Root级别
+#  #status-page-url:
+#  # Gets the relative status page URL path for this instance.
+#  # The status page URL is then constructed out of the hostName and the type of communication - secure or unsecure as specified in securePort and nonSecurePort.
+#  # It is normally used for informational purposes for other services to find about the status of this instance.
+#  # Users can provide a simple HTML indicating what is the current status of the instance.
+#  # default: /info
+#  #   状态页URL的ContextPath
+#  status-page-url-path: /info
+
+eureka.server:
+#  a-s-g-cache-expiry-timeout-ms: 0
+#  a-s-g-query-timeout-ms: 300
+#  a-s-g-update-interval-ms: 0
+#  a-w-s-access-id:
+#  a-w-s-secret-key:
+#  #   是否批量复制
+#  batch-replication: false
+#  binding-strategy:
+#  #   Non-positive
+#  #delta-retention-timer-interval-in-ms: 0
+#  disable-delta: false
+#  disable-delta-for-remote-regions: false
+#  disable-transparent-fallback-to-other-region: false
+#  e-i-p-bind-rebind-retries: 3
+#  e-i-p-binding-retry-interval-ms: 0
+#  e-i-p-binding-retry-interval-ms-when-unbound: 0
+#  enable-replicated-request-compression: false
+  enable-self-preservation: true
+#  #   Non-positive
+#  #eviction-interval-timer-in-ms: 0
+#  g-zip-content-from-remote-region: true
+#  json-codec-name:
+#  list-auto-scaling-groups-role-name: ListAutoScalingGroups
+#  log-identity-headers: true
+#  max-elements-in-peer-replication-pool: 10000
+#  max-elements-in-status-replication-pool: 10000
+#  #   单位分钟, 节点间负责复制信息的线程的最大空闲时间
+#  max-idle-thread-age-in-minutes-for-peer-replication: 15
+#  #   单位分钟, 节点间负责复制status的线程的最大空闲时间
+#  max-idle-thread-in-minutes-age-for-status-replication: 10
+#  #   复制信息的最大线程数
+#  max-threads-for-peer-replication: 20
+#  #   复制status的最大线程数
+#  max-threads-for-status-replication: 1
+#  #   复制信息的最大时长
+#  max-time-for-replication: 30000
+#  #   复制信息的最小线程数
+#  min-threads-for-peer-replication: 5
+#  #   复制status的最小线程数
+#  min-threads-for-status-replication: 1
+#  number-of-replication-retries: 5
+#  #   Non-positive
+#  #peer-eureka-nodes-update-interval-ms: 0
+#  #   Non-positive
+#  #peer-eureka-status-refresh-time-interval-ms: 0
+#  #   单位ms, 节点间连接超时
+#  peer-node-connect-timeout-ms: 200
+#  #   单位s, 节点间连接空闲超时
+#  peer-node-connection-idle-timeout-seconds: 30
+#  #   单位ms, 节点间read超时
+#  peer-node-read-timeout-ms: 200
+#  #   节点总连接数上限
+#  peer-node-total-connections: 1000
+#  #   节点与单个主机之间的连接数上限
+#  peer-node-total-connections-per-host: 500
+#  prime-aws-replica-connections: true
+#  #   org.springframework.core.env.PropertyResolver
+#  #property-resolver:
+#  rate-limiter-burst-size: 10
+#  rate-limiter-enabled: false
+#  rate-limiter-full-fetch-average-rate: 100
+#  rate-limiter-privileged-clients:
+#  rate-limiter-registry-fetch-average-rate: 500
+#  rate-limiter-throttle-standard-clients: false
+#  registry-sync-retries: 0
+#  registry-sync-retry-wait-ms: 0
+#  #   a map
+#  #remote-region-app-whitelist:
+#  remote-region-connect-timeout-ms: 1000
+#  remote-region-connection-idle-timeout-seconds: 30
+#  remote-region-fetch-thread-pool-size: 20
+#  remote-region-read-timeout-ms: 1000
+#  remote-region-registry-fetch-interval: 30
+#  remote-region-total-connections: 1000
+#  remote-region-total-connections-per-host: 500
+#  remote-region-trust-store:
+#  remote-region-trust-store-password: changeit
+#  remote-region-urls:
+#  #   a map
+#  #remote-region-urls-with-name:
+#  renewal-percent-threshold: 0.85
+#  #   Non-positive
+#  #renewal-threshold-update-interval-ms: 0
+#  response-cache-auto-expiration-in-seconds: 180
+#  #   Non-positive
+#  #response-cache-update-interval-ms: 0
+#  retention-time-in-m-s-in-delta-queue: 0
+#  route53-bind-rebind-retries: 3
+#  route53-binding-retry-interval-ms: 0
+#  route53-domain-t-t-l: 30
+#  sync-when-timestamp-differs: true
+#  use-read-only-response-cache: true
+#  wait-time-in-ms-when-sync-empty: 0 # set to 0 will break cluster
+#  xml-codec-name:
+
+---
+spring:
+  profiles: port_nonsecure
+
+eureka.instance:
+#  # Get the unique Id (within the scope of the appName) of this instance to be registered with eureka.
+#  # default: <blank-value>
+#  #   instance的id, 区分同一应用的不同实例
+#  #   eureka.instance.instance-id affect Status->instances's url text (not href) value on dashboard
+#  #   or spring.cloud.client.ip-address if eureka.instance.prefer-ip-address=true
+#  #   other possible values:
+#  #     ${spring.cloud.client.ip-address}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
+#  #     ${spring.cloud.client.hostname}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
+#  #   never use instance-id like following examples:
+#  #     ${spring.application.name}:${spring.application.instance_id:${random.value}}
+#  #     ${EUREKA_INSTANCE_ID:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+#  #     ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+#  instance-id: ${spring.cloud.client.hostname}:${spring.application.name}-${PEER:standalone}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
+#  # Gets the absolute health check page URL for this instance.
+#  # The users can provide the healthCheckUrlPath if the health check page resides in the same instance talking to eureka,
+#  # else in the cases where the instance is a proxy for some other server, users can provide the full URL. If the full URL is provided it takes precedence.
+#  # It is normally used for making educated decisions based on the health of the instance - for example,
+#  # it can be used to determine whether to proceed deployments to an entire farm or stop the deployments without causing further damage.
+#  # The full URL should follow the format http://${eureka.hostname}:7001/ where the value ${eureka.hostname} is replaced at runtime.
+#  # default: <blank-value>
+#  #   健康检查URL, 到Root级别(HTTP)
+#  health-check-url: ${EUREKA_INSTANCE_HEALTHCHECKURL:}
+#  # Gets the metadata name/value pairs associated with this instance. This information is sent to eureka server and can be used by other instances.
+#  # default: <blank-value>
+#  #   实例元数据
+#  #metadataMap:
+#    #hostname: ${EUREKA_INSTANCE_HOSTNAME:eureka.local}
+#    #prot: ${EUREKA_INSTANCE_NONSECUREPORT:8761}
+#    #instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}
+#    # or spring.cloud.client.ip-address if eureka.instance.prefer-ip-address=true
+#    #instanceId: ${spring.cloud.client.ip-address}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}
+  # Get the non-secure port on which the instance should receive traffic.
+  # default: 80
+  #   eureka.instance.non-secure-port affect Status->instances's url href (not text) value on dashboard
+  non-secure-port: ${EUREKA_INSTANCE_NONSECUREPORT:8761}
+  # Indicates whether the non-secure port should be enabled for traffic or not.
+  # default: true
+  non-secure-port-enabled: true
+  # Gets the virtual host name defined for this instance.
+  # This is typically the way other instance would find this instance by using the virtual host name.
+  # Think of this as similar to the fully qualified domain name, that the users of your services will need to find this instance.
+  # default: unknown
+  #virtual-host-name: unknown
+
+---
+spring:
+  profiles: port_secure
+
+eureka.instance:
+#  instance-id: ${spring.cloud.client.hostname}:${spring.application.name}-${PEER:standalone}:${EUREKA_INSTANCE_SECUREPORT:${SERVER_PORT:8761}}:${random.value}
+#  # Gets the absolute secure health check page URL for this instance.
+#  # The users can provide the secureHealthCheckUrl if the health check page resides in the same instance talking to eureka,
+#  # else in the cases where the instance is a proxy for some other server, users can provide the full URL.
+#  # If the full URL is provided it takes precedence.
+#  # It is normally used for making educated decisions based on the health of the instance - for example,
+#  # it can be used to determine whether to proceed deployments to an entire farm or stop the deployments without causing further damage.
+#  # The full URL should follow the format http://${eureka.hostname}:7001/ where the value ${eureka.hostname} is replaced at runtime.
+#  # default: <blank-value>
+#  #   健康检查URL, 到Root级别(HTTPS)
+#  secure-health-check-url: ${EUREKA_INSTANCE_SECUREHEALTHCHECKURL:}
+  # Indicates whether the secure port should be enabled for traffic or not.
+  # default: false
+  #   是否启用HTTPS
+  secure-port-enabled: true
+  # Get the Secure port on which the instance should receive traffic.
+  # default: 443
+  #   HTTPS端口
+  secure-port: ${EUREKA_INSTANCE_SECUREPORT:8761}
+  # Gets the secure virtual host name defined for this instance.
+  # This is typically the way other instance would find this instance by using the secure virtual host name.
+  # Think of this as similar to the fully qualified domain name, that the users of your services will need to find this instance.
+  # default: unknown
+  #secure-virtual-host-name: unknown
+
+---
+spring:
+  profiles: standalone
+
+spring.application:
+  name: ${SPRING_APPLICATION_NAME:eureka-standalone}
+
+eureka.client:
+  fetch-registry: ${EUREKA_CLIENT_FETCHREGISTRY:false}
+  register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:false}
+
+eureka.instance:
+  appname: ${SPRING_APPLICATION_NAME:eureka-standalone}
+
+---
+spring:
+  profiles: peer_awareness
+
+spring.application:
+  name: ${SPRING_APPLICATION_NAME:eureka-cluster}
+
+eureka.client:
+  fetch-registry: ${EUREKA_CLIENT_FETCHREGISTRY:true}
+  register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:true}
+
+eureka.instance:
+  appname: ${SPRING_APPLICATION_NAME:eureka-cluster}
+
+---
+spring.profiles: development.env
+
+---
+spring.profiles: it.env
+
+---
+spring.profiles: staging.env
+
+---
+spring.profiles: production.env
+#spring.profiles.include:
+#- port.nonsecure
