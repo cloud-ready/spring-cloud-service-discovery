@@ -14,7 +14,9 @@ services:
     container_name: ${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
     hostname: ${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
     networks:
-    - oss-network
+      local-network:
+        ipv4_address: 172.16.238.10
+        ipv6_address: 2001:3984:3989::10
     ports:
     - "${EUREKA_INSTANCE_NONSECUREPORT:-8761}:8761"
     volumes:
@@ -25,10 +27,11 @@ services:
     - EUREKA_CLIENT_REGISTERWITHEUREKA=false
     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka.local:${SERVER_PORT:-8761}/eureka/
     - EUREKA_INSTANCE_HOSTNAME=${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
-    #- EUREKA_INSTANCE_IP_ADDRESS=${HOST_IP_ADDRESS:-127.0.0.1}
+    - EUREKA_INSTANCE_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.10}
     - EUREKA_INSTANCE_PREFER_IP_ADDRESS=${EUREKA_INSTANCE_PREFER_IP_ADDRESS:-false}
     - EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT=${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:-1}
     - EUREKA_INSTANCE_NONSECUREPORT=${EUREKA_INSTANCE_NONSECUREPORT:-8761}
+    - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
     - PEER=standalone
     - SECURITY_BASIC_ENABLED=${SECURITY_BASIC_ENABLED:-false}
     - SECURITY_USER_NAME=${SECURITY_USER_NAME:-user}
@@ -36,7 +39,7 @@ services:
     - SERVER_PORT=${SERVER_PORT:-8761}
     - SPRING_APPLICATION_NAME=eureka-standalone
     - SPRING_CLOUD_CLIENT_HOSTNAME=${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
-    #- SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS:-127.0.0.1}
+    - SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.10}
     - SPRING_PROFILES_ACTIVE=development.env,port_nonsecure,standalone
 
 volumes:
@@ -45,4 +48,22 @@ volumes:
 networks:
   default:
     external: true
-    name: oss-network
+    name: local-network
+
+  local-network:
+    external: true
+
+#  # docker network create --driver=bridge --ipv6 --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network
+#  # docker network ls
+#  # docker network inspect local-network
+#  local-network:
+#    external: true
+#    driver: bridge
+#    enable_ipv6: true
+#    ipam:
+#      driver: default
+#      config:
+#      -
+#        subnet: 172.16.238.0/24
+#      -
+#        subnet: 2001:3984:3989::/64

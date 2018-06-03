@@ -14,7 +14,7 @@ services:
     container_name: eureka-peer1.local
     hostname: eureka-peer1.local
     networks:
-      eureka-cluster-network:
+      local-network:
         ipv4_address: 172.16.238.11
         ipv6_address: 2001:3984:3989::11
     ports:
@@ -52,7 +52,7 @@ services:
     container_name: eureka-peer2.local
     hostname: eureka-peer2.local
     networks:
-      eureka-cluster-network:
+      local-network:
         ipv4_address: 172.16.238.12
         ipv6_address: 2001:3984:3989::12
     ports:
@@ -90,7 +90,7 @@ services:
     container_name: eureka-peer3.local
     hostname: eureka-peer3.local
     networks:
-      eureka-cluster-network:
+      local-network:
         ipv4_address: 172.16.238.13
         ipv6_address: 2001:3984:3989::13
     ports:
@@ -128,18 +128,24 @@ volumes:
   volume-eureka-peer3.local: {}
 
 networks:
-  eureka-cluster-network:
-    driver: bridge
-    enable_ipv6: true
-    ipam:
-      driver: default
-      config:
-      -
-        subnet: 172.16.238.0/24
-      -
-        subnet: 2001:3984:3989::/64
+  default:
+    external: true
+    name: local-network
 
-#  default:
+  local-network:
+    external: true
+
+#  # docker network create --driver=bridge --ipv6 --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network
+#  # docker network ls
+#  # docker network inspect local-network
+#  local-network:
 #    external: true
-#    name: oss-network
-
+#    driver: bridge
+#    enable_ipv6: true
+#    ipam:
+#      driver: default
+#      config:
+#      -
+#        subnet: 172.16.238.0/24
+#      -
+#        subnet: 2001:3984:3989::/64

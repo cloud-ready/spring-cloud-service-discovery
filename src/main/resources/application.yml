@@ -5,6 +5,7 @@ logging:
   path: ${LOGGING_PATH:${user.home}/.data/eureka/logs}
   level:
     jndi: ${LOGGING_LEVEL_:INFO}
+
     org.springframework.beans.factory.annotation.InjectionMetadata: ${LOGGING_LEVEL_:INFO}
     org.springframework.beans.factory.support.DefaultListableBeanFactory: ${LOGGING_LEVEL_:INFO}
     org.springframework.core.env.MutablePropertySources: ${LOGGING_LEVEL_:INFO}
@@ -12,21 +13,16 @@ logging:
     org.springframework.jndi: ${LOGGING_LEVEL_:INFO}
     org.springframework.core.type.classreading.AnnotationAttributesReadingVisitor: INFO
     org.springframework.web.context.support.StandardServletEnvironment: ${LOGGING_LEVEL_:INFO}
-    springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator: WARN
+    org.springframework.security: ${LOGGING_LEVEL_:INFO}
 
-management:
-  endpoint:
-    health:
-      enabled: true
-      show-details: always
-    shutdown:
-      enabled: true
-  endpoints:
-    web:
-      base-path: /
-      # By default, only 'health' and 'info' are accessible via web
-      exposure:
-        include: '*'
+
+
+
+
+
+
+
+
 
 security:
   basic:
