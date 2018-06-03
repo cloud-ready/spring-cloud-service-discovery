@@ -20,7 +20,7 @@ ARG JAR_FILE
 ADD	target/${JAR_FILE} /root/
 RUN touch /root/*-exec.jar
 
-EXPOSE 8761
+
 USER root
 WORKDIR /root/
 ENTRYPOINT ["/root/entrypoint.sh"]
