@@ -1,0 +1,70 @@
+
+version: '2.1'
+services:
+  consul-agent:
+    image: consul:1.1.0
+    restart: always
+    # In-memory Consul server agent with default bridge networking and no services exposed on the host
+    # For development, should not be used in production
+    command: ["agent", "-dev", "-client", "0.0.0.0"]
+    # Join the existing node
+    #command: ["agent", "-dev", "-join=<root-agent-ip>"]
+    # Running consul agent in client mode
+    #command: ["agent", "-bind=<external ip>", "-retry-join=<root agent ip>"]
+    # Running consul agent in server mode
+    #command: ["agent", "-server", "-bind=<external ip>", "-retry-join=<root agent ip>", "-bootstrap-expect=<number of server agents>"]
+    container_name: ${CONSUL_HOST:-consul}.${DOMAIN:-local}
+    hostname: ${CONSUL_HOST:-consul}.${DOMAIN:-local}
+    networks:
+      local-network:
+        ipv4_address: 172.16.238.15
+        ipv6_address: 2001:3984:3989::15
+    ports:
+    # Server RPC is used for communication between Consul clients and servers
+    # for internal request forwarding.
+    - "${CONSUL_RPC_PORT:-8300}:8300/tcp"
+    # Serf LAN and WAN (WAN is used only by Consul servers) are used for gossip between Consul agents.
+    # LAN is within the datacenter
+    #- "${CONSUL_LAN_GOSSIP_PORT:-8301}:8301/tcp"
+    # WAN is between just the Consul servers in all datacenters.
+    #- "${CONSUL_LAN_GOSSIP_PORT:-8301}:8301/udp"
+    - "${CONSUL_WAN_GOSSIP_PORT:-8302}:8302/tcp"
+    - "${CONSUL_WAN_GOSSIP_PORT:-8302}:8302/udp"
+    # HTTP and DNS (both TCP and UDP) are the primary interfaces that applications
+    # use to interact with Consul.
+    - "${CONSUL_HTTP_API_PORT:-8500}:8500/tcp"
+    - "${CONSUL_DNS_PORT:-8600}:8600/tcp"
+    - "${CONSUL_DNS_PORT:-8600}:8600/udp"
+    privileged: true
+    volumes:
+    - volume-consul-agent-consul-data:/consul/data
+    environment:
+      CONSUL_ALLOW_PRIVILEGED_PORTS:
+      CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE:-eth0}
+      CONSUL_LOCAL_CONFIG: '{"leave_on_terminate": true}'
+
+volumes:
+  volume-consul-agent-consul-data: {}
+
+networks:
+  default:
+    external: true
+    name: local-network
+
+  local-network:
+    external: true
+
+#  # docker network create --driver=bridge --ipv6 --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network
+#  # docker network ls
+#  # docker network inspect local-network
+#  local-network:
+#    external: true
+#    driver: bridge
+#    enable_ipv6: true
+#    ipam:
+#      driver: default
+#      config:
+#      -
+#        subnet: 172.16.238.0/24
+#      -
+#        subnet: 2001:3984:3989::/64

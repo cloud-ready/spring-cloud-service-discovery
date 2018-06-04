@@ -93,6 +93,7 @@
     <modules>
         <module>spring-cloud-eureka</module>
         <module>spring-cloud-consul</module>
+        <module>spring-cloud-multi-registration</module>
     </modules>
 
     <repositories>
