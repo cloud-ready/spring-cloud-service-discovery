@@ -17,6 +17,9 @@ Dependencies in pom.xml
     <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-eureka</artifactId></dependency>
     <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-consul-all</artifactId></dependency>
     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId><scope>runtime</scope></dependency>
+    
+    <!--  -->
+    <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>0.0.1-SNAPSHOT</version></dependency>
   <!-- @formatter:on -->
 </dependencies>
 ```
@@ -52,6 +55,18 @@ spring:
       # custom property
       auto-multi-registration.enabled: true
 ```
+
+Only snapshots available for now `https://oss.sonatype.org/content/repositories/snapshots/cn/home1/spring-cloud-multi-registration/0.0.1-SNAPSHOT/`
+To access these snapshots, you may need to add OSSRH-snapshots (sonatype-snapshots) into your `pom.xml`
+```xml
+<repository>
+    <id>OSSRH-snapshots</id>
+    <name>central snapshots</name>
+    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    <releases><enabled>false</enabled></releases>
+    <snapshots><enabled>true</enabled><updatePolicy>${repositories.snapshots.updatePolicy}</updatePolicy></snapshots>
+</repository>
+``` 
 
 ## Screenshots
 
