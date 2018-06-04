@@ -1,6 +1,12 @@
 #spring-cloud-eureka-server
 spring-cloud-eureka-server
 
+![](https://travis-ci.org/cloud-ready/spring-cloud-service-discovery.svg?branch=develop)
+
+Github: https://github.com/cloud-ready/spring-cloud-eureka-server
+Docker Hub: https://hub.docker.com/r/cloudready/spring-cloud-eureka-server/
+
+
 ## Run a standalone demo at local
 
 Step 1. Bind hosts  
@@ -12,7 +18,10 @@ Edit /etc/hosts, add following content:
 127.0.0.1 eureka-peer3.local
 ```
 
-Step 2. `docker-compose up`
+Step 2. Create a docker network
+`docker network create --driver=bridge --ipv6 --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network`
+
+Step 3. `docker-compose up`
 
 Homepage [http://eureka.local:8761](http://eureka.local:8761)
 
@@ -65,7 +74,7 @@ To take `config-server.local:config-server:8888` back, run
 curl -i -X DELETE http://eureka.local:8761/eureka/apps/config-server/config-server.local:config-server:8888/status
 ```
 
-You can also set status directly on instances by post request to its `ServiceRegistryEndpoint`  
+You can also set status directly on instances by posting request to its `ServiceRegistryEndpoint`  
 URL of `ServiceRegistryEndpoint` is: `http(s)://<host>:<port>[server.context-path][management.context-path]/service-registry/instance-status`  
 `server.context-path` and `management.context-path` are optional, that depends on instance's config.  
 

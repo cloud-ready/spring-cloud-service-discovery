@@ -1,8 +1,7 @@
-# spring-cloud-eureka-server
-spring-cloud-eureka-server
+# spring-cloud-eureka
+spring-cloud-eureka
 
-Github: https://github.com/cloud-ready/spring-cloud-eureka-server
-Docker Hub: https://hub.docker.com/r/cloudready/spring-cloud-eureka-server/
+![](https://travis-ci.org/cloud-ready/spring-cloud-service-discovery.svg?branch=develop)
 
 see: https://blog.asarkar.org/technical/netflix-eureka/
 
