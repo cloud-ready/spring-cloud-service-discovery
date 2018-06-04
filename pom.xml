@@ -10,26 +10,25 @@
         <version>0.0.1.OSS-SNAPSHOT</version>
     </parent>
 
-    <artifactId>spring-cloud-eureka-server</artifactId>
-    <description>spring-cloud-eureka-server</description>
-    <!--<groupId>cn.home1</groupId>-->
-    <name>spring-cloud-eureka-server</name>
-    <packaging>jar</packaging>
-    <url>https://github.com/cloud-ready/spring-cloud-eureka-server</url>
+    <artifactId>spring-cloud-service-discovery</artifactId>
+    <description>spring-cloud-service-discovery</description>
+    <name>spring-cloud-service-discovery</name>
+    <packaging>pom</packaging>
+    <url>https://github.com/cloud-ready/spring-cloud-service-discovery</url>
     <version>0.0.1-SNAPSHOT</version>
 
     <ciManagement>
         <system>Travis CI</system>
-        <url>https://travis-ci.org/cloud-ready/spring-cloud-eureka-server</url>
+        <url>https://travis-ci.org/cloud-ready/spring-cloud-service-discovery</url>
     </ciManagement>
     <issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/cloud-ready/spring-cloud-eureka-server/issues</url>
+        <url>https://github.com/cloud-ready/spring-cloud-service-discovery/issues</url>
     </issueManagement>
     <scm>
-        <connection>scm:git:https://github.com/cloud-ready/spring-cloud-eureka-server.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/cloud-ready/spring-cloud-eureka-server.git</developerConnection>
-        <url>https://github.com/cloud-ready/spring-cloud-eureka-server</url>
+        <connection>scm:git:https://github.com/cloud-ready/spring-cloud-service-discovery.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/cloud-ready/spring-cloud-service-discovery.git</developerConnection>
+        <url>https://github.com/cloud-ready/spring-cloud-service-discovery</url>
     </scm>
 
     <properties>
@@ -40,43 +39,36 @@
     </properties>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-                <configuration>
-                    <classifier>exec</classifier>
-                    <mainClass>cn.home1.cloud.netflix.eureka.server.EurekaServer</mainClass>
-                    <layout>ZIP</layout>
-                    <!-- @formatter:off -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <configuration>
+                        <classifier>exec</classifier>
+                        <layout>ZIP</layout>
+                        <!-- @formatter:off -->
                     <excludes>
                         <exclude><groupId>org.inferred</groupId><artifactId>freebuilder</artifactId></exclude>
                         <exclude><groupId>com.google.auto.value</groupId><artifactId>auto-value</artifactId></exclude>
                         <exclude><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId></exclude>
                     </excludes>
-                    <requiresUnpack>
-                        <dependency><groupId>com.netflix.eureka</groupId><artifactId>eureka-core</artifactId></dependency>
-                        <dependency><groupId>com.netflix.eureka</groupId><artifactId>eureka-client</artifactId></dependency>
-                    </requiresUnpack>
                     <!-- @formatter:on -->
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                        <configuration>
-                            <attach>false</attach>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                            <configuration>
+                                <attach>false</attach>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <dependencyManagement>
@@ -93,26 +85,15 @@
 
     <dependencies>
         <!-- @formatter:off -->
-        <!--<dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-eureka-server</artifactId></dependency>-->
-        <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-netflix-eureka-server</artifactId></dependency>
-        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId><scope>runtime</scope></dependency>
-        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-undertow</artifactId><scope>runtime</scope></dependency>
-        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId><scope>runtime</scope></dependency>
-        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-log4j2</artifactId><scope>runtime</scope></dependency>
-        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-security</artifactId><scope>runtime</scope></dependency>
-
         <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></dependency>
-        <dependency><groupId>org.jolokia</groupId><artifactId>jolokia-core</artifactId><scope>runtime</scope></dependency>
         <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><scope>provided</scope></dependency>
-
-        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
-        <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-eureka</artifactId><scope>test</scope></dependency>
-        <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-feign</artifactId><scope>test</scope></dependency>
-        <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-ribbon</artifactId><scope>test</scope></dependency>
-        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-data-jpa</artifactId><scope>test</scope></dependency>
-        <dependency><groupId>com.h2database</groupId><artifactId>h2</artifactId><scope>test</scope></dependency>
         <!-- @formatter:on -->
     </dependencies>
+
+    <modules>
+        <module>spring-cloud-eureka</module>
+        <module>spring-cloud-consul</module>
+    </modules>
 
     <repositories>
         <!-- @formatter:off -->
