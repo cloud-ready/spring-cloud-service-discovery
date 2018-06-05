@@ -1,6 +1,10 @@
 # spring-cloud-multi-registration
 spring-cloud-multi-registration
 
+
+[![Build Status](https://travis-ci.org/cloud-ready/spring-cloud-service-discovery.svg?branch=develop)](https://travis-ci.org/cloud-ready/spring-cloud-service-discovery)
+
+
 ## Register service instance onto multiple service registries at same time
 
 Tested with `spring-cloud-netflix-eureka-client` and `spring-cloud-consul-discovery`

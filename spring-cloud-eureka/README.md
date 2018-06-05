@@ -1,7 +1,7 @@
 # spring-cloud-eureka
 spring-cloud-eureka
 
-![](https://travis-ci.org/cloud-ready/spring-cloud-service-discovery.svg?branch=develop)
+[![Build Status](https://travis-ci.org/cloud-ready/spring-cloud-service-discovery.svg?branch=develop)](https://travis-ci.org/cloud-ready/spring-cloud-service-discovery)
 
 see: https://blog.asarkar.org/technical/netflix-eureka/
 
