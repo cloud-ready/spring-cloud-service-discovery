@@ -41,8 +41,8 @@ spring.application:
   # bug: https://github.com/spring-cloud/spring-cloud-netflix/issues/788
 
 spring.cloud:
-  client.hostname: ${SPRING_CLOUD_CLIENT_HOSTNAME:} #:eureka.local
-  client.ip-address: ${SPRING_CLOUD_CLIENT_IP_ADDRESS:} #:127.0.0.1
+  client.hostname: ${SPRING_CLOUD_CLIENT_HOSTNAME:}
+  client.ip-address: ${SPRING_CLOUD_CLIENT_IP_ADDRESS:}
   inetutils:
     ignoredInterfaces:
     - docker0

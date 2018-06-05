@@ -10,9 +10,9 @@
 echo -e "\n>>>>>>>>>> ---------- custom, override options ---------- >>>>>>>>>>"
 if [ -z "${CI_OPT_CI_SCRIPT}" ]; then CI_OPT_CI_SCRIPT="https://github.com/ci-and-cd/maven-build/raw/master/src/main/ci-script/lib_ci.sh"; fi
 if [ -z "${CI_OPT_DOCKER_IMAGE_PREFIX}" ]; then CI_OPT_DOCKER_IMAGE_PREFIX="cloudready"; fi
-if [ -z "${CI_OPT_GITHUB_SITE_REPO_OWNER}" ]; then CI_OPT_GITHUB_SITE_REPO_OWNER="home1-oss"; fi
+if [ -z "${CI_OPT_GITHUB_SITE_REPO_OWNER}" ]; then CI_OPT_GITHUB_SITE_REPO_OWNER="cloud-ready"; fi
 if [ -z "${CI_OPT_GPG_KEYNAME}" ]; then CI_OPT_GPG_KEYNAME="59DBF10E"; fi
-if [ -z "${CI_OPT_ORIGIN_REPO_SLUG}" ]; then CI_OPT_ORIGIN_REPO_SLUG="cloud-ready/spring-cloud-eureka-server"; fi
+if [ -z "${CI_OPT_ORIGIN_REPO_SLUG}" ]; then CI_OPT_ORIGIN_REPO_SLUG="cloud-ready/spring-cloud-service-discovery"; fi
 if [ -z "${CI_OPT_SITE}" ]; then CI_OPT_SITE="true"; fi
 if [ -z "${CI_OPT_SITE_PATH_PREFIX}" ]; then CI_OPT_SITE_PATH_PREFIX="cloud-ready"; fi
 if [ -z "${CI_OPT_SONAR_ORGANIZATION}" ]; then CI_OPT_SONAR_ORGANIZATION="home1-oss-github"; fi
