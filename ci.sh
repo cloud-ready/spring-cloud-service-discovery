@@ -2,8 +2,10 @@
 
 
 #echo -e "\n>>>>>>>>>> ---------- options in travis-ci's .travis.yml, this is for local test or debug ---------- >>>>>>>>>>"
-##export CI_OPT_CI_SCRIPT=https://github.com/${TRAVIS_REPO_SLUG}/raw/${TRAVIS_BRANCH}/src/main/ci-script/lib_ci.sh
-##export CI_OPT_INFRASTRUCTURE=opensource
+#export CI_INFRA_OPT_GIT_AUTH_TOKEN="${CI_INFRA_OPT_OPENSOURCE_GIT_AUTH_TOKEN}"
+#export CI_INFRA_OPT_OPENSOURCE_GIT_PREFIX="https://github.com"
+#export CI_OPT_CI_SCRIPT="https://github.com/ci-and-cd/maven-build/raw/master/src/main/ci-script/lib_ci.sh"
+#export CI_OPT_INFRASTRUCTURE="opensource"
 #echo -e "<<<<<<<<<< ---------- options in travis-ci's .travis.yml, this is for local test or debug ---------- <<<<<<<<<<\n"
 
 

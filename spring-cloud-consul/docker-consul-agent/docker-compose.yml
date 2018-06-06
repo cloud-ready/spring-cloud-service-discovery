@@ -10,9 +10,9 @@ services:
     # Join the existing node
     #command: ["agent", "-dev", "-join=<root-agent-ip>"]
     # Running consul agent in client mode
-    #command: ["agent", "-bind=<external ip>", "-retry-join=<root agent ip>"]
+    #command: ["agent", "-bind=<external ip>", "-retry-join=<root agent ip>", "-retry-interval=30s", "-retry-max=0"]
     # Running consul agent in server mode
-    #command: ["agent", "-server", "-bind=<external ip>", "-retry-join=<root agent ip>", "-bootstrap-expect=<number of server agents>"]
+    #command: ["agent", "-server", "-bind=<external ip>", "-retry-join=<root agent ip>", "-retry-interval=30s", "-retry-max=0", "-bootstrap-expect=<number of server agents>"]
     container_name: ${CONSUL_HOST:-consul}.${DOMAIN:-local}
     hostname: ${CONSUL_HOST:-consul}.${DOMAIN:-local}
     networks:
