@@ -11,7 +11,7 @@ command: ["agent", "-dev", "-client", "0.0.0.0"]
 
 Join the existing node
 ```yaml
-command: ["agent", "-dev", "-join=<root agent ip>"]
+command: ["agent", "-dev", "-join=<root-agent-ip>"]
 ```
 
 ## Running Consul Agent in Client Mode
