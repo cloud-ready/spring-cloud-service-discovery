@@ -1,10 +1,4 @@
-# Run local cluster on same host (OSX way to get HOST_IP_ADDRESS)
-#
-# edit '/etc/hosts', add following lines:
-# 127.0.0.1 eureka-peer1.local
-# 127.0.0.1 eureka-peer2.local
-# 127.0.0.1 eureka-peer3.local
-# HOST_IP_ADDRESS=$(ipconfig getifaddr en0 || ipconfig getifaddr en1) docker-compose -f docker-compose-local-cluster.yml up
+
 version: '2.1'
 services:
   eureka-peer1.local:
@@ -13,6 +7,7 @@ services:
     command: []
     container_name: eureka-peer1.local
     hostname: eureka-peer1.local
+    #network_mode: host
     networks:
       local-network:
         ipv4_address: 172.16.238.11
@@ -51,6 +46,7 @@ services:
     command: []
     container_name: eureka-peer2.local
     hostname: eureka-peer2.local
+    #network_mode: host
     networks:
       local-network:
         ipv4_address: 172.16.238.12
@@ -89,6 +85,7 @@ services:
     command: []
     container_name: eureka-peer3.local
     hostname: eureka-peer3.local
+    #network_mode: host
     networks:
       local-network:
         ipv4_address: 172.16.238.13

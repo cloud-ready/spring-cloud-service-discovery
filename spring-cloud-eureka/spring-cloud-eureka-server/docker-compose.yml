@@ -1,9 +1,3 @@
-# Run local standalone node
-#
-# edit '/etc/hosts', add following lines:
-# 127.0.0.1 eureka.local
-
-
 
 version: '2.1'
 services:
@@ -13,12 +7,13 @@ services:
     command: []
     container_name: ${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
     hostname: ${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
+    #network_mode: host
     networks:
       local-network:
         ipv4_address: 172.16.238.10
         ipv6_address: 2001:3984:3989::10
     ports:
-    - "${EUREKA_INSTANCE_NONSECUREPORT:-8761}:8761"
+    - "${SERVER_PORT:-8761}:8761"
     volumes:
     - volume-eureka:/root/.data
     - volume-eureka:/tmp
@@ -30,7 +25,7 @@ services:
     - EUREKA_INSTANCE_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.10}
     - EUREKA_INSTANCE_PREFER_IP_ADDRESS=${EUREKA_INSTANCE_PREFER_IP_ADDRESS:-false}
     - EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT=${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:-1}
-    - EUREKA_INSTANCE_NONSECUREPORT=${EUREKA_INSTANCE_NONSECUREPORT:-8761}
+    - EUREKA_INSTANCE_NONSECUREPORT=${SERVER_PORT:-8761}
     - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
     - PEER=standalone
     - SECURITY_BASIC_ENABLED=${SECURITY_BASIC_ENABLED:-false}

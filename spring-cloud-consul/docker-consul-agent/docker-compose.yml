@@ -15,6 +15,7 @@ services:
     #command: ["agent", "-server", "-bind=<external ip>", "-retry-join=<root agent ip>", "-retry-interval=30s", "-retry-max=0", "-bootstrap-expect=<number of server agents>"]
     container_name: ${CONSUL_HOST:-consul}.${DOMAIN:-local}
     hostname: ${CONSUL_HOST:-consul}.${DOMAIN:-local}
+    #network_mode: host
     networks:
       local-network:
         ipv4_address: 172.16.238.15

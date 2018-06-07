@@ -21,7 +21,12 @@ Edit /etc/hosts, add following content:
 Step 2. Create a docker network
 `docker network create --driver=bridge --ipv6 --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network`
 
-Step 3. `docker-compose up`
+Step 3. `docker-compose up` or
+```bash
+# OSX way to get HOST_IP_ADDRESS
+HOST_IP_ADDRESS=$(ipconfig getifaddr en0 || ipconfig getifaddr en1) \
+docker-compose -f docker-compose-local-cluster.yml up
+```
 
 Homepage [http://eureka.local:8761](http://eureka.local:8761)
 

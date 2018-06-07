@@ -484,13 +484,9 @@ eureka.instance:
 #  #   eureka.instance.instance-id affect Status->instances's url text (not href) value on dashboard
 #  #   or spring.cloud.client.ip-address if eureka.instance.prefer-ip-address=true
 #  #   other possible values:
-#  #     ${spring.cloud.client.ip-address}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
-#  #     ${spring.cloud.client.hostname}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
-#  #   never use instance-id like following examples:
-#  #     ${spring.application.name}:${spring.application.instance_id:${random.value}}
-#  #     ${EUREKA_INSTANCE_ID:${spring.application.name}:${spring.application.instance_id:${server.port}}}
-#  #     ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
-#  instance-id: ${spring.cloud.client.hostname}:${spring.application.name}-${PEER:standalone}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
+#  #     ${spring.application.name}:${spring.cloud.client.ip-address}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
+#  #     ${spring.application.name}:${spring.cloud.client.hostname}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
+#  instance-id: ${spring.application.name}-${PEER:standalone}:${spring.cloud.client.hostname}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
 #  # Gets the absolute health check page URL for this instance.
 #  # The users can provide the healthCheckUrlPath if the health check page resides in the same instance talking to eureka,
 #  # else in the cases where the instance is a proxy for some other server, users can provide the full URL. If the full URL is provided it takes precedence.
@@ -521,12 +517,14 @@ eureka.instance:
   # Think of this as similar to the fully qualified domain name, that the users of your services will need to find this instance.
   # default: unknown
   #virtual-host-name: unknown
+  secure-port-enabled: false
 
 ---
 spring:
   profiles: port_secure
 
 eureka.instance:
+  non-secure-port-enabled: false
 #  instance-id: ${spring.cloud.client.hostname}:${spring.application.name}-${PEER:standalone}:${EUREKA_INSTANCE_SECUREPORT:${SERVER_PORT:8761}}:${random.value}
 #  # Gets the absolute secure health check page URL for this instance.
 #  # The users can provide the secureHealthCheckUrl if the health check page resides in the same instance talking to eureka,
