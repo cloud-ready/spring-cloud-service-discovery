@@ -72,7 +72,7 @@ The API for the `DiscoveryClient.getInstances()` method is `/hosts/{serviceId}`
 `http://localhost:5678/hosts/{serviceId}` if the sidecar is on port 5678.
 
 
-The Zuul proxy automatically adds routes for each service known in Eureka to /<serviceId>, 
+The Zuul proxy automatically adds routes for each service known in Eureka to /{serviceId}, 
 so the customers service is available at /customers. 
 The non-JVM application can access the customer service at `http://localhost:5678/customers` (assuming the sidecar is listening on port 5678).
 
