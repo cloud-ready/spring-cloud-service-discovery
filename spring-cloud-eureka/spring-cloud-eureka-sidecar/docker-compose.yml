@@ -1,0 +1,52 @@
+
+version: '2.1'
+services:
+  eureka.local:
+    image: ${DOCKER_REGISTRY:-cloudready}/spring-cloud-eureka-sidecar:0.0.1-SNAPSHOT
+    restart: always
+    command: []
+    container_name: ${EUREKA_INSTANCE_HOSTNAME:-eureka-sidecar.local}
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:-eureka-sidecar.local}
+    network_mode: host
+    #ports:
+    #- "${SERVER_PORT:-5678}:5678"
+    volumes:
+    - volume-eureka-sidecar:/root/.data
+    - volume-eureka-sidecar:/tmp
+    environment:
+    # Address(s) of Eureka node or cluster (comma split)
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${EUREKA_USER_NAME:-user}:${EUREKA_USER_PASSWORD:-user_pass}@eureka.local:${EUREKA_PORT:-8761}/eureka/
+
+    # Eureka prefer ip address not hostname, need not to change this.
+    - EUREKA_INSTANCE_PREFER_IP_ADDRESS=${EUREKA_INSTANCE_PREFER_IP_ADDRESS:true}
+
+    #- LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
+
+    # Password to access management endpoints such as /env, /health and so on.
+    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-admin_pass} # change me
+    # The port of this sidecar, need not to change this.
+    - SERVER_PORT=${SERVER_PORT:-5678}
+
+    # Mandatory, The health check URL path of non-JVM application or service
+    - SIDECAR_HEALTHURI=${SIDECAR_HEALTHURI:-/health} # implement this URL on the non-JVM application or service.
+    # Optional, Homepage of the non-JVM application or service
+    #- SIDECAR_HOMEPAGEURI=${SIDECAR_HOMEPAGEURI:-/}
+
+    # Optional, Ip address of the non-JVM application or service
+    # Change this only when sidecar can not properly register the application with default values and there are issues on service access.
+    #- SIDECAR_IPADDRESS=${SIDECAR_IPADDRESS:}
+
+    # Optional, Hostname of the non-JVM application or service
+    # Change this only when sidecar can not properly register the application with default values and there are issues on service access.
+    #- SIDECAR_HOSTNAME=${SIDECAR_HOSTNAME:}
+
+    # Mandatory, The non-JVM application or service's port
+    - SIDECAR_PORT=${SIDECAR_PORT:-8761} # change me
+
+    # Mandatory, Application or service name of the non-JVM application or service
+    - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:the-name-of-non-JVM-application-or-service}
+
+    #- SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:default}
+
+volumes:
+  volume-eureka-sidecar: {}

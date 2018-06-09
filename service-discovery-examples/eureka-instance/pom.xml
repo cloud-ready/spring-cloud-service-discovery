@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.home1</groupId>
+        <artifactId>service-discovery-examples</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>eureka-instance</artifactId>
+    <description>eureka-instance</description>
+    <name>eureka-instance</name>
+    <packaging>jar</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>cn.home1.cloud.example.EurekaInstance</mainClass>
+                    <!-- @formatter:off -->
+                    <requiresUnpack>
+                        <dependency><groupId>com.netflix.eureka</groupId><artifactId>eureka-core</artifactId></dependency>
+                        <dependency><groupId>com.netflix.eureka</groupId><artifactId>eureka-client</artifactId></dependency>
+                    </requiresUnpack>
+                    <!-- @formatter:on -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- @formatter:off -->
+        <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-eureka</artifactId></dependency>
+        <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-feign</artifactId></dependency>
+        <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-ribbon</artifactId></dependency>
+        <!-- @formatter:on -->
+    </dependencies>
+</project>

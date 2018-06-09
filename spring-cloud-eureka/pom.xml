@@ -17,5 +17,6 @@
 
     <modules>
         <module>spring-cloud-eureka-server</module>
+        <module>spring-cloud-eureka-sidecar</module>
     </modules>
 </project>

@@ -1,0 +1,11 @@
+<project>
+
+    <body>
+        <menu ref="parent" />
+        <menu name="DOCUMENTATION">
+            <item href="README.html" name="README" />
+        </menu>
+        <menu ref="modules" />
+        <menu ref="reports" inherit="bottom" />
+    </body>
+</project>

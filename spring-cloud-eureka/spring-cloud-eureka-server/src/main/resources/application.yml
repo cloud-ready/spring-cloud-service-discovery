@@ -42,9 +42,9 @@ spring.application:
 
 spring.cloud:
   client.hostname: ${SPRING_CLOUD_CLIENT_HOSTNAME:}
-  client.ip-address: ${SPRING_CLOUD_CLIENT_IP_ADDRESS:}
+  client.ipAddress: ${SPRING_CLOUD_CLIENT_IP_ADDRESS:}
   inetutils:
-    ignoredInterfaces:
+    ignored-interfaces:
     - docker0
     - eno.*
     - tun.*
@@ -482,9 +482,9 @@ eureka.instance:
 #  # default: <blank-value>
 #  #   instance的id, 区分同一应用的不同实例
 #  #   eureka.instance.instance-id affect Status->instances's url text (not href) value on dashboard
-#  #   or spring.cloud.client.ip-address if eureka.instance.prefer-ip-address=true
+#  #   or spring.cloud.client.ipAddress if eureka.instance.prefer-ip-address=true
 #  #   other possible values:
-#  #     ${spring.application.name}:${spring.cloud.client.ip-address}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
+#  #     ${spring.application.name}:${spring.cloud.client.ipAddress}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
 #  #     ${spring.application.name}:${spring.cloud.client.hostname}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
 #  instance-id: ${spring.application.name}-${PEER:standalone}:${spring.cloud.client.hostname}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
 #  # Gets the absolute health check page URL for this instance.
@@ -503,8 +503,8 @@ eureka.instance:
 #    #hostname: ${EUREKA_INSTANCE_HOSTNAME:eureka.local}
 #    #prot: ${EUREKA_INSTANCE_NONSECUREPORT:8761}
 #    #instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}
-#    # or spring.cloud.client.ip-address if eureka.instance.prefer-ip-address=true
-#    #instanceId: ${spring.cloud.client.ip-address}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}
+#    # or spring.cloud.client.ipAddress if eureka.instance.prefer-ip-address=true
+#    #instanceId: ${spring.cloud.client.ipAddress}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}
   # Get the non-secure port on which the instance should receive traffic.
   # default: 80
   #   eureka.instance.non-secure-port affect Status->instances's url href (not text) value on dashboard

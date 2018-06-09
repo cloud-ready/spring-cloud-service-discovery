@@ -10,12 +10,14 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>spring-cloud-consul</artifactId>
-    <description>spring-cloud-consul</description>
-    <name>spring-cloud-consul</name>
+    <artifactId>service-discovery-examples</artifactId>
+    <description>service-discovery-examples</description>
+    <name>service-discovery-examples</name>
     <packaging>pom</packaging>
 
     <modules>
-        <!--<module>spring-cloud-consul-demo</module>-->
+        <module>composite-discovery-example</module>
+        <module>consul-instance</module>
+        <module>eureka-instance</module>
     </modules>
 </project>

@@ -80,6 +80,10 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- @formatter:off -->
+            <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>${project.version}</version></dependency>
+            <!-- @formatter:on -->
         </dependencies>
     </dependencyManagement>
 
@@ -92,8 +96,8 @@
 
     <modules>
         <module>spring-cloud-eureka</module>
-        <module>spring-cloud-consul</module>
         <module>spring-cloud-multi-registration</module>
+        <module>service-discovery-examples</module>
     </modules>
 
     <repositories>

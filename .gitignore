@@ -24,3 +24,5 @@ git.properties
 **/src/site/resources
 
 /spring-cloud-eureka/spring-cloud-eureka-server/Dockerfile
+
+/src/site/markdown/*.md
