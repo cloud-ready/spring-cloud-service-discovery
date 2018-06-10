@@ -3,14 +3,17 @@
 -->
 <Configuration status="WARN">
     <Properties>
-        <Property name="defaultLoggingFile">eureka</Property>
-        <Property name="defaultLoggingPath">${sys:user.home}/.data/eureka/logs</Property>
-        <!-- https://issues.apache.org/jira/browse/LOG4J2-1589 -->
-        <!-- http://logback.qos.ch/manual/configuration.html#nestedSubst -->
+        <!-- default log file name -->
+        <Property name="defaultLoggingFile">${env:SPRING_APPLICATION_NAME:-application}</Property>
         <Property name="loggingFileFromEnv">${env:LOGGING_FILE}</Property>
         <Property name="loggingFile">${loggingFileFromEnv:-${defaultLoggingFile}}</Property>
-        <Property name="loggingPathFromEnv">${env:LOGGING_PATH}</Property>
-        <Property name="loggingPath">${loggingPathFromEnv:-${defaultLoggingPath}}</Property>
+
+        <!-- default log directory name -->
+        <Property name="instanceNameFromEnv">${env:INSTANCE_NAME}</Property>
+        <!-- Priority: INSTANCE_NAME (from docker), ${hostname} (from log4j2) -->
+        <Property name="instanceOrHost">${instanceNameFromEnv:-${hostName}}</Property>
+        <Property name="defaultLoggingPath">${sys:user.dir}/data/${instanceOrHost}/logs/rolling</Property>
+        <Property name="loggingPath">${env:LOGGING_PATH:-${defaultLoggingPath}}</Property>
     </Properties>
 
     <Appenders>
@@ -47,7 +50,7 @@
     </Appenders>
     <!-- level="${env:LOGGING_LEVEL_:-DEBUG}" will override spring-boot's logging.level.${loggerName}: ${logLevel} -->
     <Loggers>
-        <Root level="${env:LOGGING_LEVEL_:-INFO}" includeLocation="false">
+        <Root includeLocation="false">
             <AppenderRef ref="RollingRandomAccessFile"/>
             <AppenderRef ref="STDOUT"/>
         </Root>

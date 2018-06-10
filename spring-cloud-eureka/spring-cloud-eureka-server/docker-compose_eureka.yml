@@ -1,0 +1,33 @@
+
+version: '2.1'
+services:
+  eureka:
+    container_name: ${INSTANCE_NAME:-eureka-peer1}.${INSTANCE_DOMAIN:-local}
+    environment:
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+    - EUREKA_INSTANCE_HOSTNAME=${HOST_IP_ADDRESS} #${INSTANCE_NAME:-eureka-peer1}.${INSTANCE_DOMAIN:-local}
+    - EUREKA_INSTANCE_NONSECUREPORT=${SERVER_PORT}
+    - INSTANCE_NAME=${INSTANCE_NAME:-eureka-peer1}
+    - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
+    - SECURITY_USER_NAME=${SECURITY_USER_NAME:-user}
+    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-user_pass}
+    - SERVER_PORT=${SERVER_PORT}
+    - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME}
+    - SPRING_CLOUD_CLIENT_HOSTNAME=${HOST_IP_ADDRESS}
+    - SPRING_CLOUD_CLIENT_IPADDRESS=${HOST_IP_ADDRESS}
+    - SPRING_PROFILES_ACTIVE=staging.env,manual_ip_hostname,port_nonsecure,peer_awareness
+    hostname: ${INSTANCE_NAME:-eureka-peer1}.${INSTANCE_DOMAIN:-local}
+    network_mode: host
+    ports:
+    - "${SERVER_PORT:-8761}:${SERVER_PORT:-8761}"
+    volumes:
+    - data:/root/.data
+    - data:/tmp
+
+volumes:
+  data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/data
+      o: bind

@@ -1,56 +1,4 @@
 
-logging.level.: ${LOGGING_LEVEL_:INFO}
-logging:
-  file: ${LOGGING_FILE:eureka}.log
-  path: ${LOGGING_PATH:${user.home}/.data/eureka/logs}
-  level:
-    jndi: ${LOGGING_LEVEL_:INFO}
-
-    org.springframework.beans.factory.annotation.InjectionMetadata: ${LOGGING_LEVEL_:INFO}
-    org.springframework.beans.factory.support.DefaultListableBeanFactory: ${LOGGING_LEVEL_:INFO}
-    org.springframework.core.env.MutablePropertySources: ${LOGGING_LEVEL_:INFO}
-    org.springframework.core.env.PropertySourcesPropertyResolver: ${LOGGING_LEVEL_:INFO}
-    org.springframework.jndi: ${LOGGING_LEVEL_:INFO}
-    org.springframework.core.type.classreading.AnnotationAttributesReadingVisitor: INFO
-    org.springframework.web.context.support.StandardServletEnvironment: ${LOGGING_LEVEL_:INFO}
-    org.springframework.security: ${LOGGING_LEVEL_:INFO}
-
-
-
-
-
-
-
-
-
-
-security:
-  basic:
-    enabled: ${SECURITY_BASIC_ENABLED:false}
-  user:
-    name: ${SECURITY_USER_NAME:user}
-    password: ${SECURITY_USER_PASSWORD:user_pass}
-
-server.port: ${SERVER_PORT:8761}
-
-spring.application:
-  # every instance in cluster must ues same spring.application.name
-  # Peer Awareness Mode: 'eureka-cluster'
-  # Standalone Mode: 'eureka-standalone'
-  name: ${SPRING_APPLICATION_NAME:eureka-standalone}
-  # bug: https://github.com/spring-cloud/spring-cloud-netflix/issues/788
-
-spring.cloud:
-  client.hostname: ${SPRING_CLOUD_CLIENT_HOSTNAME:}
-  client.ipAddress: ${SPRING_CLOUD_CLIENT_IP_ADDRESS:}
-  inetutils:
-    ignored-interfaces:
-    - docker0
-    - eno.*
-    - tun.*
-    - veth.*
-    - virbr.*
-
 eureka.client:
 #  # Indicates whether server can redirect a client request to a backup server/cluster.
 #  # If set to false, the server will handle the request directly,
@@ -245,7 +193,7 @@ eureka.client:
     #   Standalone Mode: Notice that the serviceUrl is pointing to the same host as the local instance.
     #   Note: must use 'defaultZone' here, otherwise cluster peers can not find replicas (can not see each other).
     #   默认注册服务地址, 多个地址之间用','分隔
-    defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://${security.user.name}:${security.user.password}@${EUREKA_INSTANCE_HOSTNAME:eureka.local}:${server.port}/eureka/}
+    defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://${security.user.name}:${security.user.password}@${EUREKA_INSTANCE_HOSTNAME:eureka-standalone.local}:${server.port}/eureka/}
 #  # default: <blank-value>
 #  #transport:
 #  # Indicates whether the eureka client should use the DNS mechanism to fetch a list of eureka servers to talk to.
@@ -312,7 +260,7 @@ eureka.instance:
   # The hostname if it can be determined at configuration time (otherwise it will be guessed from OS primitives).
   # default: <blank-value>
   #   eureka.instance.hostname affect Status->instances's url href (not text) value on dashboard
-  hostname: ${EUREKA_INSTANCE_HOSTNAME:eureka.local}
+  hostname: ${EUREKA_INSTANCE_HOSTNAME:${spring.cloud.client.hostname:eureka-standalone.local}}
 #  # default: <blank-value>
 #  #inet-utils:
 #  # Initial status to register with remote Eureka server.
@@ -329,7 +277,7 @@ eureka.instance:
   # the communication from other instances primarily happen using the information supplied in {@link #getHostName(boolean)}.
   # default: <blank-value>
   #   如果未找到IP地址, 集群结点间无法互相注册
-  ip-address: ${EUREKA_INSTANCE_IP_ADDRESS:}
+  ip-address: ${EUREKA_INSTANCE_IPADDRESS:${spring.cloud.client.ipAddress:127.0.0.1}}
 #  # Indicates the time in seconds that the eureka server waits since it received the last heartbeat
 #  # before it can remove this instance from its view and there by disallowing traffic to this instance.
 #  # Setting this value too long could mean that the traffic could be routed to the instance
@@ -353,7 +301,7 @@ eureka.instance:
   # Flag to say that, when guessing a hostname, the IP address of the server should be used in preference to the hostname reported by the OS.
   # default: false
   #   当猜测hostname时, 是否优先使用IP地址
-  prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS:false}
+  prefer-ip-address: ${EUREKA_INSTANCE_PREFERIPADDRESS:false}
 #  registry:
 #    # Value used in determining when leases are cancelled, default to 1 for standalone. Should be set to 0 for peer replicated eurekas
 #    # default: 1
@@ -473,6 +421,53 @@ eureka.server:
 #  wait-time-in-ms-when-sync-empty: 0 # set to 0 will break cluster
 #  xml-codec-name:
 
+logging.level.: ${LOGGING_LEVEL_:INFO}
+logging:
+  config: classpath:log4j2-spring.xml
+  file: ${LOGGING_FILE:${spring.application.name}}.log
+  path: ${LOGGING_PATH:${user.dir}/data/${INSTANCE_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}/logs}
+  level:
+    jndi: ${LOGGING_LEVEL_:INFO}
+
+    org.springframework.beans.factory.annotation.InjectionMetadata: ${LOGGING_LEVEL_:INFO}
+    org.springframework.beans.factory.support.DefaultListableBeanFactory: ${LOGGING_LEVEL_:INFO}
+    org.springframework.core.env.MutablePropertySources: ${LOGGING_LEVEL_:INFO}
+    org.springframework.core.env.PropertySourcesPropertyResolver: ${LOGGING_LEVEL_:INFO}
+    org.springframework.jndi: ${LOGGING_LEVEL_:INFO}
+    org.springframework.core.type.classreading.AnnotationAttributesReadingVisitor: INFO
+    org.springframework.web.context.support.StandardServletEnvironment: ${LOGGING_LEVEL_:INFO}
+    org.springframework.security: ${LOGGING_LEVEL_:INFO}
+
+security:
+  basic:
+    enabled: ${SECURITY_BASIC_ENABLED:false}
+  user:
+    name: ${SECURITY_USER_NAME:user}
+    password: ${SECURITY_USER_PASSWORD:user_pass}
+
+server.port: ${SERVER_PORT:8761}
+
+spring:
+  application:
+    # every instance in cluster must ues same spring.application.name
+    # Peer Awareness Mode: 'eureka-cluster'
+    # Standalone Mode: 'eureka-standalone'
+    name: ${SPRING_APPLICATION_NAME:eureka-standalone}
+    # bug: https://github.com/spring-cloud/spring-cloud-netflix/issues/788
+  cloud:
+    inetutils:
+      preferred-networks:
+      - ^192\.168
+      - ^10\.
+      - ^172\.
+      ignored-interfaces:
+      - docker0
+      - eno.*
+      - tun.*
+      - utun.*
+      - veth.*
+      - virbr.*
+
 ---
 spring:
   profiles: port_nonsecure
@@ -486,7 +481,7 @@ eureka.instance:
 #  #   other possible values:
 #  #     ${spring.application.name}:${spring.cloud.client.ipAddress}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
 #  #     ${spring.application.name}:${spring.cloud.client.hostname}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
-#  instance-id: ${spring.application.name}-${PEER:standalone}:${spring.cloud.client.hostname}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
+#  instance-id: ${spring.application.name}:${spring.cloud.client.hostname}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
 #  # Gets the absolute health check page URL for this instance.
 #  # The users can provide the healthCheckUrlPath if the health check page resides in the same instance talking to eureka,
 #  # else in the cases where the instance is a proxy for some other server, users can provide the full URL. If the full URL is provided it takes precedence.
@@ -500,7 +495,7 @@ eureka.instance:
 #  # default: <blank-value>
 #  #   实例元数据
 #  #metadataMap:
-#    #hostname: ${EUREKA_INSTANCE_HOSTNAME:eureka.local}
+#    #hostname: ${EUREKA_INSTANCE_HOSTNAME:eureka-standalone.local}
 #    #prot: ${EUREKA_INSTANCE_NONSECUREPORT:8761}
 #    #instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}
 #    # or spring.cloud.client.ipAddress if eureka.instance.prefer-ip-address=true
@@ -525,7 +520,7 @@ spring:
 
 eureka.instance:
   non-secure-port-enabled: false
-#  instance-id: ${spring.cloud.client.hostname}:${spring.application.name}-${PEER:standalone}:${EUREKA_INSTANCE_SECUREPORT:${SERVER_PORT:8761}}:${random.value}
+#  instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${EUREKA_INSTANCE_SECUREPORT:${SERVER_PORT:8761}}:${random.value}
 #  # Gets the absolute secure health check page URL for this instance.
 #  # The users can provide the secureHealthCheckUrl if the health check page resides in the same instance talking to eureka,
 #  # else in the cases where the instance is a proxy for some other server, users can provide the full URL.
@@ -552,17 +547,12 @@ eureka.instance:
 
 ---
 spring:
-  profiles: standalone
+  profiles: manual_ip_hostname
 
-spring.application:
-  name: ${SPRING_APPLICATION_NAME:eureka-standalone}
-
-eureka.client:
-  fetch-registry: ${EUREKA_CLIENT_FETCHREGISTRY:false}
-  register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:false}
-
-eureka.instance:
-  appname: ${SPRING_APPLICATION_NAME:eureka-standalone}
+spring.cloud:
+  client:
+    hostname: ${SPRING_CLOUD_CLIENT_HOSTNAME:}
+    ipAddress: ${SPRING_CLOUD_CLIENT_IPADDRESS:}
 
 ---
 spring:
@@ -577,6 +567,20 @@ eureka.client:
 
 eureka.instance:
   appname: ${SPRING_APPLICATION_NAME:eureka-cluster}
+
+---
+spring:
+  profiles: standalone
+
+spring.application:
+  name: ${SPRING_APPLICATION_NAME:eureka-standalone}
+
+eureka.client:
+  fetch-registry: ${EUREKA_CLIENT_FETCHREGISTRY:false}
+  register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:false}
+
+eureka.instance:
+  appname: ${SPRING_APPLICATION_NAME:eureka-standalone}
 
 ---
 spring.profiles: development.env

@@ -1,13 +1,20 @@
 
 version: '2.1'
 services:
-  eureka-peer1.local:
-    image: ${DOCKER_REGISTRY:-cloudready}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
-    restart: always
-    command: []
+  eureka-peer1:
+    extends:
+      service: base-eureka
+      file: docker-compose-base.yml
     container_name: eureka-peer1.local
+    environment:
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer1.local:8761/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer2.local:8762/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer3.local:8763/eureka/
+    - EUREKA_INSTANCE_HOSTNAME=eureka-peer1.local
+    - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:-172.16.238.11}
+    - EUREKA_INSTANCE_NONSECUREPORT=8761
+    - INSTANCE_NAME=eureka-peer1
+    - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
+    - SERVER_PORT=8761
     hostname: eureka-peer1.local
-    #network_mode: host
     networks:
       local-network:
         ipv4_address: 172.16.238.11
@@ -15,38 +22,22 @@ services:
     ports:
     - "8761:8761"
     volumes:
-    - volume-eureka-peer1.local:/root/.data
-    - volume-eureka-peer1.local:/tmp
-    environment:
-    - EUREKA_CLIENT_FETCHREGISTRY=true
-    - EUREKA_CLIENT_REGISTERWITHEUREKA=true
-    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer1.local:8761/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer2.local:8762/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer3.local:8763/eureka/
-    - EUREKA_INSTANCE_HOSTNAME=eureka-peer1.local
-    - EUREKA_INSTANCE_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.11}
-    - EUREKA_INSTANCE_PREFER_IP_ADDRESS=${EUREKA_INSTANCE_PREFER_IP_ADDRESS:-false}
-    - EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT=${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:-0}
-    - EUREKA_INSTANCE_NONSECUREPORT=8761
-    - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
-    - PEER=peer1
-    - SECURITY_BASIC_ENABLED=${SECURITY_BASIC_ENABLED:-false}
-    - SECURITY_USER_NAME=${SECURITY_USER_NAME:-user}
-    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-user_pass}
-    - SERVER_PORT=8761
-    - SPRING_APPLICATION_NAME=eureka-cluster
-    - SPRING_CLOUD_CLIENT_HOSTNAME=eureka-peer1.local
-    - SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.11}
-    - SPRING_PROFILES_ACTIVE=development.env,port_nonsecure,peer_awareness
-    #extra_hosts:
-    #- "eureka-peer1.local:${HOST_IP_ADDRESS:-172.16.238.11}"
-    #- "eureka-peer2.local:${HOST_IP_ADDRESS:-172.16.238.12}"
-    #- "eureka-peer3.local:${HOST_IP_ADDRESS:-172.16.238.13}"
-  eureka-peer2.local:
-    image: ${DOCKER_REGISTRY:-cloudready}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
-    restart: always
-    command: []
+    - data:/root/.data
+    - data:/tmp
+  eureka-peer2:
+    extends:
+      service: base-eureka
+      file: docker-compose-base.yml
     container_name: eureka-peer2.local
+    environment:
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer1.local:8761/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer2.local:8762/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer3.local:8763/eureka/
+    - EUREKA_INSTANCE_HOSTNAME=eureka-peer2.local
+    - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:-172.16.238.12}
+    - EUREKA_INSTANCE_NONSECUREPORT=8762
+    - INSTANCE_NAME=eureka-peer2
+    - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
+    - SERVER_PORT=8762
     hostname: eureka-peer2.local
-    #network_mode: host
     networks:
       local-network:
         ipv4_address: 172.16.238.12
@@ -54,38 +45,22 @@ services:
     ports:
     - "8762:8762"
     volumes:
-    - volume-eureka-peer2.local:/root/.data
-    - volume-eureka-peer2.local:/tmp
-    environment:
-    - EUREKA_CLIENT_FETCHREGISTRY=true
-    - EUREKA_CLIENT_REGISTERWITHEUREKA=true
-    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer1.local:8761/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer2.local:8762/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer3.local:8763/eureka/
-    - EUREKA_INSTANCE_HOSTNAME=eureka-peer2.local
-    - EUREKA_INSTANCE_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.12}
-    - EUREKA_INSTANCE_PREFER_IP_ADDRESS=${EUREKA_INSTANCE_PREFER_IP_ADDRESS:-false}
-    - EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT=${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:-0}
-    - EUREKA_INSTANCE_NONSECUREPORT=8762
-    - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
-    - PEER=peer2
-    - SECURITY_BASIC_ENABLED=${SECURITY_BASIC_ENABLED:-true}
-    - SECURITY_USER_NAME=${SECURITY_USER_NAME:-user}
-    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-user_pass}
-    - SERVER_PORT=8762
-    - SPRING_APPLICATION_NAME=eureka-cluster
-    - SPRING_CLOUD_CLIENT_HOSTNAME=eureka-peer2.local
-    - SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.12}
-    - SPRING_PROFILES_ACTIVE=development.env,port_nonsecure,peer_awareness
-    #extra_hosts:
-    #- "eureka-peer1.local:${HOST_IP_ADDRESS:-172.16.238.11}"
-    #- "eureka-peer2.local:${HOST_IP_ADDRESS:-172.16.238.12}"
-    #- "eureka-peer3.local:${HOST_IP_ADDRESS:-172.16.238.13}"
-  eureka-peer3.local:
-    image: ${DOCKER_REGISTRY:-cloudready}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
-    restart: always
-    command: []
+    - data:/root/.data
+    - data:/tmp
+  eureka-peer3:
+    extends:
+      service: base-eureka
+      file: docker-compose-base.yml
     container_name: eureka-peer3.local
+    environment:
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer1.local:8761/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer2.local:8762/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer3.local:8763/eureka/
+    - EUREKA_INSTANCE_HOSTNAME=eureka-peer3.local
+    - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:-172.16.238.13}
+    - EUREKA_INSTANCE_NONSECUREPORT=8763
+    - INSTANCE_NAME=eureka-peer3
+    - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
+    - SERVER_PORT=8763
     hostname: eureka-peer3.local
-    #network_mode: host
     networks:
       local-network:
         ipv4_address: 172.16.238.13
@@ -93,56 +68,24 @@ services:
     ports:
     - "8763:8763"
     volumes:
-    - volume-eureka-peer3.local:/root/.data
-    - volume-eureka-peer3.local:/tmp
-    environment:
-    - EUREKA_CLIENT_FETCHREGISTRY=true
-    - EUREKA_CLIENT_REGISTERWITHEUREKA=true
-    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer1.local:8761/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer2.local:8762/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer3.local:8763/eureka/
-    - EUREKA_INSTANCE_HOSTNAME=eureka-peer3.local
-    - EUREKA_INSTANCE_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.13}
-    - EUREKA_INSTANCE_PREFER_IP_ADDRESS=${EUREKA_INSTANCE_PREFER_IP_ADDRESS:-false}
-    - EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT=${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:-0}
-    - EUREKA_INSTANCE_NONSECUREPORT=8763
-    - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
-    - PEER=peer3
-    - SECURITY_BASIC_ENABLED=${SECURITY_BASIC_ENABLED:-true}
-    - SECURITY_USER_NAME=${SECURITY_USER_NAME:-user}
-    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-user_pass}
-    - SERVER_PORT=8763
-    - SPRING_APPLICATION_NAME=eureka-cluster
-    - SPRING_CLOUD_CLIENT_HOSTNAME=eureka-peer3.local
-    - SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.13}
-    - SPRING_PROFILES_ACTIVE=development.env,port_nonsecure,peer_awareness
-    #extra_hosts:
-    #- "eureka-peer1.local:${HOST_IP_ADDRESS:-172.16.238.11}"
-    #- "eureka-peer2.local:${HOST_IP_ADDRESS:-172.16.238.12}"
-    #- "eureka-peer3.local:${HOST_IP_ADDRESS:-172.16.238.13}"
-
-volumes:
-  volume-eureka-peer1.local: {}
-  volume-eureka-peer2.local: {}
-  volume-eureka-peer3.local: {}
+    - data:/root/.data
+    - data:/tmp
 
 networks:
-  default:
-    external: true
-    name: local-network
-
   local-network:
     external: true
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.238.0/24
+      - subnet: 2001:3984:3989::/64
 
-#  # docker network create --driver=bridge --ipv6 --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network
-#  # docker network ls
-#  # docker network inspect local-network
-#  local-network:
-#    external: true
-#    driver: bridge
-#    enable_ipv6: true
-#    ipam:
-#      driver: default
-#      config:
-#      -
-#        subnet: 172.16.238.0/24
-#      -
-#        subnet: 2001:3984:3989::/64
+volumes:
+  data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/data
+      o: bind
