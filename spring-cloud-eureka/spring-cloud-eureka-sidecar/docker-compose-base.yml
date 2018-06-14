@@ -1,0 +1,44 @@
+# base configuration
+
+version: '2.1'
+services:
+  base-eureka-sidecar:
+    command: []
+    environment:
+    # Mandatory, Address(s) of Eureka node or cluster (comma split)
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:-http://user:user_pass@eureka-standalone.local:8761/eureka/}
+
+    # Optional, Eureka prefer ip address not hostname
+    # Change this only when sidecar can not properly register the application with default values and there are issues on service access.
+    - EUREKA_INSTANCE_PREFERIPADDRESS=${EUREKA_INSTANCE_PREFERIPADDRESS:-true}
+
+    - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
+
+    # Password to access management endpoints such as /env, /health and so on.
+    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-} # change me
+
+    # The port of this sidecar, need not to change this if no port conflict.
+    - SERVER_PORT=${SERVER_PORT:-5678}
+
+    # Mandatory, The health check URL path of non-JVM application or service
+    - SIDECAR_HEALTHURI=${SIDECAR_HEALTHURI:-/health} # implement this URL on the non-JVM application or service.
+
+    # Optional, Homepage of the non-JVM application or service
+    #- SIDECAR_HOMEPAGEURI=${SIDECAR_HOMEPAGEURI:-/}
+
+    # Optional, Hostname of the non-JVM application or service. This value will appear in instance-id
+    # Change this only when sidecar can not properly register the application with default values and there are issues on service access.
+    #- SIDECAR_HOSTNAME=${SIDECAR_HOSTNAME:}
+
+    # Optional, Ip address of the non-JVM application or service. This value will appear in instance-id if SIDECAR_HOSTNAME absent.
+    # Change this only when sidecar can not properly register the application with default values and there are issues on service access.
+    #- SIDECAR_IPADDRESS=${SIDECAR_IPADDRESS:}
+
+    # Mandatory, The non-JVM application or service's port
+    - SIDECAR_PORT=${SIDECAR_PORT:-5678} # change me
+
+    # Mandatory, Application or service name of the non-JVM application or service
+    - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-the-name-of-non-JVM-application-or-service}
+
+    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-sidecar:${IMAGE_VERSION:-0.0.1-SNAPSHOT}
+    restart: always

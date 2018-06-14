@@ -1,3 +1,4 @@
+# local development configuration
 
 version: '2.1'
 services:
@@ -9,11 +10,14 @@ services:
     environment:
     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer1.local:8761/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer2.local:8762/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer3.local:8763/eureka/
     - EUREKA_INSTANCE_HOSTNAME=eureka-peer1.local
-    - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:-172.16.238.11}
+    - EUREKA_INSTANCE_IPADDRESS=172.16.238.11
     - EUREKA_INSTANCE_NONSECUREPORT=8761
     - INSTANCE_NAME=eureka-peer1
     - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
     - SERVER_PORT=8761
+    - SPRING_APPLICATION_NAME=eureka-cluster
+    - SPRING_CLOUD_CLIENT_HOSTNAME=eureka-peer1.local
+    - SPRING_CLOUD_CLIENT_IPADDRESS=172.16.238.11
     hostname: eureka-peer1.local
     networks:
       local-network:
@@ -32,11 +36,14 @@ services:
     environment:
     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer1.local:8761/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer2.local:8762/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer3.local:8763/eureka/
     - EUREKA_INSTANCE_HOSTNAME=eureka-peer2.local
-    - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:-172.16.238.12}
+    - EUREKA_INSTANCE_IPADDRESS=172.16.238.12
     - EUREKA_INSTANCE_NONSECUREPORT=8762
     - INSTANCE_NAME=eureka-peer2
     - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
     - SERVER_PORT=8762
+    - SPRING_APPLICATION_NAME=eureka-cluster
+    - SPRING_CLOUD_CLIENT_HOSTNAME=eureka-peer2.local
+    - SPRING_CLOUD_CLIENT_IPADDRESS=172.16.238.12
     hostname: eureka-peer2.local
     networks:
       local-network:
@@ -55,11 +62,14 @@ services:
     environment:
     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer1.local:8761/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer2.local:8762/eureka/,http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-peer3.local:8763/eureka/
     - EUREKA_INSTANCE_HOSTNAME=eureka-peer3.local
-    - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:-172.16.238.13}
+    - EUREKA_INSTANCE_IPADDRESS=172.16.238.13
     - EUREKA_INSTANCE_NONSECUREPORT=8763
     - INSTANCE_NAME=eureka-peer3
     - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
     - SERVER_PORT=8763
+    - SPRING_APPLICATION_NAME=eureka-cluster
+    - SPRING_CLOUD_CLIENT_HOSTNAME=eureka-peer3.local
+    - SPRING_CLOUD_CLIENT_IPADDRESS=172.16.238.13
     hostname: eureka-peer3.local
     networks:
       local-network:

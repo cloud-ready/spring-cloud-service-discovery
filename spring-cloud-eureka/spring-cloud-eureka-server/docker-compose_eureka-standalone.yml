@@ -1,0 +1,43 @@
+# production configuration
+
+version: '2.1'
+services:
+  eureka-standalone:
+    extends:
+      service: base-eureka
+      file: docker-compose-base.yml
+    container_name: ${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
+    environment:
+    - EUREKA_CLIENT_FETCHREGISTRY=false
+    - EUREKA_CLIENT_REGISTERWITHEUREKA=false
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+    - EUREKA_INSTANCE_HOSTNAME=${HOST_IPADDRESS:} # ${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-internal}
+    - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:}
+    - EUREKA_INSTANCE_NONSECUREPORT=${SERVER_PORT:-8761}
+
+    - EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT=${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:-1}
+    - INSTANCE_NAME=${INSTANCE_NAME:-eureka-standalone}
+    - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
+
+    - SECURITY_USER_NAME=${SECURITY_USER_NAME:-user}
+    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-user_pass}
+    - SERVER_PORT=${SERVER_PORT:-8761}
+    - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-eureka-standalone}
+    - SPRING_CLOUD_CLIENT_HOSTNAME=${HOST_IPADDRESS:} # ${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-internal}
+    - SPRING_CLOUD_CLIENT_IPADDRESS=${HOST_IPADDRESS:}
+    - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-staging.env,manual_ip_hostname,port_nonsecure,peer_awareness}
+    hostname: ${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-internal}
+    network_mode: bridge
+    ports:
+    - "${SERVER_PORT:-8761}:${SERVER_PORT:-8761}"
+    volumes:
+    - data:/root/.data
+    - data:/tmp
+
+volumes:
+  data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/data
+      o: bind

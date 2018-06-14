@@ -23,7 +23,7 @@ Dependencies in pom.xml
     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId><scope>runtime</scope></dependency>
     
     <!--  -->
-    <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>0.0.1-SNAPSHOT</version></dependency>
+    <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>${version}</version></dependency>
   <!-- @formatter:on -->
 </dependencies>
 ```

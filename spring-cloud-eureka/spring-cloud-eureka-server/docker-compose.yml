@@ -2,7 +2,7 @@
 
 version: '2.1'
 services:
-  eureka-standalone:
+  eureka-standalone-develop:
     extends:
       service: base-eureka
       file: docker-compose-base.yml
@@ -13,10 +13,19 @@ services:
     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-standalone.local:${SERVER_PORT:-8761}/eureka/
     #- EUREKA_INSTANCE_HOSTNAME=${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
     - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:-172.16.238.10}
+
+
     - EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT=${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:-1}
     - INSTANCE_NAME=${INSTANCE_NAME:-eureka-standalone}
+
+
+
+
+
     - SPRING_APPLICATION_NAME=eureka-standalone
-    - SPRING_PROFILES_ACTIVE=development.env,port_nonsecure,standalone
+    - SPRING_CLOUD_CLIENT_HOSTNAME=${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
+    - SPRING_CLOUD_CLIENT_IPADDRESS=${HOST_IPADDRESS:-172.16.238.10}
+    - SPRING_PROFILES_ACTIVE=development.env,manual_ip_hostname,port_nonsecure,standalone
     hostname: ${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
     networks:
       local-network:
@@ -24,6 +33,9 @@ services:
         ipv6_address: 2001:3984:3989::10
     ports:
     - "${SERVER_PORT:-8761}:${SERVER_PORT:-8761}"
+    volumes:
+    - data:/root/.data
+    - data:/tmp
 
 networks:
   # docker network create --driver=bridge --ipv6 --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network

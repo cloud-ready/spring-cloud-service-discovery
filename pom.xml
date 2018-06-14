@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.home1</groupId>
         <artifactId>maven-build-java8</artifactId>
-        <version>0.0.1.OSS-SNAPSHOT</version>
+        <version>0.0.3.OSS</version>
     </parent>
 
     <artifactId>spring-cloud-service-discovery</artifactId>
@@ -32,6 +32,8 @@
     </scm>
 
     <properties>
+        <deps-spring-boot.version>0.0.4.OSS</deps-spring-boot.version>
+        <log-config.version>0.0.4.OSS</log-config.version>
         <spring-boot.version>1.5.12.RELEASE</spring-boot.version>
 
         <repositories.releases.updatePolicy>always</repositories.releases.updatePolicy>
@@ -75,13 +77,15 @@
         <dependencies>
             <dependency>
                 <groupId>cn.home1</groupId>
-                <artifactId>deps-spring-boot-1.5.12.RELEASE</artifactId>
-                <version>0.0.1.OSS-SNAPSHOT</version>
-                <type>pom</type>
+                <artifactId>deps-spring-boot-${spring-boot.version}</artifactId>
+                <version>${deps-spring-boot.version}</version>
                 <scope>import</scope>
+                <type>pom</type>
             </dependency>
 
             <!-- @formatter:off -->
+            <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-rolling</artifactId><version>${log-config.version}</version></dependency>
+            <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-test</artifactId><version>${log-config.version}</version><scope>test</scope></dependency>
             <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>${project.version}</version></dependency>
             <!-- @formatter:on -->
         </dependencies>
@@ -89,7 +93,9 @@
 
     <dependencies>
         <!-- @formatter:off -->
-        <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></dependency>
+        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-rolling</artifactId></dependency>
+        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-test</artifactId><scope>test</scope></dependency>
+
         <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><scope>provided</scope></dependency>
         <!-- @formatter:on -->
     </dependencies>
@@ -100,8 +106,16 @@
         <module>service-discovery-examples</module>
     </modules>
 
+    <!-- @formatter:off -->
     <repositories>
-        <!-- @formatter:off -->
+        <!-- Make artifacts in OSSRH repositories available -->
+        <repository>
+            <id>OSSRH-releases</id>
+            <name>central releases</name>
+            <url>https://oss.sonatype.org/content/repositories/releases/</url>
+            <releases><enabled>true</enabled><updatePolicy>${repositories.releases.updatePolicy}</updatePolicy></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
         <repository>
             <id>OSSRH-snapshots</id>
             <name>central snapshots</name>
@@ -109,6 +123,15 @@
             <releases><enabled>false</enabled></releases>
             <snapshots><enabled>true</enabled><updatePolicy>${repositories.snapshots.updatePolicy}</updatePolicy></snapshots>
         </repository>
-        <!-- @formatter:on -->
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>central</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <releases><enabled>true</enabled><updatePolicy>${repositories.releases.updatePolicy}</updatePolicy></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+    <!-- @formatter:on -->
 </project>

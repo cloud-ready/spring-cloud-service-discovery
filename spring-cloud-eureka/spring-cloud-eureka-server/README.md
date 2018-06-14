@@ -23,8 +23,8 @@ Step 2. Create a docker network
 
 Step 3. `docker-compose up` or
 ```bash
-# OSX way to get HOST_IP_ADDRESS
-HOST_IP_ADDRESS=$(ipconfig getifaddr en0 || ipconfig getifaddr en1) \
+# OSX way to get HOST_IPADDRESS
+HOST_IPADDRESS=$(ipconfig getifaddr en0 || ipconfig getifaddr en1) \
 docker-compose -f docker-compose-local-cluster.yml up
 ```
 

@@ -424,8 +424,8 @@ eureka.server:
 logging.level.: ${LOGGING_LEVEL_:INFO}
 logging:
   config: classpath:log4j2-spring.xml
-  file: ${LOGGING_FILE:${spring.application.name}}.log
-  path: ${LOGGING_PATH:${user.dir}/data/${INSTANCE_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}/logs}
+  #file: ${LOG_FILE:${INSTANCE_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}}.log
+  #path: ${LOG_PATH:${user.dir}/data/logs/${spring.application.name}}
   level:
     jndi: ${LOGGING_LEVEL_:INFO}
 
