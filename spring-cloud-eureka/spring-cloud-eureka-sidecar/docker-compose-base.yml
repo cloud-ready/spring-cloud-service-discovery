@@ -40,5 +40,5 @@ services:
     # Mandatory, Application or service name of the non-JVM application or service
     - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-the-name-of-non-JVM-application-or-service}
 
-    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-sidecar:${IMAGE_VERSION:-0.0.2}
+    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-sidecar:${IMAGE_VERSION:-0.0.3-SNAPSHOT}
     restart: always
