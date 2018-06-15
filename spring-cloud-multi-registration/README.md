@@ -23,7 +23,7 @@ Dependencies in pom.xml
     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId><scope>runtime</scope></dependency>
     
     <!--  -->
-    <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>0.0.1-SNAPSHOT</version></dependency>
+    <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>${version}</version></dependency>
   <!-- @formatter:on -->
 </dependencies>
 ```
@@ -60,7 +60,7 @@ spring:
       auto-multi-registration.enabled: true
 ```
 
-Only snapshots available for now `https://oss.sonatype.org/content/repositories/snapshots/cn/home1/spring-cloud-multi-registration/0.0.1-SNAPSHOT/`
+Only snapshots available for now `https://oss.sonatype.org/content/repositories/snapshots/cn/home1/spring-cloud-multi-registration/`
 To access these snapshots, you may need to add OSSRH-snapshots (sonatype-snapshots) into your `pom.xml`
 ```xml
 <repository>

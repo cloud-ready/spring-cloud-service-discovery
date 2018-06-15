@@ -3,7 +3,7 @@ spring-cloud-eureka-sidecar
 
 Sidecar can register non-JVM applications or services on Eureka and help them to access applications or services on Eureka.
 
-[Github](https://github.com/cloud-ready/spring-cloud-service-discovery/tree/develop/spring-cloud-eureka)
+[Github](https://github.com/cloud-ready/spring-cloud-service-discovery/tree/develop/spring-cloud-eureka/spring-cloud-eureka-sidecar)
 [Docker Hub](https://hub.docker.com/r/cloudready/spring-cloud-eureka-server/)
 
 ## I. Features
@@ -31,7 +31,7 @@ docker-compose up -d
 ### 1. There are 4 mandatory environment variables need to set before sidecar boot-up.
 
 - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-> Eureka URLs, comma split if there are multiple Eureka servers. default value is 'http://user:user_pass@eureka.local:8761/eureka/'.
+> Eureka URLs, comma split if there are multiple Eureka servers. default value is 'http://user:user_pass@eureka-standalone.local:8761/eureka/'.
 
 - SIDECAR_HEALTHURI
 > health check endpoint on no-JVM application (service). default value is '/health'.

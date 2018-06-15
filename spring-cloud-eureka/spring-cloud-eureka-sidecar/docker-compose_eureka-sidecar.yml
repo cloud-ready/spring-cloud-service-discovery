@@ -1,43 +1,29 @@
-# local development configuration
+# production development configuration
 
 version: '2.1'
 services:
-  eureka-sidecar-develop:
+  eureka-sidecar:
     extends:
       file: docker-compose-base.yml
       service: base-eureka-sidecar
-    container_name: ${INSTANCE_NAME:-eureka-sidecar}.${INSTANCE_DOMAIN:-local}
+    container_name: ${INSTANCE_NAME:-eureka-sidecar}.${INSTANCE_DOMAIN:-internal}
     environment:
     - EUREKA_INSTANCE_PREFERIPADDRESS=${EUREKA_INSTANCE_PREFERIPADDRESS:-true}
     - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
     - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-}
     - SERVER_PORT=${SERVER_PORT:-5678}
     - SIDECAR_HEALTHURI=${SIDECAR_HEALTHURI:-/health}
-    - SIDECAR_HOSTNAME=${INSTANCE_NAME:-eureka-sidecar}.${INSTANCE_DOMAIN:-local} # Optional, for instance-id
-    - SIDECAR_IPADDRESS=${SIDECAR_IPADDRESS:-172.16.238.78} # Optional, for instance-id
+    - SIDECAR_HOSTNAME=${INSTANCE_NAME:-eureka-sidecar}.${INSTANCE_DOMAIN:-internal} # Optional, for instance-id
+    - SIDECAR_IPADDRESS=${SIDECAR_IPADDRESS} # Optional, for instance-id
     - SIDECAR_PORT=${SIDECAR_PORT:-5678}
     - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-the-name-of-non-JVM-application-or-service}
-    hostname: ${INSTANCE_NAME:-eureka-sidecar}.${INSTANCE_DOMAIN:-local}
+    hostname: ${INSTANCE_NAME:-eureka-sidecar}.${INSTANCE_DOMAIN:-internal}
+    network_mode: bridge
     ports:
     - "${SERVER_PORT:-5678}:${SERVER_PORT:-5678}"
-    networks:
-      local-network:
-        ipv4_address: 172.16.238.78
-        ipv6_address: 2001:3984:3989::78
     volumes:
     - data:/root/.data
     - data:/tmp
-
-networks:
-  local-network:
-    external: true
-    driver: bridge
-    enable_ipv6: true
-    ipam:
-      driver: default
-      config:
-      - subnet: 172.16.238.0/24
-      - subnet: 2001:3984:3989::/64
 
 volumes:
   data:

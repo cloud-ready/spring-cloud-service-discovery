@@ -6,14 +6,14 @@ endpoints:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://user:user_pass@eureka.local:8761/eureka/}
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://user:user_pass@eureka-standalone.local:8761/eureka/}
   instance:
     instance-id: ${spring.application.name}:${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ipAddress:${spring.cloud.client.hostname:${random.int}}}}}:${SERVER_PORT:5678}
-    prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS:true}
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFERIPADDRESS:true}
 
 logging:
-  file: ${LOGGING_FILE:eureka-sidecar}.log
-  path: ${LOGGING_PATH:${user.home}/.data/eureka-sidecar/logs}
+  #file: ${LOG_FILE:${INSTANCE_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}}.log
+  #path: ${LOG_PATH:${user.dir}/data/logs/${spring.application.name}}
   level:
     jndi: ${LOGGING_LEVEL_:INFO}
     org.springframework.boot.actuate.endpoint.jmx.EndpointMBeanExporter: ${ENDPOINT_LOGGING_LEVEL_:WARN}

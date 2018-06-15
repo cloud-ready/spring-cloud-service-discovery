@@ -1,17 +1,12 @@
 
 version: '2.1'
 services:
-  consul-agent:
-    image: consul:1.1.0
-    restart: always
-    command: ${COMMAND:-agent -dev -client 0.0.0.0}
-    container_name: ${CONSUL_HOST:-consul}.${DOMAIN:-local}
-    hostname: ${CONSUL_HOST:-consul}.${DOMAIN:-local}
-    network_mode: host
-
-
-
-
+  base-consul-agent:
+    image: consul:${IMAGE_VERSION:-1.1.0}
+    environment:
+      CONSUL_ALLOW_PRIVILEGED_PORTS:
+      CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE:-eth0}
+      CONSUL_LOCAL_CONFIG: '{"leave_on_terminate": true}'
     ports:
     # Server RPC is used for communication between Consul clients and servers
     # for internal request forwarding.
@@ -29,12 +24,4 @@ services:
     - "${CONSUL_DNS_PORT:-8600}:8600/tcp"
     - "${CONSUL_DNS_PORT:-8600}:8600/udp"
     privileged: true
-    volumes:
-    - volume-consul-agent-consul-data:/consul/data
-    environment:
-      CONSUL_ALLOW_PRIVILEGED_PORTS:
-      CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE:-eth0}
-      CONSUL_LOCAL_CONFIG: '{"leave_on_terminate": true}'
-
-volumes:
-  volume-consul-agent-consul-data: {}
+    restart: always

@@ -13,12 +13,12 @@ before_install:
 - export PATH=$M2_HOME/bin:$PATH
 branches:
   only:
-  - master
-  - develop
-  - /^feature\/.*$/
-  - /^hotfix\/.*$/
-  - /^release\/.*$/
-  - /^v\d+\.\d+(\.\d+)?(-\S*)?/
+  #- master # do nothing on master branch
+  - develop # snapshots on develop branch
+  - /^feature\/.*$/ # build and test on feature branches
+  - /^hotfix\/.*$/ # release on hotfix branches
+  - /^release\/.*$/ # release on release branches
+  #- /^v\d+\.\d+(\.\d+)?(-\S*)?/ # build and publish a github release (can skip tests here) or do nothing on version tags
 cache:
   directories:
   - "$HOME/.cache"
@@ -40,7 +40,11 @@ jdk:
 #- oraclejdk9
 language: java
 script:
+# When prefixed with `travis_wait 30`, no log output until it is done.
+# see: https://github.com/travis-ci/travis-ci/issues/4190 or https://github.com/HaxeFoundation/hxcpp/issues/709
+- while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
 - bash ci.sh mvn clean install sonar:sonar site deploy site-deploy
+- kill %1
 services:
 - docker
 sudo: required

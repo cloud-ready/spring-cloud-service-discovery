@@ -1,64 +1,60 @@
+# local development configuration
 
 version: '2.1'
 services:
-  eureka.local:
-    image: ${DOCKER_REGISTRY:-cloudready}/spring-cloud-eureka-server:0.0.1-SNAPSHOT
-    restart: always
-    command: []
-    container_name: ${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
-    hostname: ${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
-    #network_mode: host
+  eureka-standalone-develop:
+    extends:
+      service: base-eureka
+      file: docker-compose-base.yml
+    container_name: ${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
+    environment:
+    - EUREKA_CLIENT_FETCHREGISTRY=false
+    - EUREKA_CLIENT_REGISTERWITHEUREKA=false
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-standalone.local:${SERVER_PORT:-8761}/eureka/
+    #- EUREKA_INSTANCE_HOSTNAME=${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
+    - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:-172.16.238.10}
+
+
+    - EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT=${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:-1}
+    - INSTANCE_NAME=${INSTANCE_NAME:-eureka-standalone}
+
+
+
+
+
+    - SPRING_APPLICATION_NAME=eureka-standalone
+    - SPRING_CLOUD_CLIENT_HOSTNAME=${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
+    - SPRING_CLOUD_CLIENT_IPADDRESS=${HOST_IPADDRESS:-172.16.238.10}
+    - SPRING_PROFILES_ACTIVE=development.env,manual_ip_hostname,port_nonsecure,standalone
+    hostname: ${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
     networks:
       local-network:
         ipv4_address: 172.16.238.10
         ipv6_address: 2001:3984:3989::10
     ports:
-    - "${SERVER_PORT:-8761}:8761"
+    - "${SERVER_PORT:-8761}:${SERVER_PORT:-8761}"
     volumes:
-    - volume-eureka:/root/.data
-    - volume-eureka:/tmp
-    environment:
-    - EUREKA_CLIENT_FETCHREGISTRY=false
-    - EUREKA_CLIENT_REGISTERWITHEUREKA=false
-    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka.local:${SERVER_PORT:-8761}/eureka/
-    - EUREKA_INSTANCE_HOSTNAME=${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
-    - EUREKA_INSTANCE_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.10}
-    - EUREKA_INSTANCE_PREFER_IP_ADDRESS=${EUREKA_INSTANCE_PREFER_IP_ADDRESS:-false}
-    - EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT=${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:-1}
-    - EUREKA_INSTANCE_NONSECUREPORT=${SERVER_PORT:-8761}
-    - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
-    - PEER=standalone
-    - SECURITY_BASIC_ENABLED=${SECURITY_BASIC_ENABLED:-false}
-    - SECURITY_USER_NAME=${SECURITY_USER_NAME:-user}
-    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-user_pass}
-    - SERVER_PORT=${SERVER_PORT:-8761}
-    - SPRING_APPLICATION_NAME=eureka-standalone
-    - SPRING_CLOUD_CLIENT_HOSTNAME=${EUREKA_INSTANCE_HOSTNAME:-eureka.local}
-    - SPRING_CLOUD_CLIENT_IP_ADDRESS=${HOST_IP_ADDRESS:-172.16.238.10}
-    - SPRING_PROFILES_ACTIVE=development.env,port_nonsecure,standalone
-
-volumes:
-  volume-eureka: {}
+    - data:/root/.data
+    - data:/tmp
 
 networks:
-  default:
-    external: true
-    name: local-network
-
+  # docker network create --driver=bridge --ipv6 --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network
+  # docker network ls
+  # docker network inspect local-network
   local-network:
     external: true
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.238.0/24
+      - subnet: 2001:3984:3989::/64
 
-#  # docker network create --driver=bridge --ipv6 --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network
-#  # docker network ls
-#  # docker network inspect local-network
-#  local-network:
-#    external: true
-#    driver: bridge
-#    enable_ipv6: true
-#    ipam:
-#      driver: default
-#      config:
-#      -
-#        subnet: 172.16.238.0/24
-#      -
-#        subnet: 2001:3984:3989::/64
+volumes:
+  data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/data
+      o: bind
