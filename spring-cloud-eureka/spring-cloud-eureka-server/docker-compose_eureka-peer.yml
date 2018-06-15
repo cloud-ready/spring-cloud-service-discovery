@@ -12,7 +12,7 @@ services:
 
     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
     - EUREKA_INSTANCE_HOSTNAME=${HOST_IPADDRESS} # ${INSTANCE_NAME:-eureka-peer1}.${INSTANCE_DOMAIN:-internal}
-    - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:}
+    - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS}
     - EUREKA_INSTANCE_NONSECUREPORT=${SERVER_PORT:-8761}
 
 
@@ -31,7 +31,7 @@ services:
     ports:
     - "${SERVER_PORT:-8761}:${SERVER_PORT:-8761}"
     volumes:
-    - data:/root/.data
+    - data:/root/data
     - data:/tmp
 
 volumes:

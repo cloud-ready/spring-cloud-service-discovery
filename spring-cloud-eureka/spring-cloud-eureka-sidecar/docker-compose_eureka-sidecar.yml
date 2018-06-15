@@ -22,7 +22,7 @@ services:
     ports:
     - "${SERVER_PORT:-5678}:${SERVER_PORT:-5678}"
     volumes:
-    - data:/root/.data
+    - data:/root/data
     - data:/tmp
 
 volumes:

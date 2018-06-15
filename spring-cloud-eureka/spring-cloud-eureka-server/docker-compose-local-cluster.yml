@@ -26,7 +26,7 @@ services:
     ports:
     - "8761:8761"
     volumes:
-    - data:/root/.data
+    - data:/root/data
     - data:/tmp
   eureka-peer2:
     extends:
@@ -52,7 +52,7 @@ services:
     ports:
     - "8762:8762"
     volumes:
-    - data:/root/.data
+    - data:/root/data
     - data:/tmp
   eureka-peer3:
     extends:
@@ -78,7 +78,7 @@ services:
     ports:
     - "8763:8763"
     volumes:
-    - data:/root/.data
+    - data:/root/data
     - data:/tmp
 
 networks:

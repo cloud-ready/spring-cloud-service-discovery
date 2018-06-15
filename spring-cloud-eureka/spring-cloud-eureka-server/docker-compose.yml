@@ -25,7 +25,7 @@ services:
     - SPRING_APPLICATION_NAME=eureka-standalone
     - SPRING_CLOUD_CLIENT_HOSTNAME=${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
     - SPRING_CLOUD_CLIENT_IPADDRESS=${HOST_IPADDRESS:-172.16.238.10}
-    - SPRING_PROFILES_ACTIVE=development.env,manual_ip_hostname,port_nonsecure,standalone
+    - SPRING_PROFILES_ACTIVE=develop.env,manual_ip_hostname,port_nonsecure,standalone
     hostname: ${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
     networks:
       local-network:
@@ -34,7 +34,7 @@ services:
     ports:
     - "${SERVER_PORT:-8761}:${SERVER_PORT:-8761}"
     volumes:
-    - data:/root/.data
+    - data:/root/data
     - data:/tmp
 
 networks:
