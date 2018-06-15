@@ -25,7 +25,7 @@ services:
     - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-eureka-cluster}
     #- SPRING_CLOUD_CLIENT_HOSTNAME=${HOST_IPADDRESS} # profile: manual_ip_hostname
     #- SPRING_CLOUD_CLIENT_IPADDRESS=${HOST_IPADDRESS} # profile: manual_ip_hostname
-    - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-development.env,port_nonsecure,peer_awareness}
+    - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-develop.env,port_nonsecure,peer_awareness}
     image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-server:${IMAGE_VERSION:-0.0.2-SNAPSHOT}
     restart: always
     volumes:

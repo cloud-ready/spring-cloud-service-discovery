@@ -583,7 +583,7 @@ eureka.instance:
   appname: ${SPRING_APPLICATION_NAME:eureka-standalone}
 
 ---
-spring.profiles: development.env
+spring.profiles: develop.env
 
 ---
 spring.profiles: it.env
