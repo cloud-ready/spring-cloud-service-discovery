@@ -15,7 +15,7 @@
     <name>spring-cloud-service-discovery</name>
     <packaging>pom</packaging>
     <url>https://github.com/cloud-ready/spring-cloud-service-discovery</url>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
 
     <ciManagement>
         <system>Travis CI</system>
@@ -103,8 +103,20 @@
     <modules>
         <module>spring-cloud-eureka</module>
         <module>spring-cloud-multi-registration</module>
-        <module>service-discovery-examples</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <!-- Build examples at local, skip build examples on CI -->
+            <id>build-examples</id>
+            <activation><property><name>!site</name></property><activeByDefault>false</activeByDefault></activation>
+            <modules>
+                <module>spring-cloud-eureka</module>
+                <module>spring-cloud-multi-registration</module>
+                <module>service-discovery-examples</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <!-- @formatter:off -->
     <repositories>

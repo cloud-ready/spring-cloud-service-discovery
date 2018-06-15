@@ -60,7 +60,7 @@ spring:
       auto-multi-registration.enabled: true
 ```
 
-Only snapshots available for now `https://oss.sonatype.org/content/repositories/snapshots/cn/home1/spring-cloud-multi-registration/0.0.1-SNAPSHOT/`
+Only snapshots available for now `https://oss.sonatype.org/content/repositories/snapshots/cn/home1/spring-cloud-multi-registration/`
 To access these snapshots, you may need to add OSSRH-snapshots (sonatype-snapshots) into your `pom.xml`
 ```xml
 <repository>
