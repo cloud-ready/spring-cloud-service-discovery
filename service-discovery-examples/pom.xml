@@ -15,6 +15,11 @@
     <name>service-discovery-examples</name>
     <packaging>pom</packaging>
 
+    <dependencies>
+        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-rolling</artifactId></dependency>
+        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-test</artifactId><scope>test</scope></dependency>
+    </dependencies>
+
     <modules>
         <module>composite-discovery-example</module>
         <module>consul-instance</module>

@@ -93,9 +93,6 @@
 
     <dependencies>
         <!-- @formatter:off -->
-        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-rolling</artifactId></dependency>
-        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-test</artifactId><scope>test</scope></dependency>
-
         <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><scope>provided</scope></dependency>
         <!-- @formatter:on -->
     </dependencies>
