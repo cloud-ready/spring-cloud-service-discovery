@@ -7,13 +7,18 @@
     <parent>
         <groupId>cn.home1</groupId>
         <artifactId>spring-cloud-service-discovery</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
     </parent>
 
     <artifactId>service-discovery-examples</artifactId>
     <description>service-discovery-examples</description>
     <name>service-discovery-examples</name>
     <packaging>pom</packaging>
+
+    <dependencies>
+        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-rolling</artifactId></dependency>
+        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-test</artifactId><scope>test</scope></dependency>
+    </dependencies>
 
     <modules>
         <module>composite-discovery-example</module>

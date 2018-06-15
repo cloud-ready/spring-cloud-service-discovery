@@ -7,13 +7,18 @@
     <parent>
         <groupId>cn.home1</groupId>
         <artifactId>spring-cloud-service-discovery</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
     </parent>
 
     <artifactId>spring-cloud-eureka</artifactId>
     <description>spring-cloud-eureka</description>
     <name>spring-cloud-eureka</name>
     <packaging>pom</packaging>
+
+    <dependencies>
+        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-rolling</artifactId></dependency>
+        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-test</artifactId><scope>test</scope></dependency>
+    </dependencies>
 
     <modules>
         <module>spring-cloud-eureka-server</module>

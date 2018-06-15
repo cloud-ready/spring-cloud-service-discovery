@@ -15,7 +15,7 @@
     <name>spring-cloud-service-discovery</name>
     <packaging>pom</packaging>
     <url>https://github.com/cloud-ready/spring-cloud-service-discovery</url>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
 
     <ciManagement>
         <system>Travis CI</system>
@@ -33,7 +33,7 @@
 
     <properties>
         <deps-spring-boot.version>0.0.4.OSS</deps-spring-boot.version>
-        <log-config.version>0.0.4.OSS</log-config.version>
+        <log-config.version>0.0.5.OSS</log-config.version>
         <spring-boot.version>1.5.12.RELEASE</spring-boot.version>
 
         <repositories.releases.updatePolicy>always</repositories.releases.updatePolicy>
@@ -93,9 +93,6 @@
 
     <dependencies>
         <!-- @formatter:off -->
-        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-rolling</artifactId></dependency>
-        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-test</artifactId><scope>test</scope></dependency>
-
         <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><scope>provided</scope></dependency>
         <!-- @formatter:on -->
     </dependencies>
