@@ -34,7 +34,7 @@ services:
     ports:
     - "${SERVER_PORT:-8761}:${SERVER_PORT:-8761}"
     volumes:
-    - data:/root/.data
+    - data:/root/data
     - data:/tmp
 
 networks:
