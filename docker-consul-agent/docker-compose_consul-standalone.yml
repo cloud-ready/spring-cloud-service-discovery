@@ -6,10 +6,10 @@ services:
       file: docker-compose-base.yml
       service: base-consul-agent
     command: ${COMMAND:-agent -dev -client 0.0.0.0}
-    container_name: ${INSTANCE_NAME:-consul}.${INSTANCE_DOMAIN:-internal}
+    container_name: ${INSTANCE_NAME:-consul-standalone}.${INSTANCE_DOMAIN:-internal}
     environment:
       CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE:-eth0}
-    hostname: ${INSTANCE_NAME:-consul}.${INSTANCE_DOMAIN:-internal}
+    hostname: ${INSTANCE_NAME:-consul-standalone}.${INSTANCE_DOMAIN:-internal}
     network_mode: ${NETWORK_MODE:-host}
     privileged: true
     volumes:

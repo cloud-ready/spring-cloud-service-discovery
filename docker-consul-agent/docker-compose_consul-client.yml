@@ -5,7 +5,7 @@ services:
     extends:
       file: docker-compose-base.yml
       service: base-consul-agent
-    command: ${COMMAND:agent -bind=0.0.0.0 -client=127.0.0.1 -retry-join=127.0.0.1 -retry-interval=30s -retry-max=0 -ui=true} # change me
+    command: ${COMMAND:-agent -bind=0.0.0.0 -client=127.0.0.1 -retry-join=127.0.0.1 -retry-interval=30s -retry-max=0 -ui=true} # change me
     container_name: ${INSTANCE_NAME:-consul-client}.${INSTANCE_DOMAIN:-internal}
     environment:
       CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE:-eth0}
