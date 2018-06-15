@@ -25,7 +25,7 @@ services:
         ipv4_address: 172.16.238.78
         ipv6_address: 2001:3984:3989::78
     volumes:
-    - data:/root/.data
+    - data:/root/data
     - data:/tmp
 
 networks:

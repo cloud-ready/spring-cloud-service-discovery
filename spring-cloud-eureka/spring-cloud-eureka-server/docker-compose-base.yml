@@ -29,5 +29,5 @@ services:
     image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-server:${IMAGE_VERSION:-0.0.2}
     restart: always
     volumes:
-    - data:/root/.data
+    - data:/root/data
     - data:/tmp

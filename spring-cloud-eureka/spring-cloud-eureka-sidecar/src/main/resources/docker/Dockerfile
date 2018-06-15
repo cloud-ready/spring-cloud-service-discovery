@@ -2,7 +2,7 @@
 FROM cirepo/java:oracle-8u171-jdk-alpine
 
 VOLUME /tmp
-VOLUME ["/root/.data"]
+VOLUME ["/root/data"]
 
 
 
