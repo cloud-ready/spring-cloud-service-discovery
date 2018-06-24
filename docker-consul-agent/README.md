@@ -51,6 +51,20 @@ Test DNS
 docker run -i --dns=<bridge ip> -t ubuntu sh -c "apt-get update && apt-get install -y dnsutils && dig consul.service.consul"
 ```
 
+Test service resolution
+```bash
+dig @localhost config-server.service.consul.
+dig @localhost config-server.service.consul. ANY
+dig @localhost config-server.service.consul. SRV
+```
+
+Http API
+
+http://127.0.0.1:8500/v1/agent/members
+http://127.0.0.1:8500/v1/catalog/nodes
+http://127.0.0.1:8500/v1/catalog/services
+http://127.0.0.1:8500/v1/catalog/service/config-server
+
 
 see: https://github.com/hashicorp/docker-consul
 
