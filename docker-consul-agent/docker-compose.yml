@@ -7,11 +7,12 @@ services:
       service: base-consul-agent
     # '-dns-port=53' needs 'network_mode: host'
     # In Docker for Mac VM, should use '-dns-port=53'
-    command: ${COMMAND:-agent -client 0.0.0.0 -dev -dns-port=53 -log-level=TRACE} #-log-level=TRACE
+    command: ${COMMAND:-agent -client 0.0.0.0 -dev -dns-port=53} #-log-level=TRACE
     container_name: ${INSTANCE_NAME:-consul}.${INSTANCE_DOMAIN:-local}
     environment:
       CONSUL_ALLOW_PRIVILEGED_PORTS: 1
       CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE:-eth0}
+      CONSUL_RECURSORS: ${CONSUL_RECURSORS:-192.168.65.1}
     hostname: ${INSTANCE_NAME:-consul}.${INSTANCE_DOMAIN:-local}
     networks:
       local-network:

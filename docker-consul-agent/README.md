@@ -51,6 +51,20 @@ Test DNS
 docker run -i --dns=<bridge ip> -t ubuntu sh -c "apt-get update && apt-get install -y dnsutils && dig consul.service.consul"
 ```
 
+Test Docker for Mac
+```bash
+nslookup host.docker.internal
+nslookup docker.for.mac.host.internal
+#nslookup docker.for.win.host.internal
+
+nslookup gateway.docker.internal
+nslookup docker.for.mac.gateway.internal
+#nslookup docker.for.win.gateway.internal
+
+nslookup docker.for.mac.http.internal
+#nslookup docker.for.win.http.internal
+```
+
 Test service resolution
 ```bash
 dig @localhost config-server.service.consul.
