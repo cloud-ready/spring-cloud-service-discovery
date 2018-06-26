@@ -11,7 +11,7 @@ set -e
 if [[ -z "${EUREKA_INSTANCE_NONSECUREPORT}" ]]; then export EUREKA_INSTANCE_NONSECUREPORT="8761"; fi
 
 JAVA_OPTS="${JAVA_OPTS} -Djava.security.egd=file:/dev/urandom";
-JAVA_OPTS="${JAVA_OPTS} -Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}";
+if [ -n "${SPRING_PROFILES_ACTIVE}" ]; then JAVA_OPTS="${JAVA_OPTS} -Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}"; fi
 . /opt/java_debug_monitor_profiler.sh
 
 # if command starts with an option, prepend java
