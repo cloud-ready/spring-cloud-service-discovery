@@ -6,7 +6,7 @@ services:
       file: docker-compose-base.yml
       service: base-consul-agent
     # -dns-port=53 needs 'network_mode: host'
-    command: ${COMMAND:-agent -client 0.0.0.0 -dev -dns-port=53}
+    command: ${COMMAND:-agent -client=0.0.0.0 -dev -dns-port=53}
     container_name: ${INSTANCE_NAME:-consul-standalone}.${INSTANCE_DOMAIN:-internal}
     environment:
       CONSUL_ALLOW_PRIVILEGED_PORTS: 1
