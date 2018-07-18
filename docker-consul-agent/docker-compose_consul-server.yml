@@ -7,11 +7,11 @@ services:
       service: base-consul-agent
     # -dns-port=53 needs 'network_mode: host'
     command: ${COMMAND:-agent -server -bind=0.0.0.0 -client=0.0.0.0 -dns-port=53 -retry-join=127.0.0.1 -retry-interval=30s -retry-max=0 -bootstrap-expect=3 -ui=true} # change me
-    container_name: ${INSTANCE_NAME:-consul-peer1}.${INSTANCE_DOMAIN:-internal}
+    container_name: ${CONTAINER_HOST_NAME:-consul-peer1}
     environment:
       CONSUL_ALLOW_PRIVILEGED_PORTS: 1
       CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE:-eth0}
-    hostname: ${INSTANCE_NAME:-consul-peer1}.${INSTANCE_DOMAIN:-internal}
+    hostname: ${CONTAINER_HOST_NAME:-consul-peer1}
     network_mode: ${NETWORK_MODE:-host}
 #    ports: # for network_mode: bridge
 #    - "${CONSUL_DNS_PORT:-53}:53/tcp"

@@ -12,7 +12,7 @@ eureka:
     prefer-ip-address: ${EUREKA_INSTANCE_PREFERIPADDRESS:true}
 
 logging:
-  #file: ${LOG_FILE:${INSTANCE_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}}.log
+  #file: ${LOG_FILE:${CONTAINER_HOST_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}}.log
   #path: ${LOG_PATH:${user.dir}/data/logs/${spring.application.name}}
   level:
     jndi: ${LOGGING_LEVEL_ROOT:INFO}

@@ -8,12 +8,12 @@ services:
     # '-dns-port=53' needs 'network_mode: host'
     # In Docker for Mac VM, should use '-dns-port=53'
     command: ${COMMAND:-agent -client=0.0.0.0 -dev -dns-port=53} #-log-level=TRACE
-    container_name: ${INSTANCE_NAME:-consul}.${INSTANCE_DOMAIN:-local}
+    container_name: ${CONTAINER_HOST_NAME:-consul}
     environment:
       CONSUL_ALLOW_PRIVILEGED_PORTS: 1
       CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE:-eth0}
       CONSUL_RECURSORS: ${CONSUL_RECURSORS:-192.168.65.1}
-    hostname: ${INSTANCE_NAME:-consul}.${INSTANCE_DOMAIN:-local}
+    hostname: ${CONTAINER_HOST_NAME:-consul}
     networks:
       local-network:
         ipv4_address: 172.16.238.15

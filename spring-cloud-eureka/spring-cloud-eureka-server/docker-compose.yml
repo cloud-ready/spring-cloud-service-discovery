@@ -6,29 +6,29 @@ services:
     extends:
       service: base-eureka
       file: docker-compose-base.yml
-    container_name: ${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
+    container_name: ${CONTAINER_HOST_NAME:-eureka-standalone}
     environment:
     - EUREKA_CLIENT_FETCHREGISTRY=false
     - EUREKA_CLIENT_REGISTERWITHEUREKA=false
     - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-standalone.local:${SERVER_PORT:-8761}/eureka/
-    #- EUREKA_INSTANCE_HOSTNAME=${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
+    #- EUREKA_INSTANCE_HOSTNAME=${CONTAINER_HOST_NAME:-eureka-standalone}
     - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:-172.16.238.10}
 
 
     - EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT=${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:-1}
     - EUREKA_SERVER_ENABLESELFPRESERVATION=${EUREKA_SERVER_ENABLESELFPRESERVATION:-true}
     - EUREKA_SERVER_RENEWALPERCENTTHRESHOLD=${EUREKA_SERVER_RENEWALPERCENTTHRESHOLD:-0.25}
-    - INSTANCE_NAME=${INSTANCE_NAME:-eureka-standalone}
+    - INSTANCE_NAME=${CONTAINER_HOST_NAME:-eureka-standalone}
 
 
 
 
 
     - SPRING_APPLICATION_NAME=eureka-standalone
-    - SPRING_CLOUD_CLIENT_HOSTNAME=${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
+    - SPRING_CLOUD_CLIENT_HOSTNAME=${CONTAINER_HOST_NAME:-eureka-standalone}
     - SPRING_CLOUD_CLIENT_IPADDRESS=${HOST_IPADDRESS:-172.16.238.10}
     - SPRING_PROFILES_ACTIVE=develop.env,manual_ip_hostname,port_nonsecure,standalone
-    hostname: ${INSTANCE_NAME:-eureka-standalone}.${INSTANCE_DOMAIN:-local}
+    hostname: ${CONTAINER_HOST_NAME:-eureka-standalone}
     networks:
       local-network:
         ipv4_address: 172.16.238.10
