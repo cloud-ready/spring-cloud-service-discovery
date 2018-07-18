@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.home1</groupId>
         <artifactId>spring-cloud-service-discovery</artifactId>
-        <version>0.0.3</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>spring-cloud-eureka</artifactId>
@@ -16,8 +16,8 @@
     <packaging>pom</packaging>
 
     <dependencies>
-        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-rolling</artifactId></dependency>
-        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-test</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-rolling-config</artifactId></dependency>
+        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-test-config</artifactId><scope>test</scope></dependency>
     </dependencies>
 
     <modules>

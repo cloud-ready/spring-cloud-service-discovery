@@ -23,6 +23,7 @@ git.properties
 **/src/site/markdown/src/readme
 **/src/site/resources
 
+/docker-consul-agent/docker/resolv.conf
 /spring-cloud-eureka/spring-cloud-eureka-server/Dockerfile
 /spring-cloud-eureka/spring-cloud-eureka-sidecar/Dockerfile
 

@@ -12,7 +12,7 @@ services:
     # Change this only when sidecar can not properly register the application with default values and there are issues on service access.
     - EUREKA_INSTANCE_PREFERIPADDRESS=${EUREKA_INSTANCE_PREFERIPADDRESS:-true}
 
-    - LOGGING_LEVEL_=${LOGGING_LEVEL_:-INFO}
+    - LOGGING_LEVEL_ROOT=${LOGGING_LEVEL_ROOT:-INFO}
 
     # Password to access management endpoints such as /env, /health and so on.
     - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-} # change me
@@ -40,5 +40,5 @@ services:
     # Mandatory, Application or service name of the non-JVM application or service
     - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-the-name-of-non-JVM-application-or-service}
 
-    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-sidecar:${IMAGE_VERSION:-0.0.3}
+    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-sidecar:${IMAGE_VERSION:-0.0.4-SNAPSHOT}
     restart: always

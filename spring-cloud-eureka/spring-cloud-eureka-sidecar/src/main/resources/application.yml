@@ -12,20 +12,20 @@ eureka:
     prefer-ip-address: ${EUREKA_INSTANCE_PREFERIPADDRESS:true}
 
 logging:
-  #file: ${LOG_FILE:${INSTANCE_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}}.log
+  #file: ${LOG_FILE:${CONTAINER_HOST_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}}.log
   #path: ${LOG_PATH:${user.dir}/data/logs/${spring.application.name}}
   level:
-    jndi: ${LOGGING_LEVEL_:INFO}
-    org.springframework.boot.actuate.endpoint.jmx.EndpointMBeanExporter: ${ENDPOINT_LOGGING_LEVEL_:WARN}
-    org.springframework.boot.actuate.endpoint.mvc.EndpointHandlerMapping: ${ENDPOINT_LOGGING_LEVEL_:WARN}
-    org.springframework.boot.web.servlet.FilterRegistrationBean: ${ENDPOINT_LOGGING_LEVEL_:WARN}
-    org.springframework.boot.web.servlet.ServletRegistrationBean: ${ENDPOINT_LOGGING_LEVEL_:WARN}
+    jndi: ${LOGGING_LEVEL_ROOT:INFO}
+    org.springframework.boot.actuate.endpoint.jmx.EndpointMBeanExporter: ${ENDPOINT_LOGGING_LEVEL_ROOT:WARN}
+    org.springframework.boot.actuate.endpoint.mvc.EndpointHandlerMapping: ${ENDPOINT_LOGGING_LEVEL_ROOT:WARN}
+    org.springframework.boot.web.servlet.FilterRegistrationBean: ${ENDPOINT_LOGGING_LEVEL_ROOT:WARN}
+    org.springframework.boot.web.servlet.ServletRegistrationBean: ${ENDPOINT_LOGGING_LEVEL_ROOT:WARN}
     org.springframework.core.type.classreading.AnnotationAttributesReadingVisitor: INFO
-    org.springframework.jmx.export.annotation.AnnotationMBeanExporter: ${ENDPOINT_LOGGING_LEVEL_:WARN}
-    org.springframework.jndi: ${LOGGING_LEVEL_:INFO}
-    org.springframework.web.servlet.handler.SimpleUrlHandlerMapping: ${ENDPOINT_LOGGING_LEVEL_:WARN}
-    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: ${ENDPOINT_LOGGING_LEVEL_:WARN}
-logging.level.: ${LOGGING_LEVEL_:INFO}
+    org.springframework.jmx.export.annotation.AnnotationMBeanExporter: ${ENDPOINT_LOGGING_LEVEL_ROOT:WARN}
+    org.springframework.jndi: ${LOGGING_LEVEL_ROOT:INFO}
+    org.springframework.web.servlet.handler.SimpleUrlHandlerMapping: ${ENDPOINT_LOGGING_LEVEL_ROOT:WARN}
+    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: ${ENDPOINT_LOGGING_LEVEL_ROOT:WARN}
+    root: ${LOGGING_LEVEL_ROOT:INFO}
 
 management:
   #context-path: do not set management.context-path on sidecar

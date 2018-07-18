@@ -115,7 +115,7 @@ eureka.client:
 #  #   如果Eureka服务端支持, Client从Eureka获取gzip压缩过的数据
 #  g-zip-content: true
   # see: https://github.com/spring-cloud/spring-cloud-netflix/blob/v1.4.4.RELEASE/spring-cloud-netflix-eureka-client/src/main/java/org/springframework/cloud/netflix/eureka/EurekaDiscoveryClientConfiguration.java
-  healthcheck.enabled: true
+  healthcheck.enabled: ${EUREKA_CLIENT_HEALTHCHECK_ENABLED:true}
 #  # Heartbeat executor exponential back off related property.
 #  # It is a maximum multiplier value for retry delay, in case where a sequence of timeouts occurred.
 #  # default: 10
@@ -343,7 +343,7 @@ eureka.server:
 #  e-i-p-binding-retry-interval-ms: 0
 #  e-i-p-binding-retry-interval-ms-when-unbound: 0
 #  enable-replicated-request-compression: false
-  enable-self-preservation: true
+  enable-self-preservation: ${EUREKA_SERVER_ENABLESELFPRESERVATION:true}
 #  #   Non-positive
 #  #eviction-interval-timer-in-ms: 0
 #  g-zip-content-from-remote-region: true
@@ -406,7 +406,7 @@ eureka.server:
 #  remote-region-urls:
 #  #   a map
 #  #remote-region-urls-with-name:
-#  renewal-percent-threshold: 0.85
+  renewal-percent-threshold: ${EUREKA_SERVER_RENEWALPERCENTTHRESHOLD:0.85}
 #  #   Non-positive
 #  #renewal-threshold-update-interval-ms: 0
 #  response-cache-auto-expiration-in-seconds: 180
@@ -421,22 +421,22 @@ eureka.server:
 #  wait-time-in-ms-when-sync-empty: 0 # set to 0 will break cluster
 #  xml-codec-name:
 
-logging.level.: ${LOGGING_LEVEL_:INFO}
 logging:
   config: classpath:log4j2-spring.xml
-  #file: ${LOG_FILE:${INSTANCE_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}}.log
+  #file: ${LOG_FILE:${CONTAINER_HOST_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}}.log
   #path: ${LOG_PATH:${user.dir}/data/logs/${spring.application.name}}
   level:
-    jndi: ${LOGGING_LEVEL_:INFO}
+    jndi: ${LOGGING_LEVEL_ROOT:INFO}
 
-    org.springframework.beans.factory.annotation.InjectionMetadata: ${LOGGING_LEVEL_:INFO}
-    org.springframework.beans.factory.support.DefaultListableBeanFactory: ${LOGGING_LEVEL_:INFO}
-    org.springframework.core.env.MutablePropertySources: ${LOGGING_LEVEL_:INFO}
-    org.springframework.core.env.PropertySourcesPropertyResolver: ${LOGGING_LEVEL_:INFO}
-    org.springframework.jndi: ${LOGGING_LEVEL_:INFO}
+    org.springframework.beans.factory.annotation.InjectionMetadata: ${LOGGING_LEVEL_ROOT:INFO}
+    org.springframework.beans.factory.support.DefaultListableBeanFactory: ${LOGGING_LEVEL_ROOT:INFO}
+    org.springframework.core.env.MutablePropertySources: ${LOGGING_LEVEL_ROOT:INFO}
+    org.springframework.core.env.PropertySourcesPropertyResolver: ${LOGGING_LEVEL_ROOT:INFO}
+    org.springframework.jndi: ${LOGGING_LEVEL_ROOT:INFO}
     org.springframework.core.type.classreading.AnnotationAttributesReadingVisitor: INFO
-    org.springframework.web.context.support.StandardServletEnvironment: ${LOGGING_LEVEL_:INFO}
-    org.springframework.security: ${LOGGING_LEVEL_:INFO}
+    org.springframework.web.context.support.StandardServletEnvironment: ${LOGGING_LEVEL_ROOT:INFO}
+    org.springframework.security: ${LOGGING_LEVEL_ROOT:INFO}
+    root: ${LOGGING_LEVEL_ROOT:INFO}
 
 security:
   basic:

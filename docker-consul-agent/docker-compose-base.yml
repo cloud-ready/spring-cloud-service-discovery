@@ -2,11 +2,19 @@
 version: '2.1'
 services:
   base-consul-agent:
-    image: consul:${IMAGE_VERSION:-1.1.0}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    cap_add: # ignored in swarm mode (docker-compose yaml version 3.x)
+    - NET_BIND_SERVICE
     environment:
-      CONSUL_ALLOW_PRIVILEGED_PORTS:
+      CONSUL_ALLOW_PRIVILEGED_PORTS: 1
       CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE:-eth0}
       CONSUL_LOCAL_CONFIG: '{"leave_on_terminate": true}'
+      CONSUL_RECURSORS: ${CONSUL_RECURSORS:-} # comma split list
+      # To avoid loop, must exclude host itself from 'recursors' option, so we need to know host's ip-address.
+      HOST_IPADDRESS: ${HOST_IPADDRESS:-}
+    image: ${IMAGE_PREFIX:-cloudready}/consul:${IMAGE_VERSION:-1.1.0}
     ports:
     # Server RPC is used for communication between Consul clients and servers
     # for internal request forwarding.
@@ -21,7 +29,11 @@ services:
     # HTTP and DNS (both TCP and UDP) are the primary interfaces that applications
     # use to interact with Consul.
     - "${CONSUL_HTTP_API_PORT:-8500}:8500/tcp"
-    - "${CONSUL_DNS_PORT:-8600}:8600/tcp"
-    - "${CONSUL_DNS_PORT:-8600}:8600/udp"
-    privileged: true
+    #- "${CONSUL_DNS_PORT:-8600}:8600/tcp"
+    #- "${CONSUL_DNS_PORT:-8600}:8600/udp"
+#    privileged: true
     restart: always
+#    volumes:
+#    # Read host's /etc/resolv.conf to find out DNS servers to set consul's 'recursors' automatically.
+#    # Insert 127.0.0.1 at first position if possible (/etc/resolv.conf in OSX is not consulted for resolution).
+#    - /etc/resolv.conf:/var/lib/host_etc_resolv.conf
