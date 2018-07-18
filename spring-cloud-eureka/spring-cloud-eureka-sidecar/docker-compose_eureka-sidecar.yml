@@ -6,18 +6,18 @@ services:
     extends:
       file: docker-compose-base.yml
       service: base-eureka-sidecar
-    container_name: ${INSTANCE_NAME:-eureka-sidecar}.${INSTANCE_DOMAIN:-internal}
+    container_name: ${CONTAINER_HOST_NAME:-eureka-sidecar}
     environment:
     - EUREKA_INSTANCE_PREFERIPADDRESS=${EUREKA_INSTANCE_PREFERIPADDRESS:-true}
     - LOGGING_LEVEL_ROOT=${LOGGING_LEVEL_ROOT:-INFO}
     - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-}
     - SERVER_PORT=${SERVER_PORT:-5678}
     - SIDECAR_HEALTHURI=${SIDECAR_HEALTHURI:-/health}
-    - SIDECAR_HOSTNAME=${INSTANCE_NAME:-eureka-sidecar}.${INSTANCE_DOMAIN:-internal} # Optional, for instance-id
+    - SIDECAR_HOSTNAME=${CONTAINER_HOST_NAME:-eureka-sidecar} # Optional, for instance-id
     - SIDECAR_IPADDRESS=${SIDECAR_IPADDRESS} # Optional, for instance-id
     - SIDECAR_PORT=${SIDECAR_PORT:-5678}
     - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-the-name-of-non-JVM-application-or-service}
-    hostname: ${INSTANCE_NAME:-eureka-sidecar}.${INSTANCE_DOMAIN:-internal}
+    hostname: ${CONTAINER_HOST_NAME:-eureka-sidecar}
     network_mode: bridge
     ports:
     - "${SERVER_PORT:-5678}:${SERVER_PORT:-5678}"
