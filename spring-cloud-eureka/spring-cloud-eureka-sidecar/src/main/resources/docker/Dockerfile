@@ -8,5 +8,4 @@ ARG JAR_FILE
 COPY --chown=alpine:alpine src/main/docker /
 COPY --chown=alpine:alpine target/${JAR_FILE} /home/alpine
 RUN set -ex \
-  && chmod 0755 /home/alpine/*.sh \
-  && touch /home/alpine/*.jar
+  && chmod 0755 /home/alpine/*.sh

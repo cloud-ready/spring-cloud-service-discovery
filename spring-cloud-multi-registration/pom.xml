@@ -39,7 +39,7 @@
         <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-netflix-eureka-client</artifactId><scope>provided</scope></dependency>
         <dependency><groupId>org.springframework</groupId><artifactId>spring-web</artifactId><scope>provided</scope></dependency>
 
-        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-config-test</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-test-config</artifactId><scope>test</scope></dependency>
         <!-- @formatter:on -->
     </dependencies>
 </project>
