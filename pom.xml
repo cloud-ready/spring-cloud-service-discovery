@@ -15,7 +15,7 @@
     <name>spring-cloud-service-discovery</name>
     <packaging>pom</packaging>
     <url>https://github.com/cloud-ready/spring-cloud-service-discovery</url>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <ciManagement>
         <system>Travis CI</system>
