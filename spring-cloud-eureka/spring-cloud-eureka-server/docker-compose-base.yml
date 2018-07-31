@@ -10,7 +10,7 @@ services:
     environment:
     - EUREKA_CLIENT_FETCHREGISTRY=${EUREKA_CLIENT_FETCHREGISTRY:-true}
     - EUREKA_CLIENT_REGISTERWITHEUREKA=${EUREKA_CLIENT_REGISTERWITHEUREKA:-true}
-    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:-http://user:user_pass@eureka-peer1.local:8761/eureka/}
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:-http://user:user_pass@eureka-peer1:8761/eureka/}
     - EUREKA_INSTANCE_HOSTNAME=${CONTAINER_HOST_NAME:-eureka-peer1}
     - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:-127.0.0.1}
     - EUREKA_INSTANCE_NONSECUREPORT=${SERVER_PORT:-8761}
@@ -20,16 +20,22 @@ services:
     - EUREKA_SERVER_RENEWALPERCENTTHRESHOLD=${EUREKA_SERVER_RENEWALPERCENTTHRESHOLD:-0.85}
     - INSTANCE_NAME=${CONTAINER_HOST_NAME:-eureka-peer1}
     - LOGGING_LEVEL_ROOT=${LOGGING_LEVEL_ROOT:-INFO}
-    - SECURITY_BASIC_ENABLED=${SECURITY_BASIC_ENABLED:-true}
-    - SECURITY_USER_NAME=${SECURITY_USER_NAME:-user}
-    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-user_pass}
     - SERVER_PORT=${SERVER_PORT:-8761}
     - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-eureka-cluster}
     #- SPRING_CLOUD_CLIENT_HOSTNAME=${HOST_IPADDRESS} # profile: manual_ip_hostname
     #- SPRING_CLOUD_CLIENT_IPADDRESS=${HOST_IPADDRESS} # profile: manual_ip_hostname
+    - SPRING_CLOUD_INETUTILS_PREFERREDNETWORKS=${SPRING_CLOUD_INETUTILS_PREFERREDNETWORKS}
+    - SPRING_CLOUD_INETUTILS_IGNOREDINTERFACES=${SPRING_CLOUD_INETUTILS_IGNOREDINTERFACES}
     - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-develop.env,port_nonsecure,peer_awareness}
-    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-server:${IMAGE_VERSION:-0.0.4-SNAPSHOT}
+    - SPRING_SECURITY_ENABLED=${SPRING_SECURITY_ENABLED:-true}
+    - SPRING_SECURITY_USER_NAME=${SPRING_SECURITY_USER_NAME:-user}
+    - SPRING_SECURITY_USER_PASSWORD=${SPRING_SECURITY_USER_PASSWORD:-user_pass}
+    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-server:${IMAGE_VERSION:-2.0.1-springboot2-SNAPSHOT}
+    labels:
+      top.infra.cloudready.deploy.script.commit-id: ${DEPLOY_SCRIPT_COMMITID}
+      top.infra.cloudready.deploy.script.label: ${DEPLOY_SCRIPT_LABEL}
+      top.infra.cloudready.deploy.script.repo: ${DEPLOY_SCRIPT_REPO}
+      top.infra.cloudready.deploy.config.commit-id: ${DEPLOY_CONFIG_COMMITID}
+      top.infra.cloudready.deploy.config.label: ${DEPLOY_CONFIG_LABEL}
+      top.infra.cloudready.deploy.config.repo: ${DEPLOY_CONFIG_REPO}
     restart: always
-    volumes:
-    - data:/root/data
-    - data:/tmp

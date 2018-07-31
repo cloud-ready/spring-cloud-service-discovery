@@ -1,0 +1,13 @@
+# Ignore everything
+*
+
+# But not these files...
+!/.gitignore
+# etc...
+
+# ...even if they are in subdirectories
+!*/
+
+# if the files to be tracked are in subdirectories
+!*/sub/directory_x/file.txt
+!*/sub/directory_y/*

@@ -8,20 +8,14 @@ import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.boot.actuate.endpoint.Endpoint;
-import org.springframework.boot.actuate.endpoint.mvc.MvcEndpoint;
+import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
+import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
+import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
 import org.springframework.cloud.client.serviceregistry.Registration;
 import org.springframework.cloud.client.serviceregistry.ServiceRegistry;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jmx.export.annotation.ManagedAttribute;
-import org.springframework.jmx.export.annotation.ManagedOperation;
-import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -37,10 +31,10 @@ import java.util.stream.IntStream;
  *
  * @author haolun zhang
  */
-@ManagedResource(description = "Can be used to display and set the service instance status using the service registry")
 @SuppressWarnings("unchecked")
+@Endpoint(id = "service-registry")
 @Slf4j
-public class MultiServiceRegistryEndpoint implements MvcEndpoint {
+public class MultiServiceRegistryEndpoint {
 
   private static final Comparator<ServiceRegistry> SERVICE_REGISTRY_COMPARATOR = (o1, o2) -> {
     if (o1 != null && o2 != null) {
@@ -63,6 +57,10 @@ public class MultiServiceRegistryEndpoint implements MvcEndpoint {
       return null;
     }
   }
+
+//  private final ServiceRegistry serviceRegistry;
+
+//  private Registration registration;
 
   private final Map<String, ServiceRegistry> serviceRegistries;
 
@@ -99,10 +97,17 @@ public class MultiServiceRegistryEndpoint implements MvcEndpoint {
     }
   }
 
-  @RequestMapping(path = "instance-status", method = RequestMethod.POST)
-  @ResponseBody
-  @ManagedOperation
-  public ResponseEntity<?> setStatus(@RequestBody String status) {
+  @WriteOperation
+  public ResponseEntity<?> setStatus(String status) {
+//    Assert.notNull(status, "status may not by null");
+//
+//    if (this.registration == null) {
+//      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no registration found");
+//    }
+//
+//    this.serviceRegistry.setStatus(this.registration, status);
+//    return ResponseEntity.ok().build();
+
     Assert.notNull(status, "status may not by null");
 
     if (this.pairs.isEmpty()) {
@@ -117,10 +122,14 @@ public class MultiServiceRegistryEndpoint implements MvcEndpoint {
     return ResponseEntity.ok().build();
   }
 
-  @RequestMapping(path = "instance-status", method = RequestMethod.GET)
-  @ResponseBody
-  @ManagedAttribute
+  @ReadOperation
   public ResponseEntity getStatus() {
+//    if (this.registration == null) {
+//      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no registration found");
+//    }
+//
+//    return ResponseEntity.ok().body(this.serviceRegistry.getStatus(this.registration));
+
     if (this.pairs.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no registration found");
     }
@@ -130,20 +139,5 @@ public class MultiServiceRegistryEndpoint implements MvcEndpoint {
             .map(pair -> pair.getLeft() + ": " + pair.getRight().getRight().getStatus(pair.getRight().getLeft())) //
             .collect(Collectors.joining(","))
     );
-  }
-
-  @Override
-  public String getPath() {
-    return "/service-registry";
-  }
-
-  @Override
-  public boolean isSensitive() {
-    return true;
-  }
-
-  @Override
-  public Class<? extends Endpoint<?>> getEndpointType() {
-    return null;
   }
 }

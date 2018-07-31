@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+    </Properties>
+
+    <Appenders>
+        <Console name="STDOUT">
+            <MarkerFilter marker="TRACE" onMatch="DENY" onMismatch="ACCEPT"/>
+            <PatternLayout charset="UTF-8" >
+                <pattern>%d{ISO8601}{GMT+8} %highlight{%p} %style{%c{1.} [%t] %m}{bold,green}%n</pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <!-- completely no log out if attribute 'level' of tag 'Root' absent -->
+        <Root level="${env:LOGGING_LEVEL_ROOT:-DEBUG}" includeLocation="false">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+    </Loggers>
+</Configuration>

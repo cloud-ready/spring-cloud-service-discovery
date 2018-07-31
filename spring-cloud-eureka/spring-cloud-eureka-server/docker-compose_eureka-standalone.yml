@@ -20,26 +20,34 @@ services:
     - EUREKA_SERVER_RENEWALPERCENTTHRESHOLD=${EUREKA_SERVER_RENEWALPERCENTTHRESHOLD:-0.50}
     - INSTANCE_NAME=${CONTAINER_HOST_NAME:-eureka-standalone}
     - LOGGING_LEVEL_ROOT=${LOGGING_LEVEL_ROOT:-INFO}
-
-    - SECURITY_USER_NAME=${SECURITY_USER_NAME:-user}
-    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-user_pass}
     - SERVER_PORT=${SERVER_PORT:-8761}
     - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-eureka-standalone}
     - SPRING_CLOUD_CLIENT_HOSTNAME=${HOST_IPADDRESS} # ${CONTAINER_HOST_NAME:-eureka-standalone}
     - SPRING_CLOUD_CLIENT_IPADDRESS=${HOST_IPADDRESS}
+
+
     - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-staging.env,manual_ip_hostname,port_nonsecure,peer_awareness}
+
+    - SPRING_SECURITY_USER_NAME=${SPRING_SECURITY_USER_NAME:-user}
+    - SPRING_SECURITY_USER_PASSWORD=${SPRING_SECURITY_USER_PASSWORD:-user_pass}
     hostname: ${CONTAINER_HOST_NAME:-eureka-standalone}
     network_mode: bridge
     ports:
     - "${SERVER_PORT:-8761}:${SERVER_PORT:-8761}"
     volumes:
-    - data:/root/data
-    - data:/tmp
+    - data:/home/alpine/data
+    - tmp:/tmp
 
 volumes:
   data:
     driver: local
     driver_opts:
       type: none
-      device: ${PWD}/data
+      device: ${PWD}/data/data
+      o: bind
+  tmp:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/data/tmp
       o: bind

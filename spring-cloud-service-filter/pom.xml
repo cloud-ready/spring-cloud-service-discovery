@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.home1</groupId>
+        <artifactId>spring-cloud-service-discovery</artifactId>
+        <version>2.0.1-springboot2-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>spring-cloud-service-filter</artifactId>
+    <description>spring-cloud-service-filter</description>
+    <name>spring-cloud-service-filter</name>
+    <packaging>jar</packaging>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <!-- @formatter:off -->
+            <!--<plugin><groupId>org.springframework.boot</groupId><artifactId>spring-boot-maven-plugin</artifactId></plugin>-->
+            <!-- @formatter:on -->
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- @formatter:off -->
+            <!--
+            see: https://github.com/spotify/docker-client/tree/master
+            see also: https://github.com/testcontainers/testcontainers-java
+            -->
+            <dependency><groupId>com.spotify</groupId><artifactId>docker-client</artifactId><classifier>shaded</classifier><version>8.11.7</version></dependency>
+            <!-- @formatter:on -->
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- @formatter:off -->
+        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-test-config</artifactId><scope>test</scope></dependency>
+
+        <dependency><groupId>com.google.guava</groupId><artifactId>guava</artifactId></dependency>
+        <dependency><groupId>com.spotify</groupId><artifactId>docker-client</artifactId><classifier>shaded</classifier></dependency>
+        <dependency><groupId>joda-time</groupId><artifactId>joda-time</artifactId></dependency>
+        <dependency><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></dependency>
+        <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></dependency>
+
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-actuator</artifactId><scope>provided</scope></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-autoconfigure</artifactId></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-undertow</artifactId><scope>runtime</scope></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId><scope>runtime</scope></dependency>
+        <!--<dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-consul-discovery</artifactId><scope>provided</scope></dependency>-->
+        <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-netflix-eureka-client</artifactId><scope>provided</scope></dependency>
+        <!-- @formatter:on -->
+    </dependencies>
+
+    <properties>
+        <aspectj.version>1.8.13</aspectj.version>
+    </properties>
+</project>

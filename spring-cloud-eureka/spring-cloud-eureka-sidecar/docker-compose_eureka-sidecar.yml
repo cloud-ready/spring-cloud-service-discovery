@@ -10,25 +10,31 @@ services:
     environment:
     - EUREKA_INSTANCE_PREFERIPADDRESS=${EUREKA_INSTANCE_PREFERIPADDRESS:-true}
     - LOGGING_LEVEL_ROOT=${LOGGING_LEVEL_ROOT:-INFO}
-    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-}
     - SERVER_PORT=${SERVER_PORT:-5678}
     - SIDECAR_HEALTHURI=${SIDECAR_HEALTHURI:-/health}
     - SIDECAR_HOSTNAME=${CONTAINER_HOST_NAME:-eureka-sidecar} # Optional, for instance-id
     - SIDECAR_IPADDRESS=${SIDECAR_IPADDRESS} # Optional, for instance-id
     - SIDECAR_PORT=${SIDECAR_PORT:-5678}
     - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-the-name-of-non-JVM-application-or-service}
+    - SPRING_SECURITY_USER_PASSWORD=${SPRING_SECURITY_USER_PASSWORD:-}
     hostname: ${CONTAINER_HOST_NAME:-eureka-sidecar}
     network_mode: bridge
     ports:
     - "${SERVER_PORT:-5678}:${SERVER_PORT:-5678}"
     volumes:
-    - data:/root/data
-    - data:/tmp
+    - data:/home/alpine/data
+    - tmp:/tmp
 
 volumes:
   data:
     driver: local
     driver_opts:
       type: none
-      device: ${PWD}/data
+      device: ${PWD}/data/data
+      o: bind
+  tmp:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/data/tmp
       o: bind

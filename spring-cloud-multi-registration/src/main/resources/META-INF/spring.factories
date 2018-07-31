@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 org.springframework.cloud.client.serviceregistry.MultiServiceRegistryAutoConfiguration,\
 org.springframework.cloud.client.serviceregistry.AutoMultiServiceRegistrationAutoConfiguration,\
-org.springframework.boot.actuate.endpoint.ListEndPointsAutoConfiguration
+org.springframework.boot.actuate.endpoint.ShowAllEndpointAutoConfiguration

@@ -6,16 +6,13 @@ services:
     command: []
     environment:
     # Mandatory, Address(s) of Eureka node or cluster (comma split)
-    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:-http://user:user_pass@eureka-standalone.local:8761/eureka/}
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:-http://user:user_pass@eureka-standalone:8761/eureka/}
 
     # Optional, Eureka prefer ip address not hostname
     # Change this only when sidecar can not properly register the application with default values and there are issues on service access.
     - EUREKA_INSTANCE_PREFERIPADDRESS=${EUREKA_INSTANCE_PREFERIPADDRESS:-true}
 
     - LOGGING_LEVEL_ROOT=${LOGGING_LEVEL_ROOT:-INFO}
-
-    # Password to access management endpoints such as /env, /health and so on.
-    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-} # change me
 
     # The port of this sidecar, need not to change this if no port conflict.
     - SERVER_PORT=${SERVER_PORT:-5678}
@@ -40,5 +37,18 @@ services:
     # Mandatory, Application or service name of the non-JVM application or service
     - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-the-name-of-non-JVM-application-or-service}
 
-    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-sidecar:${IMAGE_VERSION:-0.0.4-SNAPSHOT}
+    - SPRING_CLOUD_INETUTILS_PREFERREDNETWORKS=${SPRING_CLOUD_INETUTILS_PREFERREDNETWORKS}
+    - SPRING_CLOUD_INETUTILS_IGNOREDINTERFACES=${SPRING_CLOUD_INETUTILS_IGNOREDINTERFACES}
+
+    # Password to access management endpoints such as /env, /health and so on.
+    - SPRING_SECURITY_USER_PASSWORD=${SPRING_SECURITY_USER_PASSWORD:-} # change me
+
+    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-sidecar:${IMAGE_VERSION:-2.0.1-springboot2-SNAPSHOT}
+    labels:
+      top.infra.cloudready.deploy.script.commit-id: ${DEPLOY_SCRIPT_COMMITID}
+      top.infra.cloudready.deploy.script.label: ${DEPLOY_SCRIPT_LABEL}
+      top.infra.cloudready.deploy.script.repo: ${DEPLOY_SCRIPT_REPO}
+      top.infra.cloudready.deploy.config.commit-id: ${DEPLOY_CONFIG_COMMITID}
+      top.infra.cloudready.deploy.config.label: ${DEPLOY_CONFIG_LABEL}
+      top.infra.cloudready.deploy.config.repo: ${DEPLOY_CONFIG_REPO}
     restart: always

@@ -1,0 +1,35 @@
+
+endpoints.health.sensitive: ${ENDPOINTS_HEALTH_SENSITIVE:false}
+
+eureka:
+  client:
+    register-with-eureka: true
+  instance:
+    health-check-url-path: /health
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:${SPRING_CLOUD_CLIENT_HOSTNAME:${EUREKA_INSTANCE_IPADDRESS:${HOST_IPADDRESS:${spring.cloud.client.ipAddress}}}}}
+    lease-renewal-interval-in-seconds: 10
+
+#    metadata-map:
+#      instance-group: "${INSTANCE_GROUP:${instance.group:.*}}"
+
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFERIPADDRESS:false}
+    status-page-url-path: /info
+
+    instance-id: ${spring.application.name}${INSTANCE_CLASSFIER:${instance.classfier:}}:${EUREKA_INSTANCE_HOSTNAME:${SPRING_CLOUD_CLIENT_HOSTNAME:${EUREKA_INSTANCE_IPADDRESS:${HOST_IPADDRESS:${spring.cloud.client.ipAddress}}}}}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:${server.port:8080}}}
+    non-secure-port: ${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:${server.port:8080}}}
+    non-secure-port-enabled: true
+    secure-port-enabled: false
+
+management:
+  context-path: ${MANAGEMENT_CONTEXTPATH:/actuator}
+  info.git.mode: FULL
+  security:
+    enabled: false
+
+spring:
+  application:
+    name: ${SPRING_APPLICATION_NAME:service-filter-test-application}
+  cloud:
+    inetutils:
+      preferred-networks: ${SPRING_CLOUD_INETUTILS_PREFERREDNETWORKS:^192\.168\..+, ^172\.30\..+, ^10\..+}
+      ignored-interfaces: ${SPRING_CLOUD_INETUTILS_IGNOREDINTERFACES:^[a-z]?tun[0-9]*, ^awdl[0-9]*, ^lo[0-9]*}
