@@ -15,6 +15,13 @@ services:
       # To avoid loop, must exclude host itself from 'recursors' option, so we need to know host's ip-address.
       HOST_IPADDRESS: ${HOST_IPADDRESS:-}
     image: ${IMAGE_PREFIX:-cloudready}/consul:${IMAGE_VERSION:-1.1.0}
+    labels:
+      top.infra.cloudready.deploy.script.commit-id: ${DEPLOY_SCRIPT_COMMITID}
+      top.infra.cloudready.deploy.script.label: ${DEPLOY_SCRIPT_LABEL}
+      top.infra.cloudready.deploy.script.repo: ${DEPLOY_SCRIPT_REPO}
+      top.infra.cloudready.deploy.config.commit-id: ${DEPLOY_CONFIG_COMMITID}
+      top.infra.cloudready.deploy.config.label: ${DEPLOY_CONFIG_LABEL}
+      top.infra.cloudready.deploy.config.repo: ${DEPLOY_CONFIG_REPO}
     ports:
     # Server RPC is used for communication between Consul clients and servers
     # for internal request forwarding.

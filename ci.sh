@@ -4,13 +4,13 @@
 #echo -e "\n>>>>>>>>>> ---------- options in travis-ci's .travis.yml, this is for local test or debug ---------- >>>>>>>>>>"
 #export CI_INFRA_OPT_GIT_AUTH_TOKEN="${CI_INFRA_OPT_OPENSOURCE_GIT_AUTH_TOKEN}"
 #export CI_INFRA_OPT_OPENSOURCE_GIT_PREFIX="https://github.com"
-#export CI_OPT_CI_SCRIPT="https://github.com/ci-and-cd/maven-build/raw/master/src/main/ci-script/lib_ci.sh"
+#export CI_OPT_CI_SCRIPT="https://github.com/ci-and-cd/maven-build/raw/v0.2.1/src/main/ci-script/lib_ci.sh"
 #export CI_OPT_INFRASTRUCTURE="opensource"
 #echo -e "<<<<<<<<<< ---------- options in travis-ci's .travis.yml, this is for local test or debug ---------- <<<<<<<<<<\n"
 
 
 echo -e "\n>>>>>>>>>> ---------- custom, override options ---------- >>>>>>>>>>"
-if [ -z "${CI_OPT_CI_SCRIPT}" ]; then CI_OPT_CI_SCRIPT="https://github.com/ci-and-cd/maven-build/raw/master/src/main/ci-script/lib_ci.sh"; fi
+if [ -z "${CI_OPT_CI_SCRIPT}" ]; then CI_OPT_CI_SCRIPT="https://github.com/ci-and-cd/maven-build/raw/v0.2.1/src/main/ci-script/lib_ci.sh"; fi
 if [ -z "${CI_OPT_DOCKER_IMAGE_PREFIX}" ]; then CI_OPT_DOCKER_IMAGE_PREFIX="cloudready/"; fi
 if [ -z "${CI_OPT_GITHUB_SITE_REPO_OWNER}" ]; then CI_OPT_GITHUB_SITE_REPO_OWNER="cloud-ready"; fi
 if [ -z "${CI_OPT_GPG_KEYNAME}" ]; then CI_OPT_GPG_KEYNAME="59DBF10E"; fi
@@ -23,6 +23,6 @@ echo -e "<<<<<<<<<< ---------- custom, override options ---------- <<<<<<<<<<\n"
 
 
 echo -e "\n>>>>>>>>>> ---------- call remote script ---------- >>>>>>>>>>"
-echo "curl -s -L ${CI_OPT_CI_SCRIPT} > /tmp/$(basename $(pwd))-lib_ci.sh && source /tmp/$(basename $(pwd))-lib_ci.sh"
-curl -s -L ${CI_OPT_CI_SCRIPT} > /tmp/$(basename $(pwd))-lib_ci.sh && source /tmp/$(basename $(pwd))-lib_ci.sh
+echo "set -e; curl -f -s -L ${CI_OPT_CI_SCRIPT} > /tmp/$(basename $(pwd))-lib_ci.sh; set +e; source /tmp/$(basename $(pwd))-lib_ci.sh"
+set -e; curl -f -s -L ${CI_OPT_CI_SCRIPT} > /tmp/$(basename $(pwd))-lib_ci.sh; set +e; source /tmp/$(basename $(pwd))-lib_ci.sh
 echo -e "<<<<<<<<<< ---------- call remote script ---------- <<<<<<<<<<\n"

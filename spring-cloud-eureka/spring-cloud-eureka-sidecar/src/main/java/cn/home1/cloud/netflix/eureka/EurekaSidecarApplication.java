@@ -30,10 +30,14 @@ public class EurekaSidecarApplication {
    * see: {@link org.springframework.security.provisioning.InMemoryUserDetailsManager#createUser(UserDetails)}
    */
   public void printInfo() {
-    log.info("server.context-path: {}", this.environment.getProperty("server.context-path"));
-    log.info("management.context-path: {}", this.environment.getProperty("management.context-path"));
+    //log.info("server.context-path: {}", this.environment.getProperty("server.context-path"));
+    log.info("server.servlet.context-path (server.context-path deprecated since spring-boot 2.x): {}",
+    this.environment.getProperty("server.servlet.context-path"));
+    //log.info("management.context-path: {}", this.environment.getProperty("management.context-path"));
+    log.info("management.endpoints.web.base-path (management.context-path deprecated since spring-boot 2.x): {}",
+    this.environment.getProperty("management.endpoints.web.base-path"));
 
-    final String passwordFromSystemEnv = System.getenv("SECURITY_USER_PASSWORD");
+    final String passwordFromSystemEnv = System.getenv("SPRING_SECURITY_USER_PASSWORD");
     if (StringUtils.isEmpty(passwordFromSystemEnv)) {
       final String username = this.securityProperties.getUser().getName();
       final String password = this.securityProperties.getUser().getPassword();

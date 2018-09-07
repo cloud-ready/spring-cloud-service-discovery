@@ -8,9 +8,10 @@ services:
       file: docker-compose-base.yml
     container_name: ${CONTAINER_HOST_NAME:-eureka-standalone}
     environment:
+    - CONTAINER_HOST_NAME=${CONTAINER_HOST_NAME:-eureka-standalone}
     - EUREKA_CLIENT_FETCHREGISTRY=false
     - EUREKA_CLIENT_REGISTERWITHEUREKA=false
-    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SECURITY_USER_NAME:-user}:${SECURITY_USER_PASSWORD:-user_pass}@eureka-standalone.local:${SERVER_PORT:-8761}/eureka/
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://${SPRING_SECURITY_USER_NAME:-user}:${SPRING_SECURITY_USER_PASSWORD:-user_pass}@eureka-standalone:${SERVER_PORT:-8761}/eureka/
     #- EUREKA_INSTANCE_HOSTNAME=${CONTAINER_HOST_NAME:-eureka-standalone}
     - EUREKA_INSTANCE_IPADDRESS=${HOST_IPADDRESS:-172.16.238.10}
 
@@ -18,16 +19,15 @@ services:
     - EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT=${EUREKA_INSTANCE_REGISTRY_DEFAULTOPENFORTRAFFICCOUNT:-1}
     - EUREKA_SERVER_ENABLESELFPRESERVATION=${EUREKA_SERVER_ENABLESELFPRESERVATION:-true}
     - EUREKA_SERVER_RENEWALPERCENTTHRESHOLD=${EUREKA_SERVER_RENEWALPERCENTTHRESHOLD:-0.25}
-    - INSTANCE_NAME=${CONTAINER_HOST_NAME:-eureka-standalone}
-
-
-
 
 
     - SPRING_APPLICATION_NAME=eureka-standalone
     - SPRING_CLOUD_CLIENT_HOSTNAME=${CONTAINER_HOST_NAME:-eureka-standalone}
     - SPRING_CLOUD_CLIENT_IPADDRESS=${HOST_IPADDRESS:-172.16.238.10}
     - SPRING_PROFILES_ACTIVE=develop.env,manual_ip_hostname,port_nonsecure,standalone
+
+
+
     hostname: ${CONTAINER_HOST_NAME:-eureka-standalone}
     networks:
       local-network:
@@ -36,8 +36,8 @@ services:
     ports:
     - "${SERVER_PORT:-8761}:${SERVER_PORT:-8761}"
     volumes:
-    - data:/root/data
-    - data:/tmp
+    - data:/home/alpine/data
+    - tmp:/tmp
 
 networks:
   # docker network create --driver=bridge --ipv6 --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network
@@ -58,5 +58,11 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${PWD}/data
+      device: ${PWD}/data/data
+      o: bind
+  tmp:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/data/tmp
       o: bind

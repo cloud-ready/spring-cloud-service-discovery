@@ -12,10 +12,10 @@ Docker Hub: https://hub.docker.com/r/cloudready/spring-cloud-eureka-server/
 Step 1. Bind hosts  
 Edit /etc/hosts, add following content:
 ```text
-127.0.0.1 eureka-standalone.local
-127.0.0.1 eureka-peer1.local
-127.0.0.1 eureka-peer2.local
-127.0.0.1 eureka-peer3.local
+127.0.0.1 eureka-standalone
+127.0.0.1 eureka-peer1
+127.0.0.1 eureka-peer2
+127.0.0.1 eureka-peer3
 ```
 
 Step 2. Create a docker network
@@ -28,9 +28,9 @@ HOST_IPADDRESS=$(ipconfig getifaddr en0 || ipconfig getifaddr en1) \
 docker-compose -f docker-compose-local-cluster.yml up
 ```
 
-Homepage [http://eureka-standalone.local:8761](http://eureka-standalone.local:8761)
+Homepage [http://eureka-standalone:8761](http://eureka-standalone:8761)
 
-Access [http://eureka-standalone.local:8761/eureka/apps](http://eureka-standalone.local:8761/eureka/apps) to get application infos.
+Access [http://eureka-standalone:8761/eureka/apps](http://eureka-standalone:8761/eureka/apps) to get application infos.
 
 ## Instance Status in Eureka and Overridden Status
 
@@ -51,7 +51,7 @@ Overridden Status is for black/red deployment.
 
 Take some old instances down:
 ```bash
-curl -i -X PUT http://eureka-standalone.local:8761/eureka/apps/<application>/<instance-id>/status?value=OUT_OF_SERVICE
+curl -i -X PUT http://eureka-standalone:8761/eureka/apps/<application>/<instance-id>/status?value=OUT_OF_SERVICE
 ```
 
 2. Start up new instances
@@ -60,23 +60,23 @@ curl -i -X PUT http://eureka-standalone.local:8761/eureka/apps/<application>/<in
 
 Delete overridden status
 ```bash
-curl -i -X DELETE http://eureka-standalone.local:8761/eureka/apps/<application>/<instance-id>/status
+curl -i -X DELETE http://eureka-standalone:8761/eureka/apps/<application>/<instance-id>/status
 ```
 
 For example, we have an application named `config-server` which has multiple instances.  
 Their instance ids are:
 
-- config-server.local:config-server:8888
-- config-server-2.local:config-server:9999
+- config-server:config-server:8888
+- config-server-2:config-server:9999
 
-To take `config-server.local:config-server:8888` down, run
+To take `config-server:config-server:8888` down, run
 ```bash
-curl -i -X PUT http://eureka-standalone.local:8761/eureka/apps/config-server/config-server.local:config-server:8888/status?value=OUT_OF_SERVICE
+curl -i -X PUT http://eureka-standalone:8761/eureka/apps/config-server/config-server:config-server:8888/status?value=OUT_OF_SERVICE
 ```
 
-To take `config-server.local:config-server:8888` back, run
+To take `config-server:config-server:8888` back, run
 ```bash
-curl -i -X DELETE http://eureka-standalone.local:8761/eureka/apps/config-server/config-server.local:config-server:8888/status
+curl -i -X DELETE http://eureka-standalone:8761/eureka/apps/config-server/config-server:config-server:8888/status
 ```
 
 You can also set status directly on instances by posting request to its `ServiceRegistryEndpoint`  
@@ -85,18 +85,18 @@ URL of `ServiceRegistryEndpoint` is: `http(s)://<host>:<port>[server.context-pat
 
 `/service-registry/instance-status` is a sensitive endpoint, may need to authentication (depends on instance's config).   
 
-For example, we can set instance `config-server.local:8888` of application `config-server` to `OUT_OF_SERVICE` by running:
+For example, we can set instance `config-server:8888` of application `config-server` to `OUT_OF_SERVICE` by running:
 ```bash
-curl -i -X POST -u admin:admin_pass -H 'Content-Type: application/json' -d 'OUT_OF_SERVICE' http://config-server.local:8888/manage/service-registry/instance-status
+curl -i -X POST -u admin:admin_pass -H 'Content-Type: application/json' -d 'OUT_OF_SERVICE' http://config-server:8888/manage/service-registry/instance-status
 ```
 
 Note: only `OUT_OF_SERVICE` and `UP` are acceptable for this endpoint.  
 
 And then we can verify that by
 ```bash
-curl -i -X GET -u admin:admin_pass -H 'Accept: application/json' http://config-server.local:8888/manage/service-registry/instance-status
+curl -i -X GET -u admin:admin_pass -H 'Accept: application/json' http://config-server:8888/manage/service-registry/instance-status
 ```
 We got `eureka: {overriddenStatus=UNKNOWN, status=UP},consul: OUT_OF_SERVICE`.  
 Here may be a bug that eureka's overriddenStatus is not set correctly.  
-But this is ok, if you run `curl -i -s -X GET http://eureka-standalone.local:8761/eureka/apps/config-server/config-server.local:config-server:8888 | grep overriddenstatus`,
+But this is ok, if you run `curl -i -s -X GET http://eureka-standalone:8761/eureka/apps/config-server/config-server:config-server:8888 | grep overriddenstatus`,
 you can see the overriddenStatus on eureka side is updated.  

@@ -20,7 +20,14 @@
         <dependency><groupId>cn.home1</groupId><artifactId>log4j2-test-config</artifactId><scope>test</scope></dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <!--<dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-eureka-dashboard-labeler</artifactId><version>${project.version}</version></dependency>-->
+        </dependencies>
+    </dependencyManagement>
+
     <modules>
+        <!--<module>spring-cloud-eureka-dashboard-labeler</module>-->
         <module>spring-cloud-eureka-server</module>
         <module>spring-cloud-eureka-sidecar</module>
     </modules>

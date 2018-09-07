@@ -16,11 +16,18 @@
     <packaging>jar</packaging>
 
     <build>
+        <pluginManagement>
+            <plugins>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <agent>
+                        <aspectj>${user.home}/.m2/repository/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar</aspectj>
+                    </agent>
                     <mainClass>cn.home1.cloud.netflix.eureka.server.EurekaServer</mainClass>
                     <!-- @formatter:off -->
                     <requiresUnpack>
@@ -29,6 +36,9 @@
                     </requiresUnpack>
                     <!-- @formatter:on -->
                 </configuration>
+                <dependencies>
+                    <dependency><groupId>org.aspectj</groupId><artifactId>aspectjweaver</artifactId><version>${aspectj.version}</version></dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>com.spotify</groupId>
@@ -39,21 +49,28 @@
 
     <dependencies>
         <!-- @formatter:off -->
+        <!--<dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-eureka-dashboard-labeler</artifactId><scope>runtime</scope></dependency>-->
+        <!--<dependency><groupId>com.h2database</groupId><artifactId>h2</artifactId><scope>test</scope></dependency>-->
+
+        <dependency><groupId>javax.servlet</groupId><artifactId>javax.servlet-api</artifactId></dependency>
+        <dependency><groupId>org.jolokia</groupId><artifactId>jolokia-core</artifactId><scope>runtime</scope></dependency>
+
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId></dependency>
+        <!--<dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-data-jpa</artifactId><scope>test</scope></dependency>-->
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-security</artifactId></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-undertow</artifactId><scope>runtime</scope></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId><scope>runtime</scope></dependency>
         <!--<dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-eureka-server</artifactId></dependency>-->
         <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-netflix-eureka-server</artifactId></dependency>
-        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId><scope>runtime</scope></dependency>
-        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-undertow</artifactId><scope>runtime</scope></dependency>
-        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId><scope>runtime</scope></dependency>
-        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-security</artifactId><scope>runtime</scope></dependency>
-
-        <dependency><groupId>org.jolokia</groupId><artifactId>jolokia-core</artifactId><scope>runtime</scope></dependency>
 
         <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
         <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-eureka</artifactId><scope>test</scope></dependency>
         <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-feign</artifactId><scope>test</scope></dependency>
         <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-ribbon</artifactId><scope>test</scope></dependency>
-        <!--<dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-data-jpa</artifactId><scope>test</scope></dependency>-->
-        <!--<dependency><groupId>com.h2database</groupId><artifactId>h2</artifactId><scope>test</scope></dependency>-->
         <!-- @formatter:on -->
     </dependencies>
+
+    <properties>
+        <aspectj.version>1.8.13</aspectj.version>
+    </properties>
 </project>
