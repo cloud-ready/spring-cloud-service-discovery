@@ -192,7 +192,7 @@ eureka.client:
     #   Peer Awareness Mode: eureka.client.service-url.defaultZone's hosts affect DS Replicas value on dashboard
     #   Standalone Mode: Notice that the serviceUrl is pointing to the same host as the local instance.
     #   Note: must use 'defaultZone' here, otherwise cluster peers can not find replicas (can not see each other).
-    #   默认注册服务地址, 多个地址之间用','分隔
+    #   split by comma
     defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://${security.user.name:user}:${security.user.password:user_pass}@${EUREKA_INSTANCE_HOSTNAME:eureka-standalone}:${server.port}/eureka/}
 #  # default: <blank-value>
 #  #transport:
@@ -207,11 +207,11 @@ eureka.client:
 #eureka.dashboard:
 #  # Flag to enable the Eureka dashboard. Default true.
 #  # default: true
-#  #   是否开启Dashboard
+#  #   whether enable dashboard
 #  enabled: true
 #  # The path to the Eureka dashboard (relative to the servlet path). Defaults to "/".
 #  # default: /
-#  #   Dashboard路径
+#  #   path of dashboard
 #  path: /
 
 eureka.instance:
@@ -221,11 +221,11 @@ eureka.instance:
 #  #a-s-g-name:
 #  # Get the name of the application group to be registered with eureka.
 #  # default: <blank-value>
-#  #   注册在Eureka上的应用组名
+#  #   application name on (register to) eureka
 #  #app-group-name:
   # Get the name of the application to be registered with eureka.
   # default: unknown
-  #   注册在Eureka上的应用名, 集群内全部结点必须一致
+  #   application name on (register to) eureka, all instances of an application must use same value
   appname: ${SPRING_APPLICATION_NAME:eureka-standalone}
 #  # Returns the data center this instance is deployed. This information is used to get some AWS specific instance information if the instance is deployed in AWS.
 #  # default: <blank-value>
@@ -248,12 +248,12 @@ eureka.instance:
 #  # It is normally used for informational purposes for other services to use it as a landing page.
 #  # The full URL should follow the format http://${eureka.hostname}:7001/ where the value ${eureka.hostname} is replaced at runtime.
 #  # default: <blank-value>
-#  #   实例URL
+#  #   instance's URL
 #  #home-page-url:
 #  # Gets the relative home page URL Path for this instance. The home page URL is then constructed out of the hostName and the type of communication - secure or unsecure.
 #  # It is normally used for informational purposes for other services to use it as a landing page.
 #  # default: /
-#  #   实例URL的ContextPath
+#  #   instance's context-path
 #  home-page-url-path: /
 #  # default: <blank-value>
 #  #host-info:

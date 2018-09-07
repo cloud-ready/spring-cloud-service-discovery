@@ -1,12 +1,12 @@
 
-endpoints.health.sensitive: ${ENDPOINTS_HEALTH_SENSITIVE:false}
+#endpoints.health.sensitive: ${ENDPOINTS_HEALTH_SENSITIVE:false} # deprecated since spring-boot 2.x
 
 eureka:
   client:
     register-with-eureka: true
   instance:
     health-check-url-path: /health
-    hostname: ${EUREKA_INSTANCE_HOSTNAME:${SPRING_CLOUD_CLIENT_HOSTNAME:${EUREKA_INSTANCE_IPADDRESS:${HOST_IPADDRESS:${spring.cloud.client.ipAddress}}}}}
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:${SPRING_CLOUD_CLIENT_HOSTNAME:${EUREKA_INSTANCE_IPADDRESS:${HOST_IPADDRESS:${spring.cloud.client.ip-address}}}}}
     lease-renewal-interval-in-seconds: 10
 
 #    metadata-map:
@@ -15,16 +15,28 @@ eureka:
     prefer-ip-address: ${EUREKA_INSTANCE_PREFERIPADDRESS:false}
     status-page-url-path: /info
 
-    instance-id: ${spring.application.name}${INSTANCE_CLASSFIER:${instance.classfier:}}:${EUREKA_INSTANCE_HOSTNAME:${SPRING_CLOUD_CLIENT_HOSTNAME:${EUREKA_INSTANCE_IPADDRESS:${HOST_IPADDRESS:${spring.cloud.client.ipAddress}}}}}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:${server.port:8080}}}
+    instance-id: ${spring.application.name}${INSTANCE_CLASSFIER:${instance.classfier:}}:${EUREKA_INSTANCE_HOSTNAME:${SPRING_CLOUD_CLIENT_HOSTNAME:${EUREKA_INSTANCE_IPADDRESS:${HOST_IPADDRESS:${spring.cloud.client.ip-address}}}}}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:${server.port:8080}}}
     non-secure-port: ${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:${server.port:8080}}}
     non-secure-port-enabled: true
     secure-port-enabled: false
 
 management:
-  context-path: ${MANAGEMENT_CONTEXTPATH:/actuator}
-  info.git.mode: FULL
-  security:
-    enabled: false
+  endpoint:
+    shutdown.enabled: ${MANAGEMENT_ENDPOINT_SHUTDOWN_ENABLED:true}
+    health:
+      show-details: ${MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS:WHEN_AUTHORIZED}
+      roles: ${MANAGEMENT_ENDPOINT_HEALTH_ROLES:ACTUATOR}
+  endpoints:
+    web: # since spring-boot 2.x
+      base-path: ${MANAGEMENT_ENDPOINTS_WEB_BASEPATH:/actuator} # management.context-path deprecated since spring-boot 2.x
+      exposure:
+        include: "${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE:*}"
+        exclude: "${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_EXCLUDE:}"
+  info.git.mode: FULL # TODO spring-boot 2.x
+  #port: # deprecated since spring-boot 2.x
+  #security: # deprecated since spring-boot 2.x
+  #  enabled: true
+  #  roles: ADMIN # no ROLE_ prefix here
 
 spring:
   application:
