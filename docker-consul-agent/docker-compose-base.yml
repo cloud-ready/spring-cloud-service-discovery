@@ -1,4 +1,3 @@
-
 version: '2.1'
 services:
   base-consul-agent:
@@ -38,7 +37,7 @@ services:
     - "${CONSUL_HTTP_API_PORT:-8500}:8500/tcp"
     #- "${CONSUL_DNS_PORT:-8600}:8600/tcp"
     #- "${CONSUL_DNS_PORT:-8600}:8600/udp"
-#    privileged: true
+    #privileged: true
     restart: always
 #    volumes:
 #    # Read host's /etc/resolv.conf to find out DNS servers to set consul's 'recursors' automatically.

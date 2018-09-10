@@ -9,12 +9,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ShowAllEndpointAutoConfiguration {
 
-  @ConditionalOnClass(Endpoint.class)
-  protected class ShowAllEndpointConfiguration {
+    @ConditionalOnClass(Endpoint.class)
+    protected class ShowAllEndpointConfiguration {
 
-    @Bean
-    public ShowAllEndpoint showAllEndpoint(ApplicationContext applicationContext) {
-      return new ShowAllEndpoint(applicationContext);
+        @Bean
+        public ShowAllEndpoint showAllEndpoint(ApplicationContext applicationContext) {
+            return new ShowAllEndpoint(applicationContext);
+        }
     }
-  }
 }

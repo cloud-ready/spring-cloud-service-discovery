@@ -19,31 +19,31 @@ import javax.annotation.PostConstruct;
 @Slf4j
 public class EurekaInstanceBuildVersionAutoConfiguration {
 
-  @Autowired(required = false)
-  private EurekaInstanceConfig instanceConfig;
+    @Autowired(required = false)
+    private EurekaInstanceConfig instanceConfig;
 
-  @Autowired(required = false)
-  private BuildProperties buildProperties;
+    @Autowired(required = false)
+    private BuildProperties buildProperties;
 
-  @Value("${eureka.instance.metadata.keys.build-time:build-time}")
-  private String buildTimeKey;
+    @Value("${eureka.instance.metadata.keys.build-time:build-time}")
+    private String buildTimeKey;
 
-  @Value("${eureka.instance.metadata.keys.build-version:build-version}")
-  private String buildVersionKey;
+    @Value("${eureka.instance.metadata.keys.build-version:build-version}")
+    private String buildVersionKey;
 
-  @PostConstruct
-  public void init() {
-    if (this.instanceConfig == null || this.buildProperties == null) {
-      return;
+    @PostConstruct
+    public void init() {
+        if (this.instanceConfig == null || this.buildProperties == null) {
+            return;
+        }
+
+        final String buildTime = this.buildProperties.getTime().toString();
+        final String buildVersion = this.buildProperties.getVersion();
+
+        log.info("build-time: {}", buildTime);
+        log.info("build-version: {}", buildVersion);
+
+        this.instanceConfig.getMetadataMap().put(this.buildTimeKey, buildTime);
+        this.instanceConfig.getMetadataMap().put(this.buildVersionKey, buildVersion);
     }
-
-    final String buildTime = this.buildProperties.getTime().toString();
-    final String buildVersion = this.buildProperties.getVersion();
-
-    log.info("build-time: {}", buildTime);
-    log.info("build-version: {}", buildVersion);
-
-    this.instanceConfig.getMetadataMap().put(this.buildTimeKey, buildTime);
-    this.instanceConfig.getMetadataMap().put(this.buildVersionKey, buildVersion);
-  }
 }

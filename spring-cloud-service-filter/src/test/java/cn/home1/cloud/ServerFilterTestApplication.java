@@ -13,7 +13,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @Slf4j
 public class ServerFilterTestApplication {
 
-  public static void main(final String... args) {
-    SpringApplication.run(ServerFilterTestApplication.class, args);
-  }
+    public static void main(final String... args) {
+        SpringApplication.run(ServerFilterTestApplication.class, args);
+    }
 }

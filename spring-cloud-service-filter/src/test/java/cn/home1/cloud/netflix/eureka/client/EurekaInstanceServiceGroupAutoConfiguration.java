@@ -21,27 +21,27 @@ import javax.annotation.PostConstruct;
 @Slf4j
 public class EurekaInstanceServiceGroupAutoConfiguration {
 
-  @Autowired
-  private Environment environment;
+    @Autowired
+    private Environment environment;
 
-  @Autowired(required = false)
-  private EurekaInstanceConfig instanceConfig;
+    @Autowired(required = false)
+    private EurekaInstanceConfig instanceConfig;
 
-  @Value("${eureka.instance.metadata.keys.instance-group:instance-group}")
-  private String instanceGroupKey;
+    @Value("${eureka.instance.metadata.keys.instance-group:instance-group}")
+    private String instanceGroupKey;
 
-  @PostConstruct
-  public void init() {
-    if (this.instanceConfig == null) {
-      return;
+    @PostConstruct
+    public void init() {
+        if (this.instanceConfig == null) {
+            return;
+        }
+
+        final String instanceGroupEnvVariable = this.environment.getProperty("INSTANCE_GROUP", "");
+        final String instanceGroupProperty = this.environment.getProperty("instance.group", ".*");
+        final String instanceGroup = isNotBlank(instanceGroupEnvVariable) ? instanceGroupEnvVariable : instanceGroupProperty;
+
+        log.info("instance-group: {}", instanceGroup);
+
+        this.instanceConfig.getMetadataMap().put(this.instanceGroupKey, instanceGroup);
     }
-
-    final String instanceGroupEnvVariable = this.environment.getProperty("INSTANCE_GROUP", "");
-    final String instanceGroupProperty = this.environment.getProperty("instance.group", ".*");
-    final String instanceGroup = isNotBlank(instanceGroupEnvVariable) ? instanceGroupEnvVariable : instanceGroupProperty;
-
-    log.info("instance-group: {}", instanceGroup);
-
-    this.instanceConfig.getMetadataMap().put(this.instanceGroupKey, instanceGroup);
-  }
 }

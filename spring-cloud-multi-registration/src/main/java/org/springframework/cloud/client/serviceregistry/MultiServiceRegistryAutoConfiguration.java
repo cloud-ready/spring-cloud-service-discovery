@@ -74,18 +74,18 @@ public class MultiServiceRegistryAutoConfiguration {
 //    }
 //  }
 
-  @ConditionalOnBean(ServiceRegistry.class)
-  @ConditionalOnClass(Endpoint.class)
-  protected class MultiServiceRegistryEndpointConfiguration {
+    @ConditionalOnBean(ServiceRegistry.class)
+    @ConditionalOnClass(Endpoint.class)
+    protected class MultiServiceRegistryEndpointConfiguration {
 
-    @Autowired(required = false)
-    private List<Registration> registrations;
+        @Autowired(required = false)
+        private List<Registration> registrations;
 
-    @Bean
-    public MultiServiceRegistryEndpoint serviceRegistryEndpoint(final List<ServiceRegistry> serviceRegistries) {
-      MultiServiceRegistryEndpoint endpoint = new MultiServiceRegistryEndpoint(serviceRegistries);
-      endpoint.setRegistrations(this.registrations);
-      return endpoint;
+        @Bean
+        public MultiServiceRegistryEndpoint serviceRegistryEndpoint(final List<ServiceRegistry> serviceRegistries) {
+            MultiServiceRegistryEndpoint endpoint = new MultiServiceRegistryEndpoint(serviceRegistries);
+            endpoint.setRegistrations(this.registrations);
+            return endpoint;
+        }
     }
-  }
 }

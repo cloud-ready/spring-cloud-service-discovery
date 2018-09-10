@@ -20,19 +20,19 @@ import org.springframework.context.event.EventListener;
 @Slf4j
 public class EurekaServer {
 
-  @Autowired
-  private EurekaClientConfigBean eurekaClientConfig;
+    @Autowired
+    private EurekaClientConfigBean eurekaClientConfig;
 
-  @Autowired
-  private EurekaInstanceConfigBean eurekaInstanceConfig;
+    @Autowired
+    private EurekaInstanceConfigBean eurekaInstanceConfig;
 
-  @EventListener(ApplicationReadyEvent.class)
-  public void printImportantInfo() {
-    log.info("eureka.client.service-url.defaultZone: {}", this.eurekaClientConfig.getServiceUrl().get("defaultZone"));
-    log.info("eureka.instance.hostname: {}", this.eurekaInstanceConfig.getHostname());
-  }
+    public static void main(final String... args) {
+        new SpringApplicationBuilder(EurekaServer.class).web(true).run(args);
+    }
 
-  public static void main(final String... args) {
-    new SpringApplicationBuilder(EurekaServer.class).web(true).run(args);
-  }
+    @EventListener(ApplicationReadyEvent.class)
+    public void printImportantInfo() {
+        log.info("eureka.client.service-url.defaultZone: {}", this.eurekaClientConfig.getServiceUrl().get("defaultZone"));
+        log.info("eureka.instance.hostname: {}", this.eurekaInstanceConfig.getHostname());
+    }
 }

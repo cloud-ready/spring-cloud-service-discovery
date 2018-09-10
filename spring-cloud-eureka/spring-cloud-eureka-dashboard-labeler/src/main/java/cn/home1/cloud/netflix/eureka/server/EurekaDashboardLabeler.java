@@ -17,37 +17,36 @@ import org.springframework.util.StringUtils;
 @Aspect
 public class EurekaDashboardLabeler {
 
-  @Value("${eureka.instance.metadata.keys.instance-group:instance-group}")
-  private String instanceGroupKey;
+    private static EurekaDashboardLabeler instance = new EurekaDashboardLabeler();
+    @Value("${eureka.instance.metadata.keys.instance-group:instance-group}")
+    private String instanceGroupKey;
 
-  @Around("execution(public * com.netflix.appinfo.InstanceInfo.getId())")
-  public String versionLabelAppInstances(final ProceedingJoinPoint jp) throws Throwable {
-    final String instanceId = (String) jp.proceed();
-    for (final StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-      // limit to EurekaController#populateApps in order to avoid side effects
-      if (ste.getClassName().contains("EurekaController")) {
-        final InstanceInfo info = (InstanceInfo) jp.getThis();
-        final String instanceGroup = info.getMetadata().get(this.instanceGroupKey);
-        if (StringUtils.hasText(instanceGroup)) {
-          return String.format("%s [%s]", instanceId, instanceGroup);
-        }
-        break;
-      }
+    /**
+     * Singleton pattern used by LTW then Spring
+     */
+    public static EurekaDashboardLabeler aspectOf() {
+        return instance;
     }
-    return instanceId;
-  }
 
-  @Bean("post-construct-labeler")
-  public EurekaDashboardLabeler init() {
-    return EurekaDashboardLabeler.aspectOf();
-  }
+    @Around("execution(public * com.netflix.appinfo.InstanceInfo.getId())")
+    public String versionLabelAppInstances(final ProceedingJoinPoint jp) throws Throwable {
+        final String instanceId = (String) jp.proceed();
+        for (final StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+            // limit to EurekaController#populateApps in order to avoid side effects
+            if (ste.getClassName().contains("EurekaController")) {
+                final InstanceInfo info = (InstanceInfo) jp.getThis();
+                final String instanceGroup = info.getMetadata().get(this.instanceGroupKey);
+                if (StringUtils.hasText(instanceGroup)) {
+                    return String.format("%s [%s]", instanceId, instanceGroup);
+                }
+                break;
+            }
+        }
+        return instanceId;
+    }
 
-  private static EurekaDashboardLabeler instance = new EurekaDashboardLabeler();
-
-  /**
-   * Singleton pattern used by LTW then Spring
-   */
-  public static EurekaDashboardLabeler aspectOf() {
-    return instance;
-  }
+    @Bean("post-construct-labeler")
+    public EurekaDashboardLabeler init() {
+        return EurekaDashboardLabeler.aspectOf();
+    }
 }

@@ -19,33 +19,33 @@ import java.util.Map.Entry;
 @Endpoint(id = "show-all")
 public class ShowAllEndpoint {
 
-  private ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
-  public ShowAllEndpoint(final ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
-
-  @ReadOperation
-  public ResponseEntity getEndpoints() {
-    final Map<String, Object> endpointBeans = this.applicationContext.getBeansWithAnnotation(Endpoint.class);
-
-    final List<String> endpoints = Lists.newLinkedList();
-    for (final Entry<String, Object> entry : endpointBeans.entrySet()) {
-      final Object endpointInstance = entry.getValue();
-      final Class endpointClazz = endpointInstance.getClass();
-      final Endpoint annotation = AnnotationUtils.findAnnotation(endpointClazz, Endpoint.class);
-      final String id = "" + AnnotationUtils.getValue(annotation, "id");
-      endpoints.add(isNotBlank(id) ? id : "'" + entry.getKey() + "'");
+    public ShowAllEndpoint(final ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
-    endpoints.sort(String::compareTo);
 
-    return ResponseEntity.ok().body(endpoints.stream().collect(joining(",\n")));
-  }
+    @ReadOperation
+    public ResponseEntity getEndpoints() {
+        final Map<String, Object> endpointBeans = this.applicationContext.getBeansWithAnnotation(Endpoint.class);
 
-  @Autowired(required = false)
-  public void setObjectMappers(final List<com.fasterxml.jackson.databind.ObjectMapper> objectMappers) {
-    objectMappers.forEach(objectMapper ->
-        objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
-    );
-  }
+        final List<String> endpoints = Lists.newLinkedList();
+        for (final Entry<String, Object> entry : endpointBeans.entrySet()) {
+            final Object endpointInstance = entry.getValue();
+            final Class endpointClazz = endpointInstance.getClass();
+            final Endpoint annotation = AnnotationUtils.findAnnotation(endpointClazz, Endpoint.class);
+            final String id = "" + AnnotationUtils.getValue(annotation, "id");
+            endpoints.add(isNotBlank(id) ? id : "'" + entry.getKey() + "'");
+        }
+        endpoints.sort(String::compareTo);
+
+        return ResponseEntity.ok().body(endpoints.stream().collect(joining(",\n")));
+    }
+
+    @Autowired(required = false)
+    public void setObjectMappers(final List<com.fasterxml.jackson.databind.ObjectMapper> objectMappers) {
+        objectMappers.forEach(objectMapper ->
+            objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+        );
+    }
 }

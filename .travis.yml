@@ -1,4 +1,3 @@
-
 addons:
   apt:
     packages:
@@ -53,11 +52,11 @@ script:
 - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
 - if [[ "${TRAVIS_BRANCH}" =~ ^release/.+ ]]; then export CI_OPT_GITHUB_SITE_PUBLISH=true; else export CI_OPT_GITHUB_SITE_PUBLISH=false; fi;
   if [ "${TRAVIS_ENABLED}" == "true" ]; then
-    if [ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]; then
-      bash ci.sh mvn clean install sonar:sonar site deploy site-deploy;
-    else
-      bash ci.sh mvn clean install sonar:sonar site deploy site:stage site:stage-deploy;
-    fi;
+  if [ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]; then
+  bash ci.sh mvn clean install sonar:sonar site deploy site-deploy;
+  else
+  bash ci.sh mvn clean install sonar:sonar site deploy site:stage site:stage-deploy;
+  fi;
   fi
 - kill %1
 services:

@@ -14,13 +14,13 @@ import java.net.ServerSocket;
 @Slf4j
 public class IsAliveTest {
 
-  @Test
-  public void testIsAlive() throws IOException {
-    assertFalse(isSocketAlive("127.0.0.1", 12345));
+    @Test
+    public void testIsAlive() throws IOException {
+        assertFalse(isSocketAlive("127.0.0.1", 12345));
 
-    final ServerSocket randomServerSocket = new ServerSocket(0);
-    assertTrue(isSocketAlive("127.0.0.1", randomServerSocket.getLocalPort()));
-    randomServerSocket.close();
-    assertFalse(isSocketAlive("127.0.0.1", randomServerSocket.getLocalPort()));
-  }
+        final ServerSocket randomServerSocket = new ServerSocket(0);
+        assertTrue(isSocketAlive("127.0.0.1", randomServerSocket.getLocalPort()));
+        randomServerSocket.close();
+        assertFalse(isSocketAlive("127.0.0.1", randomServerSocket.getLocalPort()));
+    }
 }

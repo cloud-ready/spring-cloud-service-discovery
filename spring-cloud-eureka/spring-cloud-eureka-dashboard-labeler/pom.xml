@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -27,10 +27,10 @@
                     <version>1.11</version>
                     <configuration>
                         <!--<aspectLibraries>-->
-                            <!--<aspectLibrary>-->
-                                <!--<groupId>io.astefanutti.metrics.aspectj</groupId>-->
-                                <!--<artifactId>metrics-aspectj</artifactId>-->
-                            <!--</aspectLibrary>-->
+                        <!--<aspectLibrary>-->
+                        <!--<groupId>io.astefanutti.metrics.aspectj</groupId>-->
+                        <!--<artifactId>metrics-aspectj</artifactId>-->
+                        <!--</aspectLibrary>-->
                         <!--</aspectLibraries>-->
                         <complianceLevel>${java.version}</complianceLevel>
                         <source>${java.version}</source>
@@ -45,7 +45,11 @@
                         </execution>
                     </executions>
                     <dependencies>
-                        <dependency><groupId>org.aspectj</groupId><artifactId>aspectjtools</artifactId><version>${aspectj.version}</version></dependency>
+                        <dependency>
+                            <groupId>org.aspectj</groupId>
+                            <artifactId>aspectjtools</artifactId>
+                            <version>${aspectj.version}</version>
+                        </dependency>
                     </dependencies>
                 </plugin>
                 <plugin>
@@ -69,19 +73,19 @@
         </pluginManagement>
         <plugins>
             <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-compiler-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<excludes><exclude>src/main/java/</exclude></excludes>-->
-                <!--</configuration>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-compiler-plugin</artifactId>-->
+            <!--<configuration>-->
+            <!--<excludes><exclude>src/main/java/</exclude></excludes>-->
+            <!--</configuration>-->
             <!--</plugin>-->
             <!--<plugin>-->
-                <!--<groupId>org.projectlombok</groupId>-->
-                <!--<artifactId>lombok-maven-plugin</artifactId>-->
+            <!--<groupId>org.projectlombok</groupId>-->
+            <!--<artifactId>lombok-maven-plugin</artifactId>-->
             <!--</plugin>-->
             <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>aspectj-maven-plugin</artifactId>-->
+            <!--<groupId>org.codehaus.mojo</groupId>-->
+            <!--<artifactId>aspectj-maven-plugin</artifactId>-->
             <!--</plugin>-->
         </plugins>
     </build>

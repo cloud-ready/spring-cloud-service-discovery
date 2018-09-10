@@ -35,32 +35,32 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
     SecurityDataConfiguration.class})
 public class ApplicationSecurityAutoConfiguration {
 
-  @Bean
-  @ConditionalOnMissingBean(AuthenticationEventPublisher.class)
-  public DefaultAuthenticationEventPublisher authenticationEventPublisher(
-      ApplicationEventPublisher publisher) {
-    return new DefaultAuthenticationEventPublisher(publisher);
-  }
-
-  @ConditionalOnProperty(prefix = "spring.security", name = "enabled", havingValue = "true")
-  @Configuration
-  @Order(SecurityProperties.BASIC_AUTH_ORDER)
-  static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
-
-    @Override
-    protected void configure(final HttpSecurity http) throws Exception {
-      //super.configure(http); // default config
-      http //
-          .authorizeRequests() //
-          .requestMatchers(EndpointRequest.to("health", "info")).permitAll() //
-          .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR") //
-          .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //
-          .antMatchers("/**").hasRole("USER") //
-          .and() //
-          .formLogin().disable() //
-          .httpBasic().and() //
-          .sessionManagement().sessionCreationPolicy(STATELESS).and() //
-      ;
+    @Bean
+    @ConditionalOnMissingBean(AuthenticationEventPublisher.class)
+    public DefaultAuthenticationEventPublisher authenticationEventPublisher(
+        ApplicationEventPublisher publisher) {
+        return new DefaultAuthenticationEventPublisher(publisher);
     }
-  }
+
+    @ConditionalOnProperty(prefix = "spring.security", name = "enabled", havingValue = "true")
+    @Configuration
+    @Order(SecurityProperties.BASIC_AUTH_ORDER)
+    static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+
+        @Override
+        protected void configure(final HttpSecurity http) throws Exception {
+            //super.configure(http); // default config
+            http //
+                .authorizeRequests() //
+                .requestMatchers(EndpointRequest.to("health", "info")).permitAll() //
+                .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR") //
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //
+                .antMatchers("/**").hasRole("USER") //
+                .and() //
+                .formLogin().disable() //
+                .httpBasic().and() //
+                .sessionManagement().sessionCreationPolicy(STATELESS).and() //
+            ;
+        }
+    }
 }
