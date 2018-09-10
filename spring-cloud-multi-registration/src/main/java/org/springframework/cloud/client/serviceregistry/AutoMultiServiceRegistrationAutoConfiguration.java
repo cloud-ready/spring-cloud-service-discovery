@@ -20,19 +20,19 @@ import javax.annotation.PostConstruct;
 @ConditionalOnProperty(value = "spring.cloud.service-registry.auto-multi-registration.enabled", havingValue = "true")
 public class AutoMultiServiceRegistrationAutoConfiguration {
 
-  /**
-   * i.e. EurekaAutoServiceRegistration, ConsulAutoServiceRegistration ...
-   */
-  @Autowired(required = false)
-  private List<AutoServiceRegistration> autoServiceRegistrations;
+    /**
+     * i.e. EurekaAutoServiceRegistration, ConsulAutoServiceRegistration ...
+     */
+    @Autowired(required = false)
+    private List<AutoServiceRegistration> autoServiceRegistrations;
 
-  @Autowired
-  private AutoServiceRegistrationProperties properties;
+    @Autowired
+    private AutoServiceRegistrationProperties properties;
 
-  @PostConstruct
-  protected void init() {
-    if ((autoServiceRegistrations == null || autoServiceRegistrations.size() < 1) && this.properties.isFailFast()) {
-      throw new IllegalStateException("Auto Multi Service Registration has been requested, but there is no AutoServiceRegistration bean");
+    @PostConstruct
+    protected void init() {
+        if ((autoServiceRegistrations == null || autoServiceRegistrations.size() < 1) && this.properties.isFailFast()) {
+            throw new IllegalStateException("Auto Multi Service Registration has been requested, but there is no AutoServiceRegistration bean");
+        }
     }
-  }
 }

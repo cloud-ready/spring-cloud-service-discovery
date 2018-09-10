@@ -101,6 +101,7 @@
         <!--<module>spring-cloud-service-filter</module>-->
     </modules>
 
+    <!-- @formatter:off -->
     <profiles>
         <profile>
             <!-- Build examples at local, skip build examples on CI -->
@@ -114,6 +115,7 @@
             </modules>
         </profile>
     </profiles>
+    <!-- @formatter:on -->
 
     <!-- @formatter:off -->
     <repositories>

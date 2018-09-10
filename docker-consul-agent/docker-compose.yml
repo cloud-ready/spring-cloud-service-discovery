@@ -1,4 +1,3 @@
-
 version: '2.1'
 services:
   consul-agent-develop:
@@ -21,7 +20,7 @@ services:
     ports:
     - "${CONSUL_DNS_PORT:-53}:53/tcp"
     - "${CONSUL_DNS_PORT:-53}:53/udp"
-#    privileged: true
+    #privileged: true
     volumes:
     - data:/consul/data
     - /etc/resolv.conf:/var/lib/host_etc_resolv.conf
