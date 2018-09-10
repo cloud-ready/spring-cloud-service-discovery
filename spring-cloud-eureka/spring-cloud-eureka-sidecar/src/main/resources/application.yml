@@ -1,4 +1,3 @@
-
 endpoints:
   env.sensitive: ${ENDPOINTS_ENV_SENSITIVE:true}
   health.sensitive: ${ENDPOINTS_HEALTH_SENSITIVE:false}
