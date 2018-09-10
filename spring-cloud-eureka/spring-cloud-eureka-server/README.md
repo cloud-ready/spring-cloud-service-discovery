@@ -80,8 +80,8 @@ curl -i -X DELETE http://eureka-standalone:8761/eureka/apps/config-server/config
 ```
 
 You can also set status directly on instances by posting request to its `ServiceRegistryEndpoint`  
-URL of `ServiceRegistryEndpoint` is: `http(s)://<host>:<port>[server.context-path][management.context-path]/service-registry/instance-status`  
-`server.context-path` and `management.context-path` are optional, that depends on instance's config.  
+URL of `ServiceRegistryEndpoint` is: `http(s)://<host>:<port>[server.servlet.context-path][management.endpoints.web.base-path]/service-registry/instance-status`  
+`server.servlet.context-path` and `management.endpoints.web.base-path` are optional, that depends on instance's config.  
 
 `/service-registry/instance-status` is a sensitive endpoint, may need to authentication (depends on instance's config).   
 

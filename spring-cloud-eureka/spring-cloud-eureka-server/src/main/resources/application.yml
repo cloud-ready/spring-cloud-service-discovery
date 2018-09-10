@@ -277,7 +277,7 @@ eureka.instance:
   # the communication from other instances primarily happen using the information supplied in {@link #getHostName(boolean)}.
   # default: <blank-value>
   #   如果未找到IP地址, 集群结点间无法互相注册
-  ip-address: ${EUREKA_INSTANCE_IPADDRESS:${spring.cloud.client.ipAddress:127.0.0.1}}
+  ip-address: ${EUREKA_INSTANCE_IPADDRESS:${spring.cloud.client.ip-address:127.0.0.1}}
 #  # Indicates the time in seconds that the eureka server waits since it received the last heartbeat
 #  # before it can remove this instance from its view and there by disallowing traffic to this instance.
 #  # Setting this value too long could mean that the traffic could be routed to the instance
@@ -438,6 +438,19 @@ logging:
     org.springframework.security: ${LOGGING_LEVEL_ROOT:INFO}
     root: ${LOGGING_LEVEL_ROOT:INFO}
 
+management:
+  endpoint:
+    shutdown.enabled: ${MANAGEMENT_ENDPOINT_SHUTDOWN_ENABLED:true}
+    health:
+      show-details: ${MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS:WHEN_AUTHORIZED}
+      roles: ${MANAGEMENT_ENDPOINT_HEALTH_ROLES:ACTUATOR}
+  endpoints:
+    web: # since spring-boot 2.x
+      base-path: ${MANAGEMENT_ENDPOINTS_WEB_BASEPATH:/} # default: /actuator, management.context-path deprecated since spring-boot 2.x
+      exposure:
+        include: "${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE:*}"
+        exclude: "${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_EXCLUDE:}"
+
 server.port: ${SERVER_PORT:8761}
 
 spring:
@@ -453,12 +466,13 @@ spring:
       preferred-networks: ${SPRING_CLOUD_INETUTILS_PREFERREDNETWORKS:^192\.168\..+, ^172\.30\..+, ^10\..+}
       ignored-interfaces: ${SPRING_CLOUD_INETUTILS_IGNOREDINTERFACES:^[a-z]?tun[0-9]*, ^awdl[0-9]*, ^lo[0-9]*}
 
-security:
-  basic.enabled: ${SECURITY_BASIC_ENABLED:false}
-  user:
-    name: ${SECURITY_USER_NAME:user}
-    password: ${SECURITY_USER_PASSWORD:user_pass}
-    role: ${SPRING_SECURITY_USER_ROLES:ACTUATOR, ADMIN, SUPERUSER, USER}
+  security:
+    enabled: ${SPRING_SECURITY_ENABLED:false}
+    user:
+      name: ${SPRING_SECURITY_USER_NAME:user}
+      password: ${SPRING_SECURITY_USER_PASSWORD:user_pass}
+      roles: ${SPRING_SECURITY_USER_ROLES:ACTUATOR, ADMIN, SUPERUSER, USER}
+
 
 ---
 spring:
@@ -469,9 +483,9 @@ eureka.instance:
 #  # default: <blank-value>
 #  #   instance的id, 区分同一应用的不同实例
 #  #   eureka.instance.instance-id affect Status->instances's url text (not href) value on dashboard
-#  #   or spring.cloud.client.ipAddress if eureka.instance.prefer-ip-address=true
+#  #   or spring.cloud.client.ip-address if eureka.instance.prefer-ip-address=true
 #  #   other possible values:
-#  #     ${spring.application.name}:${spring.cloud.client.ipAddress}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
+#  #     ${spring.application.name}:${spring.cloud.client.ip-address}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
 #  #     ${spring.application.name}:${spring.cloud.client.hostname}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
 #  instance-id: ${spring.application.name}:${spring.cloud.client.hostname}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}:${random.value}
 #  # Gets the absolute health check page URL for this instance.
@@ -490,8 +504,8 @@ eureka.instance:
 #    #hostname: ${EUREKA_INSTANCE_HOSTNAME:eureka-standalone}
 #    #prot: ${EUREKA_INSTANCE_NONSECUREPORT:8761}
 #    #instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}
-#    # or spring.cloud.client.ipAddress if eureka.instance.prefer-ip-address=true
-#    #instanceId: ${spring.cloud.client.ipAddress}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}
+#    # or spring.cloud.client.ip-address if eureka.instance.prefer-ip-address=true
+#    #instanceId: ${spring.cloud.client.ip-address}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}
   # Get the non-secure port on which the instance should receive traffic.
   # default: 80
   #   eureka.instance.non-secure-port affect Status->instances's url href (not text) value on dashboard
@@ -544,7 +558,7 @@ spring:
 spring.cloud:
   client:
     hostname: ${SPRING_CLOUD_CLIENT_HOSTNAME:}
-    ipAddress: ${SPRING_CLOUD_CLIENT_IPADDRESS:}
+    ip-address: ${SPRING_CLOUD_CLIENT_IPADDRESS:}
 
 ---
 spring:

@@ -18,7 +18,7 @@ Dependencies in pom.xml
 ```xml
 <dependencies>
   <!-- @formatter:off -->
-    <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-eureka</artifactId></dependency>
+    <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-netflix-eureka-client</artifactId></dependency>
     <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-consul-all</artifactId></dependency>
     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId><scope>runtime</scope></dependency>
     

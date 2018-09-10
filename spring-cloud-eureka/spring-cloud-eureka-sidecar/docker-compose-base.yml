@@ -41,9 +41,9 @@ services:
     - SPRING_CLOUD_INETUTILS_IGNOREDINTERFACES=${SPRING_CLOUD_INETUTILS_IGNOREDINTERFACES}
 
     # Password to access management endpoints such as /env, /health and so on.
-    - SECURITY_USER_PASSWORD=${SECURITY_USER_PASSWORD:-} # change me
+    - SPRING_SECURITY_USER_PASSWORD=${SPRING_SECURITY_USER_PASSWORD:-} # change me
 
-    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-sidecar:${IMAGE_VERSION:-0.0.4-SNAPSHOT}
+    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-sidecar:${IMAGE_VERSION:-2.0.1-SNAPSHOT}
     labels:
       top.infra.cloudready.deploy.script.commit-id: ${DEPLOY_SCRIPT_COMMITID}
       top.infra.cloudready.deploy.script.label: ${DEPLOY_SCRIPT_LABEL}

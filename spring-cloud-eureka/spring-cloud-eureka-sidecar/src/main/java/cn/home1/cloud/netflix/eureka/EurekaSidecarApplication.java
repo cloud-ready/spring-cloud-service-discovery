@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.cloud.netflix.sidecar.EnableSidecar;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
@@ -16,7 +17,7 @@ import org.springframework.util.StringUtils;
  * The @EnableSidecar annotation includes @EnableCircuitBreaker, @EnableDiscoveryClient, and @EnableZuulProxy
  */
 @EnableSidecar
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @Slf4j
 public class EurekaSidecarApplication {
 

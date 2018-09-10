@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cloud.netflix.eureka.EurekaClientConfigBean;
@@ -15,7 +16,7 @@ import org.springframework.context.event.EventListener;
  * Created by zhanghaolun on 16/9/26.
  */
 @EnableEurekaServer
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @Slf4j
 public class EurekaServer {
 
