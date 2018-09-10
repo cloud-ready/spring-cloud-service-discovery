@@ -1,4 +1,3 @@
-
 endpoints:
   env.sensitive: ${ENDPOINTS_ENV_SENSITIVE:true}
   health.sensitive: ${ENDPOINTS_HEALTH_SENSITIVE:false}
@@ -6,10 +5,13 @@ endpoints:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://user:user_pass@eureka-standalone.local:8761/eureka/}
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://user:user_pass@eureka-standalone:8761/eureka/}
   instance:
+    health-check-url: http://${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ipAddress:${spring.cloud.client.hostname:localhost}}}}:${SIDECAR_PORT:8761}${SIDECAR_HEALTHURI:/health}
+    home-page-url: http://${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ipAddress:${spring.cloud.client.hostname:localhost}}}}:${SIDECAR_PORT:8761}${SIDECAR_HOMEPAGEURI:/}
     instance-id: ${spring.application.name}:${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ipAddress:${spring.cloud.client.hostname:${random.int}}}}}:${SERVER_PORT:5678}
     prefer-ip-address: ${EUREKA_INSTANCE_PREFERIPADDRESS:true}
+    status-page-url: http://${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ipAddress:${spring.cloud.client.hostname:localhost}}}}:${SIDECAR_PORT:8761}/info
 
 logging:
   #file: ${LOG_FILE:${CONTAINER_HOST_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}}.log
@@ -25,7 +27,7 @@ logging:
     org.springframework.jndi: ${LOGGING_LEVEL_ROOT:INFO}
     org.springframework.web.servlet.handler.SimpleUrlHandlerMapping: ${ENDPOINT_LOGGING_LEVEL_ROOT:WARN}
     org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: ${ENDPOINT_LOGGING_LEVEL_ROOT:WARN}
-    root: ${LOGGING_LEVEL_ROOT:INFO}
+    root: ${LOGGING_LEVEL_ROOT:DEBUG}
 
 management:
   #context-path: do not set management.context-path on sidecar
@@ -34,17 +36,8 @@ management:
     roles: SUPERUSER
     sessions: stateless
 
-security:
-  basic:
-    enabled: false
-  sessions: stateless
-  user:
-    name: admin
-    password: ${SECURITY_USER_PASSWORD:${random.uuid}}
-    role: ADMIN
-
 server:
-  #context-path: do not set server.context-path on sidecar
+  #servlet.context-path: # do not set server.servlet.context-path on sidecar (server.context-path deprecated since spring-boot 2.x)
   port: ${SERVER_PORT:5678}
 
 sidecar:
@@ -59,14 +52,13 @@ spring:
   application.name: ${SPRING_APPLICATION_NAME:the-name-of-non-JVM-application-or-service}
   cloud:
     inetutils:
-      preferred-networks:
-      - ^192\.168
-      - ^10\.
-      - ^172\.
-      ignored-interfaces:
-      - docker0
-      - eno.*
-      - tun.*
-      - utun.*
-      - veth.*
-      - virbr.*
+      preferred-networks: ${SPRING_CLOUD_INETUTILS_PREFERREDNETWORKS:^192\.168\..+, ^172\.30\..+, ^10\..+}
+      ignored-interfaces: ${SPRING_CLOUD_INETUTILS_IGNOREDINTERFACES:^[a-z]?tun[0-9]*, ^awdl[0-9]*, ^lo[0-9]*}
+
+security:
+  basic.enabled: false
+  sessions: stateless
+  user:
+    name: admin
+    password: ${SECURITY_USER_PASSWORD:${random.uuid}}
+    role: ${SPRING_SECURITY_USER_ROLES:ACTUATOR, ADMIN, SUPERUSER, USER}

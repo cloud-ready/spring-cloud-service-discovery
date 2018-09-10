@@ -8,13 +8,14 @@ addons:
     - graphviz
     - openssl
 before_install:
-- export JAVA_HOME=$HOME/oraclejdk10
+- export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
-- bash install-jdk.sh -F 10 -L BCL --target ${JAVA_HOME} --workspace $HOME/.cache/install-jdk
+- bash install-jdk.sh -F 10 -L BCL --target $HOME/oraclejdk10 --workspace $HOME/.cache/install-jdk
 - if [ -d /home/travis/oraclejdk10 ]; then sudo mkdir -p /usr/lib/jvm; sudo ln -s /home/travis/oraclejdk10 /usr/lib/jvm/java-10-oracle; fi
 - aria2c --file-allocation=none -c -x 10 -s 10 -m 0 --console-log-level=notice --log-level=notice --summary-interval=0 -o apache-maven-3.5.4-bin.zip https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.zip && unzip -qq apache-maven-3.5.4-bin.zip
 - export M2_HOME=$PWD/apache-maven-3.5.4
 - export PATH=$M2_HOME/bin:$PATH
+- if [ -z "${LOGGING_LEVEL_ROOT}" ]; then export LOGGING_LEVEL_ROOT=INFO; fi
 branches:
   only:
   #- master # do nothing on master branch
@@ -33,9 +34,12 @@ cache:
 dist: trusty
 env:
   global:
-  # i.e. CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/master/src/main/ci-script/lib_ci.sh
-  - CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/master/src/main/ci-script/lib_ci.sh
+  - TRAVIS_ENABLED=true
+  # e.g. CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/v0.2.1/src/main/ci-script/lib_ci.sh
+  - CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/v0.2.1/src/main/ci-script/lib_ci.sh
+  - CI_OPT_GITHUB_SITE_PUBLISH=true
   - CI_OPT_INFRASTRUCTURE=opensource
+  #- CI_OPT_MAVEN_EFFECTIVE_POM=true
   - MAVEN_SKIP_RC=true
 group: edge
 install: true
@@ -47,7 +51,14 @@ script:
 # When prefixed with `travis_wait 30`, no log output until it is done.
 # see: https://github.com/travis-ci/travis-ci/issues/4190 or https://github.com/HaxeFoundation/hxcpp/issues/709
 - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
-- bash ci.sh mvn clean install sonar:sonar site deploy site-deploy
+- if [[ "${TRAVIS_BRANCH}" =~ ^release/.+ ]]; then export CI_OPT_GITHUB_SITE_PUBLISH=true; else export CI_OPT_GITHUB_SITE_PUBLISH=false; fi;
+  if [ "${TRAVIS_ENABLED}" == "true" ]; then
+    if [ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]; then
+      bash ci.sh mvn clean install sonar:sonar site deploy site-deploy;
+    else
+      bash ci.sh mvn clean install sonar:sonar site deploy site:stage site:stage-deploy;
+    fi;
+  fi
 - kill %1
 services:
 - docker

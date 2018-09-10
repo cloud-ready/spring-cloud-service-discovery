@@ -7,9 +7,9 @@ import java.util.List;
 
 @Configuration
 public class ListEndPointsAutoConfiguration {
-  
-  @Bean
-  public ListEndPoints listEndPoints(List<Endpoint> endpoints) {
-    return new ListEndPoints(endpoints);
-  }
+
+    @Bean
+    public ListEndPoints listEndPoints(List<Endpoint> endpoints) {
+        return new ListEndPoints(endpoints);
+    }
 }

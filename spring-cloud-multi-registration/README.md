@@ -39,7 +39,7 @@ spring:
     config:
       enabled: false
     consul:
-      host: ${SPRING_CLOUD_CONSUL_HOST:consul.local}
+      host: ${SPRING_CLOUD_CONSUL_HOST:consul}
       port: ${SPRING_CLOUD_CONSUL_PORT:8500}
 ```
 

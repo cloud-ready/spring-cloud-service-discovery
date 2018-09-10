@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * see: {@link org.springframework.cloud.client.serviceregistry.AutoServiceRegistrationConfiguration}
+ *
  * @author haolun zhang
  */
 @Configuration
