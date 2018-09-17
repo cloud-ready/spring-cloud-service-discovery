@@ -38,8 +38,8 @@ dist: trusty
 env:
   global:
   - TRAVIS_ENABLED=true
-  # e.g. CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/v0.2.2/src/main/ci-script/lib_ci.sh
-  - CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/v0.2.2/src/main/ci-script/lib_ci.sh
+  # e.g. CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/v0.2.3/src/main/ci-script/lib_ci.sh
+  - CI_OPT_CI_SCRIPT=https://github.com/ci-and-cd/maven-build/raw/v0.2.3/src/main/ci-script/lib_ci.sh
   - CI_OPT_GITHUB_SITE_PUBLISH=true
   - CI_OPT_INFRASTRUCTURE=opensource
   #- CI_OPT_MAVEN_EFFECTIVE_POM=true
