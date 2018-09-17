@@ -454,10 +454,10 @@ spring:
       ignored-interfaces: ${SPRING_CLOUD_INETUTILS_IGNOREDINTERFACES:^[a-z]?tun[0-9]*, ^awdl[0-9]*, ^lo[0-9]*}
 
 security:
-  basic.enabled: ${SECURITY_BASIC_ENABLED:false}
+  basic.enabled: ${SPRING_SECURITY_ENABLED:false}
   user:
-    name: ${SECURITY_USER_NAME:user}
-    password: ${SECURITY_USER_PASSWORD:user_pass}
+    name: ${SPRING_SECURITY_USER_NAME:user}
+    password: ${SPRING_SECURITY_USER_PASSWORD:user_pass}
     role: ${SPRING_SECURITY_USER_ROLES:ACTUATOR, ADMIN, SUPERUSER, USER}
 
 ---

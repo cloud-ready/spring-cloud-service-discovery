@@ -60,5 +60,5 @@ security:
   sessions: stateless
   user:
     name: admin
-    password: ${SECURITY_USER_PASSWORD:${random.uuid}}
+    password: ${SPRING_SECURITY_USER_PASSWORD:${random.uuid}}
     role: ${SPRING_SECURITY_USER_ROLES:ACTUATOR, ADMIN, SUPERUSER, USER}
