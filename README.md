@@ -1,6 +1,6 @@
 # spring-cloud-service-discovery
 
-[Sonar](https://sonarcloud.io/api/project_badges/measure?project=cn.home1%3Aspring-cloud-service-discovery&metric=alert_status)  
+[![Sonar](https://sonarcloud.io/api/project_badges/measure?project=cn.home1%3Aspring-cloud-service-discovery&metric=alert_status)](https://sonarcloud.io/dashboard?id=cn.home1%3Aspring-cloud-service-discovery)  
 [Maven Site (release)](https://cloud-ready.github.io/cloud-ready/release/build-docker/spring-cloud-service-discovery/index.html)  
 [Maven Site (snapshot)](https://cloud-ready.github.io/cloud-ready/snapshot/build-docker/spring-cloud-service-discovery/index.html)  
 [Artifacts (release)](https://oss.sonatype.org/content/repositories/releases/cn/home1/spring-cloud-service-discovery/)  
