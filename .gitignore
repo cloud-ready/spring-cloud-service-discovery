@@ -25,6 +25,7 @@ git.properties
 
 /docker-consul-agent/docker/resolv.conf
 /spring-cloud-eureka/spring-cloud-eureka-server/Dockerfile
+/spring-cloud-eureka/spring-cloud-eureka-server/src/main/docker/deploy.zip
 /spring-cloud-eureka/spring-cloud-eureka-sidecar/Dockerfile
 
 /src/site/markdown/*.md

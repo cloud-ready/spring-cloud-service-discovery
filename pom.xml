@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>cn.home1</groupId>
         <artifactId>build-docker</artifactId>
-        <version>0.2.3</version>
+        <version>0.3.7</version>
     </parent>
 
     <artifactId>spring-cloud-service-discovery</artifactId>
@@ -32,7 +32,7 @@
     </scm>
 
     <properties>
-        <deps-spring-boot.version>0.1.7</deps-spring-boot.version>
+        <deps-spring-boot.version>0.2.3</deps-spring-boot.version>
         <log-config.version>0.1.2</log-config.version>
         <spring-boot.version>1.5.12.RELEASE</spring-boot.version>
 
