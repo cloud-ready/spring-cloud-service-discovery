@@ -11,6 +11,8 @@ import org.joda.time.DateTime;
 
 import java.util.concurrent.TimeUnit;
 
+import top.infra.test.NetUtils;
+
 @NoArgsConstructor(access = PRIVATE)
 @Slf4j
 public final class WaitForIt {
@@ -20,28 +22,28 @@ public final class WaitForIt {
     }
 
     public static boolean waitForIt(final int port, final int timeoutInSeconds) {
-        final String hostName = "127.0.0.1";
+        final String address = NetUtils.getIpAddressQuietly();
         final DateTime from = DateTime.now();
         final DateTime till = from.plusSeconds(timeoutInSeconds);
 
         DateTime now;
         while ((now = DateTime.now()).isBefore(till)) {
-            log.info("trying to connect to {}:{}", hostName, port);
-            if (IsAlive.isSocketAlive(hostName, port)) {
+            log.info("trying to connect to {}:{}", address, port);
+            if (IsAlive.isSocketAlive(address, port)) {
                 log.info("connect to {}:{} succeed in {} seconds",
-                    hostName, port, secondsBetween(from, now).getSeconds());
+                    address, port, secondsBetween(from, now).getSeconds());
                 return true;
             } else {
                 try {
                     final int waitSeconds = 5;
-                    log.info("wait {} seconds to connect to {}:{}", waitSeconds, hostName, port);
+                    log.info("wait {} seconds to connect to {}:{}", waitSeconds, address, port);
                     Thread.sleep(TimeUnit.SECONDS.toMillis(waitSeconds));
                 } catch (final InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
             }
         }
-        log.info("connect to {}:{} failed", hostName, port);
+        log.info("connect to {}:{} failed", address, port);
 
         return false;
     }
