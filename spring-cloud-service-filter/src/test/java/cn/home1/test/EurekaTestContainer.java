@@ -7,6 +7,7 @@ import static com.google.common.collect.Sets.newLinkedHashSet;
 import static com.spotify.docker.client.DockerClient.LogsParam.follow;
 import static com.spotify.docker.client.DockerClient.LogsParam.stderr;
 import static com.spotify.docker.client.DockerClient.LogsParam.stdout;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.commons.util.InetUtils;
 import org.springframework.cloud.commons.util.InetUtilsProperties;
 
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.List;
 import java.util.Map;
@@ -143,10 +145,7 @@ public final class EurekaTestContainer {
     }
 
     public String getDefaultZone() {
-        final InetUtilsProperties inetUtilsProperties = new InetUtilsProperties();
-        final InetUtils inetUtils = new InetUtils(inetUtilsProperties);
-        final String ipAddress = inetUtils.findFirstNonLoopbackAddress().getHostAddress();
-
+        final String ipAddress = getIpAddressQuietly();
         final int eurekaPort = this.getEurekaPort();
         return "http://user:user_pass@" + ipAddress + ":" + eurekaPort + "/eureka/";
     }
@@ -192,5 +191,31 @@ public final class EurekaTestContainer {
 
         // Close the docker client
         this.dockerClient.close();
+    }
+
+    public static String getIpAddressQuietly() {
+        String localAddress;
+
+        final String envHostIpaddress = System.getenv("HOST_IPADDRESS");
+        if (isNotBlank(envHostIpaddress)) {
+            localAddress = envHostIpaddress;
+        } else {
+            final InetUtilsProperties inetUtilsProperties = new InetUtilsProperties();
+            final InetUtils inetUtils = new InetUtils(inetUtilsProperties);
+            final InetAddress firstNonLoopbackAddress = inetUtils.findFirstNonLoopbackAddress();
+
+            if (firstNonLoopbackAddress != null) {
+                localAddress = firstNonLoopbackAddress.getHostAddress();
+            } else {
+                try {
+                    localAddress = InetAddress.getLocalHost().getHostAddress();
+                } catch (Exception ex) {
+                    log.info("getLocalHostQuietly", "cant resolve localhost address", ex);
+                    localAddress = "127.0.0.1";
+                }
+            }
+        }
+
+        return localAddress;
     }
 }
