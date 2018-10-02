@@ -98,7 +98,7 @@
     <modules>
         <module>spring-cloud-eureka</module>
         <module>spring-cloud-multi-registration</module>
-        <!--<module>spring-cloud-service-filter</module>-->
+        <module>spring-cloud-service-filter</module>
     </modules>
 
     <!-- @formatter:off -->
@@ -110,7 +110,7 @@
             <modules>
                 <module>spring-cloud-eureka</module>
                 <module>spring-cloud-multi-registration</module>
-                <!--<module>spring-cloud-service-filter</module>-->
+                <module>spring-cloud-service-filter</module>
                 <module>service-discovery-examples</module>
             </modules>
         </profile>

@@ -27,5 +27,6 @@ git.properties
 /spring-cloud-eureka/spring-cloud-eureka-server/Dockerfile
 /spring-cloud-eureka/spring-cloud-eureka-server/src/main/docker/deploy.zip
 /spring-cloud-eureka/spring-cloud-eureka-sidecar/Dockerfile
+/spring-cloud-eureka/spring-cloud-eureka-sidecar/src/main/docker/deploy.zip
 
 /src/site/markdown/*.md

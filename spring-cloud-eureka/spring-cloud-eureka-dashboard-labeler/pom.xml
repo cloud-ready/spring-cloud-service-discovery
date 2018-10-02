@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.home1</groupId>
+        <artifactId>spring-cloud-eureka</artifactId>
+        <version>1.0.1.U1</version>
+    </parent>
+
+    <artifactId>spring-cloud-eureka-dashboard-labeler</artifactId>
+    <description>spring-cloud-eureka-dashboard-labeler</description>
+    <name>spring-cloud-eureka-dashboard-labeler</name>
+    <packaging>jar</packaging>
+
+    <build>
+        <!--<sourceDirectory>${project.build.directory}/generated-sources/delombok</sourceDirectory>-->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <!-- Compile Time Weaving: java -jar target/*.jar -->
+                    <!-- lombok issue with aspectj, see: https://github.com/rzwitserloot/lombok/issues/995 -->
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>aspectj-maven-plugin</artifactId>
+                    <version>1.11</version>
+                    <configuration>
+                        <!--<aspectLibraries>-->
+                        <!--<aspectLibrary>-->
+                        <!--<groupId>io.astefanutti.metrics.aspectj</groupId>-->
+                        <!--<artifactId>metrics-aspectj</artifactId>-->
+                        <!--</aspectLibrary>-->
+                        <!--</aspectLibraries>-->
+                        <complianceLevel>${java.version}</complianceLevel>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <proc>none</proc>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.aspectj</groupId>
+                            <artifactId>aspectjtools</artifactId>
+                            <version>${aspectj.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok-maven-plugin</artifactId>
+                    <version>1.16.16.0</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>delombok</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <addOutputDirectory>false</addOutputDirectory>
+                        <sourceDirectory>src/main/java</sourceDirectory>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-compiler-plugin</artifactId>-->
+            <!--<configuration>-->
+            <!--<excludes><exclude>src/main/java/</exclude></excludes>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+            <!--<groupId>org.projectlombok</groupId>-->
+            <!--<artifactId>lombok-maven-plugin</artifactId>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+            <!--<groupId>org.codehaus.mojo</groupId>-->
+            <!--<artifactId>aspectj-maven-plugin</artifactId>-->
+            <!--</plugin>-->
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- @formatter:off -->
+        <!--<dependency><groupId>com.h2database</groupId><artifactId>h2</artifactId><scope>test</scope></dependency>-->
+        <dependency><groupId>com.netflix.eureka</groupId><artifactId>eureka-client</artifactId><scope>provided</scope></dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>io.astefanutti.metrics.aspectj</groupId><artifactId>metrics-aspectj</artifactId><version>1.2.0</version>-->
+            <!--<exclusions><exclusion><groupId>io.dropwizard.metrics</groupId><artifactId>metrics-annotation</artifactId></exclusion></exclusions>-->
+        <!--</dependency>-->
+        <!--<dependency><groupId>io.dropwizard.metrics</groupId><artifactId>metrics-annotation</artifactId><version>3.2.2</version></dependency>-->
+        <!-- Load Time Weaving: java -javaagent:$HOME/.m2/repository/org/aspectj/aspectjweaver/1.8.13/aspectjweaver-1.8.13.jar -jar target/*.jar -->
+        <dependency><groupId>org.aspectj</groupId><artifactId>aspectjrt</artifactId><scope>runtime</scope></dependency>
+        <dependency><groupId>org.aspectj</groupId><artifactId>aspectjweaver</artifactId><scope>compile</scope></dependency>
+        <!--<dependency><groupId>org.springframework</groupId><artifactId>spring-aop</artifactId></dependency>-->
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-aop</artifactId><scope>runtime</scope></dependency>
+
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-autoconfigure</artifactId><scope>compile</scope></dependency>
+        <!-- @formatter:on -->
+    </dependencies>
+</project>

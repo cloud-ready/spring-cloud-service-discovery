@@ -25,13 +25,13 @@
     <dependencyManagement>
         <!-- @formatter:off -->
         <dependencies>
-            <!--<dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-eureka-dashboard-labeler</artifactId><version>${project.version}</version></dependency>-->
+            <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-eureka-dashboard-labeler</artifactId><version>${project.version}</version></dependency>
         </dependencies>
         <!-- @formatter:on -->
     </dependencyManagement>
 
     <modules>
-        <!--<module>spring-cloud-eureka-dashboard-labeler</module>-->
+        <module>spring-cloud-eureka-dashboard-labeler</module>
         <module>spring-cloud-eureka-server</module>
         <module>spring-cloud-eureka-sidecar</module>
     </modules>
