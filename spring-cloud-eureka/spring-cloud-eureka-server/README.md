@@ -22,7 +22,7 @@ Step 2. Create a docker network
 
 <del>`docker network create --driver=bridge --ipv6 --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network`</del>
 
-`docker network create --driver=bridge --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network`
+`docker network create --driver=bridge --ipam-driver=default --subnet=172.16.238.0/24 local-network`
 
 Step 3. `docker-compose up` or
 ```bash
