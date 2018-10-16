@@ -23,7 +23,7 @@ services:
     networks:
       local-network:
         ipv4_address: 172.16.238.78
-        ipv6_address: 2001:3984:3989::78
+        #ipv6_address: 2001:3984:3989::78
     volumes:
     - data:/home/alpine/data
     - tmp:/tmp
@@ -37,7 +37,7 @@ networks:
       driver: default
       config:
       - subnet: 172.16.238.0/24
-      - subnet: 2001:3984:3989::/64
+      #- subnet: 2001:3984:3989::/64
 
 volumes:
   data:

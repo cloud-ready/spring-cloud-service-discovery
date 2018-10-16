@@ -32,7 +32,7 @@ services:
     networks:
       local-network:
         ipv4_address: 172.16.238.10
-        ipv6_address: 2001:3984:3989::10
+        #ipv6_address: 2001:3984:3989::10
     ports:
     - "${SERVER_PORT:-8761}:${SERVER_PORT:-8761}"
     volumes:
@@ -40,7 +40,7 @@ services:
     - tmp:/tmp
 
 networks:
-  # docker network create --driver=bridge --ipv6 --ipam-driver=default --subnet=172.16.238.0/24 --subnet=2001:3984:3989::/64 local-network
+  # docker network create --driver=bridge --ipam-driver=default --subnet=172.16.238.0/24 local-network
   # docker network ls
   # docker network inspect local-network
   local-network:
@@ -51,7 +51,7 @@ networks:
       driver: default
       config:
       - subnet: 172.16.238.0/24
-      - subnet: 2001:3984:3989::/64
+      #- subnet: 2001:3984:3989::/64
 
 volumes:
   data:

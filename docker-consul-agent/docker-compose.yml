@@ -16,7 +16,7 @@ services:
     networks:
       local-network:
         ipv4_address: 172.16.238.15
-        ipv6_address: 2001:3984:3989::15
+        #ipv6_address: 2001:3984:3989::15
     ports:
     - "${CONSUL_DNS_PORT:-53}:53/tcp"
     - "${CONSUL_DNS_PORT:-53}:53/udp"
@@ -34,7 +34,7 @@ networks:
       driver: default
       config:
       - subnet: 172.16.238.0/24
-      - subnet: 2001:3984:3989::/64
+      #- subnet: 2001:3984:3989::/64
 
 volumes:
   data:
