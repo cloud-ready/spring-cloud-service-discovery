@@ -24,7 +24,7 @@ services:
     networks:
       local-network:
         ipv4_address: 172.16.238.11
-        ipv6_address: 2001:3984:3989::11
+        #ipv6_address: 2001:3984:3989::11
     ports:
     - "8761:8761"
     volumes:
@@ -52,7 +52,7 @@ services:
     networks:
       local-network:
         ipv4_address: 172.16.238.12
-        ipv6_address: 2001:3984:3989::12
+        #ipv6_address: 2001:3984:3989::12
     ports:
     - "8762:8762"
     volumes:
@@ -80,7 +80,7 @@ services:
     networks:
       local-network:
         ipv4_address: 172.16.238.13
-        ipv6_address: 2001:3984:3989::13
+        #ipv6_address: 2001:3984:3989::13
     ports:
     - "8763:8763"
     volumes:
@@ -96,7 +96,7 @@ networks:
       driver: default
       config:
       - subnet: 172.16.238.0/24
-      - subnet: 2001:3984:3989::/64
+      #- subnet: 2001:3984:3989::/64
 
 volumes:
   data:
