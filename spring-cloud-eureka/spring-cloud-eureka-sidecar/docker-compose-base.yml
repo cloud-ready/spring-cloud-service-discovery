@@ -43,7 +43,7 @@ services:
     # Password to access management endpoints such as /env, /health and so on.
     - SPRING_SECURITY_USER_PASSWORD=${SPRING_SECURITY_USER_PASSWORD:-} # change me
 
-    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-sidecar:${IMAGE_VERSION:-1.0.1.U1}
+    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-sidecar:${IMAGE_TAG:-1.0.1.U1}
     labels:
       top.infra.cloudready.deploy.script.commit-id: ${DEPLOY_SCRIPT_COMMITID}
       top.infra.cloudready.deploy.script.label: ${DEPLOY_SCRIPT_LABEL}

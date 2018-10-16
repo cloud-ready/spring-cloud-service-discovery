@@ -14,7 +14,7 @@ services:
       CONSUL_RECURSORS: ${CONSUL_RECURSORS:-} # comma split list
       # To avoid loop, must exclude host itself from 'recursors' option, so we need to know host's ip-address.
       HOST_IPADDRESS: ${HOST_IPADDRESS:-}
-    image: ${IMAGE_PREFIX:-cloudready}/consul:${IMAGE_VERSION:-1.1.0}
+    image: ${IMAGE_PREFIX:-cloudready}/consul:${IMAGE_TAG:-1.1.0}
     labels:
       top.infra.cloudready.deploy.script.commit-id: ${DEPLOY_SCRIPT_COMMITID}
       top.infra.cloudready.deploy.script.label: ${DEPLOY_SCRIPT_LABEL}
