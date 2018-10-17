@@ -30,7 +30,7 @@ services:
     - SPRING_SECURITY_ENABLED=${SPRING_SECURITY_ENABLED:-true}
     - SPRING_SECURITY_USER_NAME=${SPRING_SECURITY_USER_NAME:-user}
     - SPRING_SECURITY_USER_PASSWORD=${SPRING_SECURITY_USER_PASSWORD:-user_pass}
-    image: ${IMAGE_PREFIX:-cloudready}/spring-cloud-eureka-server:${IMAGE_TAG:-2.0.1-SNAPSHOT}
+    image: ${IMAGE_PREFIX:-cloudready/}spring-cloud-eureka-server:${IMAGE_TAG:-2.0.1-SNAPSHOT}
     labels:
       top.infra.cloudready.deploy.script.commit-id: ${DEPLOY_SCRIPT_COMMITID}
       top.infra.cloudready.deploy.script.label: ${DEPLOY_SCRIPT_LABEL}
