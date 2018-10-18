@@ -12,14 +12,14 @@ if [ -z "${CI_INFRA_OPT_GIT_PREFIX}" ]; then CI_INFRA_OPT_GIT_PREFIX="https://gi
 
 
 if [ -z "${CI_OPT_CI_SCRIPT}" ]; then CI_OPT_CI_SCRIPT="${CI_INFRA_OPT_GIT_PREFIX}/ci-and-cd/maven-build/raw/develop/src/main/ci-script/lib_ci.sh"; fi
-#if [ -z "${CI_OPT_CI_SCRIPT}" ]; then CI_OPT_CI_SCRIPT="${CI_INFRA_OPT_GIT_PREFIX}/ci-and-cd/maven-build/raw/v0.3.7/src/main/ci-script/lib_ci.sh"; fi
+#if [ -z "${CI_OPT_CI_SCRIPT}" ]; then CI_OPT_CI_SCRIPT="${CI_INFRA_OPT_GIT_PREFIX}/ci-and-cd/maven-build/raw/v0.3.8/src/main/ci-script/lib_ci.sh"; fi
 if [ -z "${CI_OPT_DOCKER_IMAGE_PREFIX}" ]; then CI_OPT_DOCKER_IMAGE_PREFIX="cloudready/"; fi
 if [ -z "${CI_OPT_GITHUB_SITE_PUBLISH}" ]; then CI_OPT_GITHUB_SITE_PUBLISH="false"; fi
 if [ -z "${CI_OPT_GITHUB_SITE_REPO_OWNER}" ]; then CI_OPT_GITHUB_SITE_REPO_OWNER="cloud-ready"; fi
 if [ -z "${CI_OPT_GPG_KEYNAME}" ]; then CI_OPT_GPG_KEYNAME="59DBF10E"; fi
 if [ -z "${CI_OPT_INFRASTRUCTURE}" ]; then CI_OPT_INFRASTRUCTURE="opensource"; fi
 if [ -z "${CI_OPT_MAVEN_BUILD_REPO}" ]; then CI_OPT_MAVEN_BUILD_REPO="${CI_INFRA_OPT_GIT_PREFIX}/ci-and-cd/maven-build/raw/develop"; fi
-#if [ -z "${CI_OPT_MAVEN_BUILD_REPO}" ]; then CI_OPT_MAVEN_BUILD_REPO="${CI_INFRA_OPT_GIT_PREFIX}/ci-and-cd/maven-build/raw/v0.3.7"; fi
+#if [ -z "${CI_OPT_MAVEN_BUILD_REPO}" ]; then CI_OPT_MAVEN_BUILD_REPO="${CI_INFRA_OPT_GIT_PREFIX}/ci-and-cd/maven-build/raw/v0.3.8"; fi
 if [ -z "${CI_OPT_MAVEN_EFFECTIVE_POM}" ]; then CI_OPT_MAVEN_EFFECTIVE_POM="false"; fi
 if [ -z "${CI_OPT_ORIGIN_REPO_SLUG}" ]; then if [ -n "${CI_PROJECT_PATH}" ]; then CI_OPT_ORIGIN_REPO_SLUG="gitlab-cloud-ready/spring-cloud-service-discovery"; else CI_OPT_ORIGIN_REPO_SLUG="cloud-ready/spring-cloud-service-discovery"; fi; fi
 if [ -z "${CI_OPT_SITE}" ]; then CI_OPT_SITE="true"; fi

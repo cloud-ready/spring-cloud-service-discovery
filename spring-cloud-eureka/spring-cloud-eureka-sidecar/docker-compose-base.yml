@@ -45,10 +45,11 @@ services:
 
     image: ${IMAGE_PREFIX:-cloudready/}spring-cloud-eureka-sidecar:${IMAGE_TAG:-2.0.1-SNAPSHOT}
     labels:
-      top.infra.cloudready.deploy.script.commit-id: ${DEPLOY_SCRIPT_COMMITID}
-      top.infra.cloudready.deploy.script.label: ${DEPLOY_SCRIPT_LABEL}
-      top.infra.cloudready.deploy.script.repo: ${DEPLOY_SCRIPT_REPO}
-      top.infra.cloudready.deploy.config.commit-id: ${DEPLOY_CONFIG_COMMITID}
-      top.infra.cloudready.deploy.config.label: ${DEPLOY_CONFIG_LABEL}
-      top.infra.cloudready.deploy.config.repo: ${DEPLOY_CONFIG_REPO}
+      deploy.config.commit: ${LABEL_DEPLOY_CONFIG_COMMIT:-unknown}
+      deploy.config.name: ${LABEL_DEPLOY_CONFIG_NAME:-unknown}
+      deploy.config.ref: ${LABEL_DEPLOY_CONFIG_REF:-unknown}
+      deploy.util.commit: ${LABEL_DEPLOY_UTIL_COMMIT:-unknown}
+      deploy.util.ref: ${LABEL_DEPLOY_UTIL_REF:-unknown}
+      instance.name.short: ${LABEL_INSTANCE_NAME_SHORT:-standalone.eureka-sidecar}
+      instance.name: ${LABEL_INSTANCE_NAME:-127.0.0.1/eureka-sidecar/standalone}
     restart: always

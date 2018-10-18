@@ -15,12 +15,13 @@ services:
       HOST_IPADDRESS: ${HOST_IPADDRESS:-}
     image: ${IMAGE_PREFIX:-cloudready/}consul:${IMAGE_TAG:-1.1.0}
     labels:
-      top.infra.cloudready.deploy.script.commit-id: ${DEPLOY_SCRIPT_COMMITID}
-      top.infra.cloudready.deploy.script.label: ${DEPLOY_SCRIPT_LABEL}
-      top.infra.cloudready.deploy.script.repo: ${DEPLOY_SCRIPT_REPO}
-      top.infra.cloudready.deploy.config.commit-id: ${DEPLOY_CONFIG_COMMITID}
-      top.infra.cloudready.deploy.config.label: ${DEPLOY_CONFIG_LABEL}
-      top.infra.cloudready.deploy.config.repo: ${DEPLOY_CONFIG_REPO}
+      deploy.config.commit: ${LABEL_DEPLOY_CONFIG_COMMIT:-unknown}
+      deploy.config.name: ${LABEL_DEPLOY_CONFIG_NAME:-unknown}
+      deploy.config.ref: ${LABEL_DEPLOY_CONFIG_REF:-unknown}
+      deploy.util.commit: ${LABEL_DEPLOY_UTIL_COMMIT:-unknown}
+      deploy.util.ref: ${LABEL_DEPLOY_UTIL_REF:-unknown}
+      instance.name.short: ${LABEL_INSTANCE_NAME_SHORT:-standalone.consul}
+      instance.name: ${LABEL_INSTANCE_NAME:-127.0.0.1/consul/standalone}
     ports:
     # Server RPC is used for communication between Consul clients and servers
     # for internal request forwarding.
