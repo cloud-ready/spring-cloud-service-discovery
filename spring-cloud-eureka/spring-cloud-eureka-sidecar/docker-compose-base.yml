@@ -6,7 +6,7 @@ services:
     command: []
     environment:
     # Mandatory, Address(s) of Eureka node or cluster (comma split)
-    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:-http://user:user_pass@eureka-standalone:8761/eureka/}
+    - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:-http://user:user_pass@standalone.eureka:8761/eureka/}
 
     # Optional, Eureka prefer ip address not hostname
     # Change this only when sidecar can not properly register the application with default values and there are issues on service access.

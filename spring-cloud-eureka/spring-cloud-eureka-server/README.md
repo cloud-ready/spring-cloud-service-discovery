@@ -12,7 +12,7 @@ Docker Hub: https://hub.docker.com/r/cloudready/spring-cloud-eureka-server/
 Step 1. Bind hosts  
 Edit /etc/hosts, add following content:
 ```text
-127.0.0.1 eureka-standalone
+127.0.0.1 standalone.eureka
 127.0.0.1 eureka-peer1
 127.0.0.1 eureka-peer2
 127.0.0.1 eureka-peer3
@@ -31,9 +31,9 @@ HOST_IPADDRESS=$(ipconfig getifaddr en0 || ipconfig getifaddr en1) \
 docker-compose -f docker-compose-local-cluster.yml up
 ```
 
-Homepage [http://eureka-standalone:8761](http://eureka-standalone:8761)
+Homepage [http://standalone.eureka:8761](http://standalone.eureka:8761)
 
-Access [http://eureka-standalone:8761/eureka/apps](http://eureka-standalone:8761/eureka/apps) to get application infos.
+Access [http://standalone.eureka:8761/eureka/apps](http://standalone.eureka:8761/eureka/apps) to get application infos.
 
 ## Instance Status in Eureka and Overridden Status
 
@@ -54,7 +54,7 @@ Overridden Status is for black/red deployment.
 
 Take some old instances down:
 ```bash
-curl -i -X PUT http://eureka-standalone:8761/eureka/apps/<application>/<instance-id>/status?value=OUT_OF_SERVICE
+curl -i -X PUT http://standalone.eureka:8761/eureka/apps/<application>/<instance-id>/status?value=OUT_OF_SERVICE
 ```
 
 2. Start up new instances
@@ -63,7 +63,7 @@ curl -i -X PUT http://eureka-standalone:8761/eureka/apps/<application>/<instance
 
 Delete overridden status
 ```bash
-curl -i -X DELETE http://eureka-standalone:8761/eureka/apps/<application>/<instance-id>/status
+curl -i -X DELETE http://standalone.eureka:8761/eureka/apps/<application>/<instance-id>/status
 ```
 
 For example, we have an application named `config-server` which has multiple instances.  
@@ -74,12 +74,12 @@ Their instance ids are:
 
 To take `config-server:config-server:8888` down, run
 ```bash
-curl -i -X PUT http://eureka-standalone:8761/eureka/apps/config-server/config-server:config-server:8888/status?value=OUT_OF_SERVICE
+curl -i -X PUT http://standalone.eureka:8761/eureka/apps/config-server/config-server:config-server:8888/status?value=OUT_OF_SERVICE
 ```
 
 To take `config-server:config-server:8888` back, run
 ```bash
-curl -i -X DELETE http://eureka-standalone:8761/eureka/apps/config-server/config-server:config-server:8888/status
+curl -i -X DELETE http://standalone.eureka:8761/eureka/apps/config-server/config-server:config-server:8888/status
 ```
 
 You can also set status directly on instances by posting request to its `ServiceRegistryEndpoint`  
@@ -101,5 +101,5 @@ curl -i -X GET -u admin:admin_pass -H 'Accept: application/json' http://config-s
 ```
 We got `eureka: {overriddenStatus=UNKNOWN, status=UP},consul: OUT_OF_SERVICE`.  
 Here may be a bug that eureka's overriddenStatus is not set correctly.  
-But this is ok, if you run `curl -i -s -X GET http://eureka-standalone:8761/eureka/apps/config-server/config-server:config-server:8888 | grep overriddenstatus`,
+But this is ok, if you run `curl -i -s -X GET http://standalone.eureka:8761/eureka/apps/config-server/config-server:config-server:8888 | grep overriddenstatus`,
 you can see the overriddenStatus on eureka side is updated.  
