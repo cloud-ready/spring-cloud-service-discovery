@@ -31,7 +31,7 @@ docker-compose up -d
 ### 1. There are 4 mandatory environment variables need to set before sidecar boot-up.
 
 - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-> Eureka URLs, comma split if there are multiple Eureka servers. default value is 'http://user:user_pass@eureka-standalone:8761/eureka/'.
+> Eureka URLs, comma split if there are multiple Eureka servers. default value is 'http://user:user_pass@standalone.eureka:8761/eureka/'.
 
 - SIDECAR_HEALTHURI
 > health check endpoint on no-JVM application (service). default value is '/health'.

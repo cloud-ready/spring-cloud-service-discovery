@@ -5,7 +5,7 @@ endpoints:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://user:user_pass@eureka-standalone:8761/eureka/}
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://user:user_pass@standalone.eureka:8761/eureka/}
   instance:
     health-check-url: http://${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ipAddress:${spring.cloud.client.hostname:localhost}}}}:${SIDECAR_PORT:8761}${SIDECAR_HEALTHURI:/health}
     home-page-url: http://${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ipAddress:${spring.cloud.client.hostname:localhost}}}}:${SIDECAR_PORT:8761}${SIDECAR_HOMEPAGEURI:/}

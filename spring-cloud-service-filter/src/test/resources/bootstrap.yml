@@ -1,7 +1,7 @@
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:${local.eureka.client.service-url.defaultZone:http://user:user_pass@eureka-standalone:8761/eureka/}}
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:${local.eureka.client.service-url.defaultZone:http://user:user_pass@standalone.eureka:8761/eureka/}}
 
 logging.level.root: ${LOGGING_LEVEL_ROOT:DEBUG}
 

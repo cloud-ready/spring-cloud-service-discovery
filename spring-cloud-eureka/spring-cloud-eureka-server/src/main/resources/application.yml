@@ -193,7 +193,7 @@ eureka.client:
     #   Standalone Mode: Notice that the serviceUrl is pointing to the same host as the local instance.
     #   Note: must use 'defaultZone' here, otherwise cluster peers can not find replicas (can not see each other).
     #   split by comma
-    defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://${security.user.name:user}:${security.user.password:user_pass}@${EUREKA_INSTANCE_HOSTNAME:eureka-standalone}:${server.port}/eureka/}
+    defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://${security.user.name:user}:${security.user.password:user_pass}@${EUREKA_INSTANCE_HOSTNAME:standalone.eureka}:${server.port}/eureka/}
 #  # default: <blank-value>
 #  #transport:
 #  # Indicates whether the eureka client should use the DNS mechanism to fetch a list of eureka servers to talk to.
@@ -226,7 +226,7 @@ eureka.instance:
   # Get the name of the application to be registered with eureka.
   # default: unknown
   #   application name on (register to) eureka, all instances of an application must use same value
-  appname: ${SPRING_APPLICATION_NAME:eureka-standalone}
+  appname: ${SPRING_APPLICATION_NAME:standalone.eureka}
 #  # Returns the data center this instance is deployed. This information is used to get some AWS specific instance information if the instance is deployed in AWS.
 #  # default: <blank-value>
 #  #data-center-info:
@@ -260,7 +260,7 @@ eureka.instance:
   # The hostname if it can be determined at configuration time (otherwise it will be guessed from OS primitives).
   # default: <blank-value>
   #   eureka.instance.hostname affect Status->instances's url href (not text) value on dashboard
-  hostname: ${EUREKA_INSTANCE_HOSTNAME:${spring.cloud.client.hostname:eureka-standalone}}
+  hostname: ${EUREKA_INSTANCE_HOSTNAME:${spring.cloud.client.hostname:standalone.eureka}}
 #  # default: <blank-value>
 #  #inet-utils:
 #  # Initial status to register with remote Eureka server.
@@ -445,8 +445,8 @@ spring:
   application:
     # every instance in cluster must ues same spring.application.name
     # Peer Awareness Mode: 'eureka-cluster'
-    # Standalone Mode: 'eureka-standalone'
-    name: ${SPRING_APPLICATION_NAME:eureka-standalone}
+    # Standalone Mode: 'standalone.eureka'
+    name: ${SPRING_APPLICATION_NAME:standalone.eureka}
     # bug: https://github.com/spring-cloud/spring-cloud-netflix/issues/788
   cloud:
     inetutils:
@@ -487,7 +487,7 @@ eureka.instance:
 #  # default: <blank-value>
 #  #   实例元数据
 #  #metadataMap:
-#    #hostname: ${EUREKA_INSTANCE_HOSTNAME:eureka-standalone}
+#    #hostname: ${EUREKA_INSTANCE_HOSTNAME:standalone.eureka}
 #    #prot: ${EUREKA_INSTANCE_NONSECUREPORT:8761}
 #    #instanceId: ${spring.cloud.client.hostname}:${spring.application.name}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}
 #    # or spring.cloud.client.ipAddress if eureka.instance.prefer-ip-address=true
@@ -565,14 +565,14 @@ spring:
   profiles: standalone
 
 spring.application:
-  name: ${SPRING_APPLICATION_NAME:eureka-standalone}
+  name: ${SPRING_APPLICATION_NAME:standalone.eureka}
 
 eureka.client:
   fetch-registry: ${EUREKA_CLIENT_FETCHREGISTRY:false}
   register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:false}
 
 eureka.instance:
-  appname: ${SPRING_APPLICATION_NAME:eureka-standalone}
+  appname: ${SPRING_APPLICATION_NAME:standalone.eureka}
 
 ---
 spring.profiles: develop.env
