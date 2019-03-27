@@ -13,7 +13,7 @@ services:
       CONSUL_RECURSORS: ${CONSUL_RECURSORS:-} # comma split list
       # To avoid loop, must exclude host itself from 'recursors' option, so we need to know host's ip-address.
       HOST_IPADDRESS: ${HOST_IPADDRESS:-}
-    image: ${IMAGE_PREFIX:-cloudready/}consul:${IMAGE_TAG:-1.1.0}
+    image: ${IMAGE_PREFIX:-cloudready/}consul:${IMAGE_TAG:-1.4.4}
     labels:
       deploy.config.commit: ${LABEL_DEPLOY_CONFIG_COMMIT:-unknown}
       deploy.config.name: ${LABEL_DEPLOY_CONFIG_NAME:-unknown}
