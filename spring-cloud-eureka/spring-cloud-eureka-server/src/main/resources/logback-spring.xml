@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--See https://logback.qos.ch/manual/configuration.html for details-->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <include resource="org/springframework/boot/logging/logback/error-file-appender.xml"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+    <springProperty scope="context" name="logging.gelf.enabled" source="logging.gelf.enabled" defaultValue="false"/>
+    <springProperty scope="context" name="logging.gelf.protocol" source="logging.gelf.protocol" defaultValue="udp"/>
+    <if condition='property("logging.gelf.enabled").equals("true")'>
+        <then>
+            <if condition='property("logging.gelf.protocol").equals("tcp")'>
+                <then>
+                    <include resource="org/springframework/boot/logging/logback/gelf-tcp-appender.xml"/>
+                    <root>
+                        <appender-ref ref="GELF_TCP_ASYNC"/>
+                    </root>
+                </then>
+            </if>
+            <if condition='property("logging.gelf.protocol").equals("tls")'>
+                <then>
+                    <include resource="org/springframework/boot/logging/logback/gelf-tls-appender.xml"/>
+                    <root>
+                        <appender-ref ref="GELF_TLS_ASYNC"/>
+                    </root>
+                </then>
+            </if>
+            <if condition='property("logging.gelf.protocol").equals("udp")'>
+                <then>
+                    <include resource="org/springframework/boot/logging/logback/gelf-udp-appender.xml"/>
+                    <root>
+                        <appender-ref ref="GELF_UDP"/>
+                    </root>
+                </then>
+            </if>
+        </then>
+    </if>
+
+    <!--<include resource="org/springframework/boot/logging/logback/logstash-sleuth-json-file-appender.xml"/>-->
+    <springProperty scope="context" name="logbackLogstashEnabled" source="logging.logstash.enabled" defaultValue="false"/>
+    <if condition='property("logbackLogstashEnabled").equals("true")'>
+        <then>
+            <include resource="org/springframework/boot/logging/logback/logstash-tcp-appender.xml"/>
+            <root>
+                <appender-ref ref="LOGSTASH_TCP"/>
+            </root>
+        </then>
+    </if>
+
+    <jmxConfigurator/>
+</configuration>

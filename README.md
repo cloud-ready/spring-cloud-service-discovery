@@ -20,3 +20,10 @@ spring-cloud-service-discovery
 [Docker Hub (spring-cloud-eureka-sidecar)](https://hub.docker.com/r/cloudready/spring-cloud-eureka-sidecar/)  
 
 [spring-cloud-multi-registration](https://github.com/cloud-ready/spring-cloud-service-discovery/tree/develop/spring-cloud-multi-registration)  
+
+
+## Build this project
+
+```bash
+JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home" mvn -Dskip-artifacts=true -Dskip-quality=true help:active-profiles clean install spotbugs:spotbugs spotbugs:check pmd:pmd pmd:check
+```

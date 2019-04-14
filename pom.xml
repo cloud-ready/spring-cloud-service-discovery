@@ -2,18 +2,17 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <parent>
-        <groupId>cn.home1</groupId>
-        <artifactId>build-docker</artifactId>
-        <version>0.3.8</version>
-    </parent>
-
     <artifactId>spring-cloud-service-discovery</artifactId>
     <description>spring-cloud-service-discovery</description>
+    <groupId>cn.home1</groupId>
+    <modelVersion>4.0.0</modelVersion>
     <name>spring-cloud-service-discovery</name>
     <packaging>pom</packaging>
+    <parent>
+        <artifactId>cloud-ready-parent</artifactId>
+        <groupId>top.infra</groupId>
+        <version>2.0.4-SNAPSHOT</version>
+    </parent>
     <url>https://github.com/cloud-ready/spring-cloud-service-discovery</url>
     <version>2.0.1-SNAPSHOT</version>
 
@@ -31,11 +30,22 @@
         <url>https://github.com/cloud-ready/spring-cloud-service-discovery</url>
     </scm>
 
-    <properties>
-        <deps-spring-boot.version>0.2.3</deps-spring-boot.version>
-        <log-config.version>0.2.0</log-config.version>
-        <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
+    <dependencies>
+        <!-- @formatter:off -->
+        <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><scope>provided</scope></dependency>
+        <!-- @formatter:on -->
+    </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- @formatter:off -->
+            <dependency><groupId>cn.home1</groupId><artifactId>logback-gelf-config</artifactId><version>${log-config.version}</version></dependency>
+            <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>${project.version}</version></dependency>
+            <!-- @formatter:on -->
+        </dependencies>
+    </dependencyManagement>
+
+    <properties>
         <repositories.releases.updatePolicy>always</repositories.releases.updatePolicy>
         <repositories.snapshots.updatePolicy>always</repositories.snapshots.updatePolicy>
     </properties>
@@ -68,32 +78,6 @@
         <plugins>
         </plugins>
     </build>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>cn.home1</groupId>
-                <artifactId>deps-spring-boot-${spring-boot.version}</artifactId>
-                <version>${deps-spring-boot.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-
-            <!-- @formatter:off -->
-            <dependency><groupId>cn.home1</groupId><artifactId>log4j2-rolling-config</artifactId><version>${log-config.version}</version></dependency>
-            <dependency><groupId>cn.home1</groupId><artifactId>log4j2-test-config</artifactId><version>${log-config.version}</version><scope>test</scope></dependency>
-            <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>${project.version}</version></dependency>
-            <!-- @formatter:on -->
-        </dependencies>
-    </dependencyManagement>
-
-    <dependencies>
-        <!-- @formatter:off -->
-        <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><scope>provided</scope></dependency>
-
-        <dependency><groupId>cn.home1</groupId><artifactId>log4j2-test-config</artifactId><scope>test</scope></dependency>
-        <!-- @formatter:on -->
-    </dependencies>
 
     <modules>
         <module>spring-cloud-eureka</module>

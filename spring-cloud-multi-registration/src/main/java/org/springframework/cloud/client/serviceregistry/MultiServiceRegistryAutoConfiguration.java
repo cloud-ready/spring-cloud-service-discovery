@@ -1,5 +1,9 @@
 package org.springframework.cloud.client.serviceregistry;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -10,8 +14,6 @@ import org.springframework.cloud.consul.serviceregistry.ConsulServiceRegistryAut
 import org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 /**
  * http://host:port/server-context-path/management-context-path/service-registry/instance-status
@@ -76,7 +78,8 @@ public class MultiServiceRegistryAutoConfiguration {
 
     @ConditionalOnBean(ServiceRegistry.class)
     @ConditionalOnClass(Endpoint.class)
-    protected class MultiServiceRegistryEndpointConfiguration {
+    @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC")
+    protected static class MultiServiceRegistryEndpointConfiguration {
 
         @Autowired(required = false)
         private List<Registration> registrations;

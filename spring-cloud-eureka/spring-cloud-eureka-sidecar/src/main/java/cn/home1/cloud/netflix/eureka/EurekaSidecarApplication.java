@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.cloud.netflix.sidecar.EnableSidecar;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
 /**
@@ -35,7 +34,7 @@ public class EurekaSidecarApplication {
     }
 
     /**
-     * see: {@link org.springframework.security.provisioning.InMemoryUserDetailsManager#createUser(UserDetails)}
+     * see: {@link org.springframework.security.provisioning.InMemoryUserDetailsManager#createUser(org.springframework.security.core.userdetails.UserDetails)}
      */
     public void printInfo() {
         //log.info("server.context-path: {}", this.environment.getProperty("server.context-path"));

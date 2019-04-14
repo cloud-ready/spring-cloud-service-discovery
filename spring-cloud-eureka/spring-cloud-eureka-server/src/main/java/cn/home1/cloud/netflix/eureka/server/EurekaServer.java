@@ -1,5 +1,7 @@
 package cn.home1.cloud.netflix.eureka.server;
 
+import static org.springframework.boot.WebApplicationType.SERVLET;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class EurekaServer {
     private EurekaInstanceConfigBean eurekaInstanceConfig;
 
     public static void main(final String... args) {
-        new SpringApplicationBuilder(EurekaServer.class).web(true).run(args);
+        new SpringApplicationBuilder(EurekaServer.class).web(SERVLET).run(args);
     }
 
     @EventListener(ApplicationReadyEvent.class)

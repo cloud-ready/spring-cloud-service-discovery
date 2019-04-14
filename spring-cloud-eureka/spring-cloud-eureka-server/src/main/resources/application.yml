@@ -422,7 +422,7 @@ eureka.server:
 #  xml-codec-name:
 
 logging:
-  config: classpath:log4j2-spring.xml
+  config: classpath:logback-spring.xml
   #file: ${LOG_FILE:${CONTAINER_HOST_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}}.log
   #path: ${LOG_PATH:${user.dir}/data/logs/${spring.application.name}}
   level:

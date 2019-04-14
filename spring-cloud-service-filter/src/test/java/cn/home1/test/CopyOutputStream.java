@@ -59,7 +59,7 @@ public class CopyOutputStream extends OutputStream {
         try (final BufferedReader streamOutReader = this.getReader()) {
             DateTime now;
             while ((now = DateTime.now()).isBefore(till)) {
-                log.info("waitForLine find {} in log", regex);
+                log.trace("waitForLine find {} in log", regex); // output of this line can cause 'false found'
 
                 final TimeLimiter timeLimiter = new SimpleTimeLimiter();
                 try {

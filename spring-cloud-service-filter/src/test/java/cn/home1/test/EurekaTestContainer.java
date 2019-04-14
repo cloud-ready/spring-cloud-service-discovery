@@ -31,7 +31,7 @@ import top.infra.test.NetUtils;
 @Slf4j
 public final class EurekaTestContainer {
 
-    private static final String DEFAULT_IMAGE = "cloudready/spring-cloud-eureka-server:2.0.1-springboot2-SNAPSHOT";
+    private static final String DEFAULT_IMAGE = "cloudready/spring-cloud-eureka-server:2.0.1-SNAPSHOT";
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 

@@ -1,5 +1,5 @@
 
-FROM cirepo/java-oracle:8u171-en_US.UTF-8_Etc.UTC-alpine
+FROM cirepo/service-base-image-java:openjdk-11.0.2-en_US.UTF-8_Etc.UTC-alpine-SNAPSHOT
 
 
 ARG JAR_FILE
