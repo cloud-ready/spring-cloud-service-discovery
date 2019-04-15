@@ -29,7 +29,7 @@ before_script:
       exit 0;
     fi;
     git checkout -f ${CI_COMMIT_SHA};
-    echo "remove untracked files and directories"; git clean -fd :/;
+    echo "remove untracked files and directories"; git clean -fdx :/ -e artifacts.tar.gz;
   fi;
 
 build_snapshots:
