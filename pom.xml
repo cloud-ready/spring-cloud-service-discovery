@@ -88,6 +88,13 @@
     <!-- @formatter:off -->
     <profiles>
         <profile>
+            <id>default-docker-image-prefix</id>
+            <activation><property><name>!docker.image.prefix</name></property><activeByDefault>false</activeByDefault></activation>
+            <properties>
+                <docker.image.prefix>cloudready/</docker.image.prefix>
+            </properties>
+        </profile>
+        <profile>
             <!-- Build examples at local, skip build examples on CI -->
             <id>build-examples</id>
             <activation><property><name>!site</name></property><activeByDefault>false</activeByDefault></activation>

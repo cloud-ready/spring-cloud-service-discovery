@@ -26,7 +26,7 @@ services:
     - SPRING_CLOUD_CLIENT_IPADDRESS=${HOST_IPADDRESS}
 
 
-    - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-staging.env,manual_ip_hostname,port_nonsecure,peer_awareness}
+    - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-staging.env,port_nonsecure,peer_awareness}
 
     - SPRING_SECURITY_USER_NAME=${SPRING_SECURITY_USER_NAME:-user}
     - SPRING_SECURITY_USER_PASSWORD=${SPRING_SECURITY_USER_PASSWORD:-user_pass}

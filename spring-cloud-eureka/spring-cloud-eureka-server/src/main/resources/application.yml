@@ -193,7 +193,7 @@ eureka.client:
     #   Standalone Mode: Notice that the serviceUrl is pointing to the same host as the local instance.
     #   Note: must use 'defaultZone' here, otherwise cluster peers can not find replicas (can not see each other).
     #   split by comma
-    defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://${security.user.name:user}:${security.user.password:user_pass}@${EUREKA_INSTANCE_HOSTNAME:standalone.eureka}:${server.port}/eureka/}
+    defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://${spring.security.user.name}:${spring.security.user.password}@${EUREKA_INSTANCE_HOSTNAME:standalone.eureka}:${server.port}/eureka/}
 #  # default: <blank-value>
 #  #transport:
 #  # Indicates whether the eureka client should use the DNS mechanism to fetch a list of eureka servers to talk to.
@@ -226,7 +226,7 @@ eureka.instance:
   # Get the name of the application to be registered with eureka.
   # default: unknown
   #   application name on (register to) eureka, all instances of an application must use same value
-  appname: ${SPRING_APPLICATION_NAME:standalone.eureka}
+  appname: ${spring.application.name}
 #  # Returns the data center this instance is deployed. This information is used to get some AWS specific instance information if the instance is deployed in AWS.
 #  # default: <blank-value>
 #  #data-center-info:
@@ -551,14 +551,14 @@ eureka.instance:
   # default: unknown
   #secure-virtual-host-name: unknown
 
----
-spring:
-  profiles: manual_ip_hostname
-
-spring.cloud:
-  client:
-    hostname: ${SPRING_CLOUD_CLIENT_HOSTNAME:}
-    ip-address: ${SPRING_CLOUD_CLIENT_IPADDRESS:}
+#---
+#spring:
+#  profiles: manual_ip_hostname
+#
+#spring.cloud:
+#  client:
+#    hostname: ${SPRING_CLOUD_CLIENT_HOSTNAME:standalone.eureka}
+#    ip-address: ${SPRING_CLOUD_CLIENT_IPADDRESS:}
 
 ---
 spring:
@@ -572,7 +572,7 @@ eureka.client:
   register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:true}
 
 eureka.instance:
-  appname: ${SPRING_APPLICATION_NAME:eureka-cluster}
+  appname: ${spring.application.name}
 
 ---
 spring:
@@ -586,7 +586,7 @@ eureka.client:
   register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:false}
 
 eureka.instance:
-  appname: ${SPRING_APPLICATION_NAME:standalone.eureka}
+  appname: ${spring.application.name}
 
 ---
 spring.profiles: develop.env
