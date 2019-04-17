@@ -2,6 +2,7 @@ package cn.home1.cloud.netflix.eureka;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -21,6 +22,7 @@ import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 /**
  * see: https://github.com/spring-projects/spring-boot/issues/12323
@@ -29,7 +31,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Configuration
 @ConditionalOnClass(DefaultAuthenticationEventPublisher.class)
-@ConditionalOnProperty(prefix = "spring.security", name = "enabled", havingValue = "true")
+// @ConditionalOnProperty(prefix = "spring.security", name = "enabled", havingValue = "true")
 @EnableConfigurationProperties(SecurityProperties.class)
 @Import({SpringBootWebSecurityConfiguration.class, WebSecurityEnablerConfiguration.class,
     SecurityDataConfiguration.class})
@@ -42,25 +44,39 @@ public class ApplicationSecurityAutoConfiguration {
         return new DefaultAuthenticationEventPublisher(publisher);
     }
 
-    @ConditionalOnProperty(prefix = "spring.security", name = "enabled", havingValue = "true")
+    // @ConditionalOnProperty(prefix = "spring.security", name = "enabled", havingValue = "true")
     @Configuration
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
     static class ApplicationWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
+        @Value("${spring.security.enabled:false}")
+        private Boolean enabled;
+
         @Override
         protected void configure(final HttpSecurity http) throws Exception {
             //super.configure(http); // default config
-            http //
-                .authorizeRequests() //
-                .requestMatchers(EndpointRequest.to("health", "info")).permitAll() //
-                .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR") //
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //
-                .antMatchers("/**").hasRole("USER") //
-                .and() //
-                .formLogin().disable() //
-                .httpBasic().and() //
-                .sessionManagement().sessionCreationPolicy(STATELESS).and() //
-            ;
+
+            if (this.enabled) {
+                http //
+                    .authorizeRequests() //
+                    .requestMatchers(EndpointRequest.to("health", "info")).permitAll() //
+                    .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR") //
+                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //
+                    .antMatchers("/**").hasRole("USER") //
+                    .and() //
+                    .httpBasic().and() //
+                    .formLogin().disable() //
+                    .sessionManagement().sessionCreationPolicy(STATELESS).and() //
+                    .exceptionHandling()
+                    // .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) //
+                    .authenticationEntryPoint(new BasicAuthenticationEntryPoint()) //
+                ;
+            } else {
+                http //
+                    .authorizeRequests() //
+                    .antMatchers("/**").permitAll() //
+                ;
+            }
         }
     }
 }

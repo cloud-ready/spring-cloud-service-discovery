@@ -240,7 +240,7 @@ eureka.instance:
 #  # it can be used to determine whether to proceed deployments to an entire farm or stop the deployments without causing further damage.
 #  #   健康检查URL的ContextPath
 #  # default: /health
-#  health-check-url-path: /health
+  health-check-url-path: ${management.endpoints.web.base-path}/health
 #  # Gets the absolute home page URL for this instance.
 #  # The users can provide the homePageUrlPath if the home page resides in the same instance talking to eureka,
 #  # else in the cases where the instance is a proxy for some other server, users can provide the full URL.
@@ -323,7 +323,7 @@ eureka.instance:
 #  # Users can provide a simple HTML indicating what is the current status of the instance.
 #  # default: /info
 #  #   状态页URL的ContextPath
-#  status-page-url-path: /info
+  status-page-url-path: ${management.endpoints.web.base-path}/info
 
 eureka.server:
 #  a-s-g-cache-expiry-timeout-ms: 0
@@ -446,7 +446,7 @@ management:
       roles: ${MANAGEMENT_ENDPOINT_HEALTH_ROLES:ACTUATOR}
   endpoints:
     web: # since spring-boot 2.x
-      base-path: ${MANAGEMENT_ENDPOINTS_WEB_BASEPATH:/} # default: /actuator, management.context-path deprecated since spring-boot 2.x
+      base-path: ${MANAGEMENT_ENDPOINTS_WEB_BASEPATH:} # default: /actuator, management.context-path deprecated since spring-boot 2.x
       exposure:
         include: "${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE:*}"
         exclude: "${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_EXCLUDE:}"

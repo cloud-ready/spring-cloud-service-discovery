@@ -4,7 +4,7 @@ eureka:
   client:
     register-with-eureka: true
   instance:
-    health-check-url-path: /health
+    health-check-url-path: ${management.endpoints.web.base-path}/health
     hostname: ${EUREKA_INSTANCE_HOSTNAME:${SPRING_CLOUD_CLIENT_HOSTNAME:${EUREKA_INSTANCE_IPADDRESS:${HOST_IPADDRESS:${spring.cloud.client.ip-address}}}}}
     lease-renewal-interval-in-seconds: 10
 
@@ -12,9 +12,9 @@ eureka:
     #  instance-group: "${INSTANCE_GROUP:${instance.group:.*}}"
 
     prefer-ip-address: ${EUREKA_INSTANCE_PREFERIPADDRESS:false}
-    status-page-url-path: /info
+    status-page-url-path: ${management.endpoints.web.base-path}/info
 
-    instance-id: ${spring.application.name}${INSTANCE_CLASSFIER:${instance.classfier:}}:${EUREKA_INSTANCE_HOSTNAME:${SPRING_CLOUD_CLIENT_HOSTNAME:${EUREKA_INSTANCE_IPADDRESS:${HOST_IPADDRESS:${spring.cloud.client.ip-address}}}}}:${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:${server.port:8080}}}
+    instance-id: ${spring.application.name}${INSTANCE_CLASSFIER:${instance.classfier:}}:${eureka.instance.hostname}:${eureka.instance.non-secure-port}
     non-secure-port: ${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:${server.port:8080}}}
     non-secure-port-enabled: true
     secure-port-enabled: false

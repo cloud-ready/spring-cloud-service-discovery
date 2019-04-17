@@ -7,11 +7,11 @@ eureka:
     service-url:
       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://user:user_pass@standalone.eureka:8761/eureka/}
   instance:
-    health-check-url: http://${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ip-address:${spring.cloud.client.hostname:localhost}}}}:${SIDECAR_PORT:8761}${SIDECAR_HEALTHURI:/health}
-    home-page-url: http://${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ip-address:${spring.cloud.client.hostname:localhost}}}}:${SIDECAR_PORT:8761}${SIDECAR_HOMEPAGEURI:/}
-    instance-id: ${spring.application.name}:${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ip-address:${spring.cloud.client.hostname:${random.int}}}}}:${SERVER_PORT:5678}
+    health-check-url: ${sidecar.health-uri}
+    home-page-url: ${sidecar.home-page-uri}
+    instance-id: ${spring.application.name}:${sidecar.hostname}:${SERVER_PORT:5678}
     prefer-ip-address: ${EUREKA_INSTANCE_PREFERIPADDRESS:true}
-    status-page-url: http://${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ip-address:${spring.cloud.client.hostname:localhost}}}}:${SIDECAR_PORT:8761}/info
+    status-page-url: http://${sidecar.hostname}:${sidecar.port}${SIDECAR_STATUSPAGEURI:/info}
 
 logging:
   #file: ${LOG_FILE:${CONTAINER_HOST_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}}.log
@@ -51,9 +51,9 @@ server:
   port: ${SERVER_PORT:5678}
 
 sidecar:
-  health-uri: http://${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ip-address:${spring.cloud.client.hostname:localhost}}}}:${SIDECAR_PORT:8761}${SIDECAR_HEALTHURI:/health} # mandatory
-  home-page-uri: http://${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ip-address:${spring.cloud.client.hostname:localhost}}}}:${SIDECAR_PORT:8761}${SIDECAR_HOMEPAGEURI:/} # optional
-  hostname: ${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ip-address:${spring.cloud.client.hostname:}}}} # optional
+  health-uri: http://${sidecar.hostname}:${sidecar.port}${SIDECAR_HEALTHURI:/health} # mandatory
+  home-page-uri: http://${sidecar.hostname}:${sidecar.port}${SIDECAR_HOMEPAGEURI:/} # optional
+  hostname: ${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ip-address:${spring.cloud.client.hostname:localhost}}}} # optional
   ip-address: ${SIDECAR_IPADDRESS:${spring.cloud.client.ip-address:}} # optional
   # sidecar.port is the port on which the non-JVM application listens
   port: ${SIDECAR_PORT:8761} # mandatory
