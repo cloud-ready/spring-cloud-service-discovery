@@ -53,7 +53,7 @@ server:
 sidecar:
   health-uri: http://${sidecar.hostname}:${sidecar.port}${SIDECAR_HEALTHURI:/health} # mandatory
   home-page-uri: http://${sidecar.hostname}:${sidecar.port}${SIDECAR_HOMEPAGEURI:/} # optional
-  hostname: ${SIDECAR_HOSTNAME:${SIDECAR_IPADDRESS:${spring.cloud.client.ip-address:${spring.cloud.client.hostname:localhost}}}} # optional
+  hostname: ${SIDECAR_HOSTNAME:${spring.cloud.client.hostname:${sidecar.ip-address:localhost}}} # optional
   ip-address: ${SIDECAR_IPADDRESS:${spring.cloud.client.ip-address:}} # optional
   # sidecar.port is the port on which the non-JVM application listens
   port: ${SIDECAR_PORT:8761} # mandatory
