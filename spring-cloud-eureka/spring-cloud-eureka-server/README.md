@@ -83,21 +83,21 @@ curl -i -X DELETE http://standalone.eureka:8761/eureka/apps/config-server/config
 ```
 
 You can also set status directly on instances by posting request to its `ServiceRegistryEndpoint`  
-URL of `ServiceRegistryEndpoint` is: `http(s)://<host>:<port>[server.servlet.context-path][management.endpoints.web.base-path]/serviceregistry/instance-status`  
+URL of `ServiceRegistryEndpoint` is: `http(s)://<host>:<port>[server.servlet.context-path][management.endpoints.web.base-path]/service-registry/instance-status`  
 `server.servlet.context-path` and `management.endpoints.web.base-path` are optional, that depends on instance's config.  
 
-`/serviceregistry/instance-status` is a sensitive endpoint, may need to authentication (depends on instance's config).   
+`/service-registry/instance-status` is a sensitive endpoint, may need to authentication (depends on instance's config).   
 
 For example, we can set instance `config-server:8888` of application `config-server` to `OUT_OF_SERVICE` by running:
 ```bash
-curl -i -X POST -u admin:admin_pass -H 'Content-Type: application/json' -d 'OUT_OF_SERVICE' http://config-server:8888/manage/serviceregistry/instance-status
+curl -i -X POST -u admin:admin_pass -H 'Content-Type: application/json' -d 'OUT_OF_SERVICE' http://config-server:8888/manage/service-registry/instance-status
 ```
 
 Note: only `OUT_OF_SERVICE` and `UP` are acceptable for this endpoint.  
 
 And then we can verify that by
 ```bash
-curl -i -X GET -u admin:admin_pass -H 'Accept: application/json' http://config-server:8888/manage/serviceregistry/instance-status
+curl -i -X GET -u admin:admin_pass -H 'Accept: application/json' http://config-server:8888/manage/service-registry/instance-status
 ```
 We got `eureka: {overriddenStatus=UNKNOWN, status=UP},consul: OUT_OF_SERVICE`.  
 Here may be a bug that eureka's overriddenStatus is not set correctly.  

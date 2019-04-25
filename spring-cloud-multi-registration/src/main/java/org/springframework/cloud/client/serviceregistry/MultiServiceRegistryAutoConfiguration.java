@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * http://host:port/server-context-path/management-context-path/serviceregistry/instance-status
+ * http://host:port/server-context-path/management-context-path/service-registry/instance-status
  *
  * in /META-INF/spring.factories
  * see: {@link org.springframework.cloud.client.serviceregistry.ServiceRegistryAutoConfiguration}

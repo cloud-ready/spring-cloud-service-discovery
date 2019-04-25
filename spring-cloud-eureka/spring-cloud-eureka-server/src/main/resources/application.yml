@@ -128,6 +128,7 @@ eureka.client:
 #  # default: 40
 #  #   单位s, 启动后, 间隔多少时间后开始复制instance info到Eureka
 #  initial-instance-info-replication-interval-seconds: 40
+  initial-instance-info-replication-interval-seconds: 40
 #  # Indicates how often(in seconds) to replicate instance changes to be replicated to the eureka server.
 #  # default: 30
 #  #   单位s, 每间隔多少时间复制instance info变动到Eureka
@@ -234,6 +235,15 @@ eureka.instance:
 #  #default-address-resolution-order: []
 #  # default: <blank-value>
 #  #environment:
+#  # Gets the absolute health check page URL for this instance.
+#  # The users can provide the healthCheckUrlPath if the health check page resides in the same instance talking to eureka,
+#  # else in the cases where the instance is a proxy for some other server, users can provide the full URL. If the full URL is provided it takes precedence.
+#  # It is normally used for making educated decisions based on the health of the instance - for example,
+#  # it can be used to determine whether to proceed deployments to an entire farm or stop the deployments without causing further damage.
+#  # The full URL should follow the format http://${eureka.hostname}:7001/ where the value ${eureka.hostname} is replaced at runtime.
+#  # default: <blank-value>
+#  #   健康检查URL, 到Root级别(HTTP)
+#  health-check-url: ${EUREKA_INSTANCE_HEALTHCHECKURL:}
 #  # Gets the relative health check URL path for this instance.
 #  # The health check page URL is then constructed out of the hostname and the type of communication - secure or unsecure as specified in securePort and nonSecurePort.
 #  # It is normally used for making educated decisions based on the health of the instance - for example,
@@ -261,6 +271,17 @@ eureka.instance:
   # default: <blank-value>
   #   eureka.instance.hostname affect Status->instances's url href (not text) value on dashboard
   hostname: ${SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME:${EUREKA_INSTANCE_HOSTNAME:${spring.cloud.client.hostname:standalone.eureka}}}
+#  # Get the unique Id (within the scope of the appName) of this instance to be registered with eureka.
+#  # default: <blank-value>
+#  #   instance的id, 区分同一应用的不同实例
+#  #   eureka.instance.instance-id affect Status->instances's url text (not href) value on dashboard
+#  #   or eureka.instance.ip-address if eureka.instance.prefer-ip-address=true
+#  #   other possible values:
+#  #     ${spring.application.name}:${eureka.instance.ip-address}:${eureka.instance.non-secure-port}:${random.value}
+#  #     ${spring.application.name}:${eureka.instance.hostname}:${eureka.instance.non-secure-port}:${random.value}
+#  instance-id: ${spring.application.name}:${eureka.instance.hostname}:${eureka.instance.non-secure-port}:${random.value}
+  # eureka.instance.instance-id affect Status->instances's url text (not href) value on dashboard
+  instance-id: ${spring.application.name}:${eureka.instance.hostname}:${eureka.instance.non-secure-port}
 #  # default: <blank-value>
 #  #inet-utils:
 #  # Initial status to register with remote Eureka server.
@@ -294,10 +315,13 @@ eureka.instance:
 #  # default: 30
 #  #   单位s, Client发送心跳的时间间隔
 #  lease-renewal-interval-in-seconds: 30
-#  # Get the namespace used to find properties. Ignored in Spring Cloud.
-#  # default: eureka
-#  #   查找属性时使用的名称空间, spring-cloud中已忽略
-#  namespace: eureka
+#  # Gets the metadata name/value pairs associated with this instance. This information is sent to eureka server and can be used by other instances.
+#  # default: <blank-value>
+#  #   实例元数据
+#  #metadataMap:
+#    #hostname: ${eureka.instance.hostname}
+#    #port: ${server.port}
+#    #instanceId: ${spring.application.name}:${eureka.instance.hostname}:${eureka.instance.non-secure-port}
   metadataMap:
     applicationId: ${spring.application.name}
 
@@ -307,10 +331,22 @@ eureka.instance:
     startup: ${random.int}
     user.name: ${spring.security.user.name:}
     user.password: ${spring.security.user.password:}
+#  # Get the namespace used to find properties. Ignored in Spring Cloud.
+#  # default: eureka
+#  #   查找属性时使用的名称空间, spring-cloud中已忽略
+#  namespace: eureka
+# Get the non-secure port on which the instance should receive traffic.
+# default: 80
+#   eureka.instance.non-secure-port affect Status->instances's url href (not text) value on dashboard
+  non-secure-port: ${server.port}
+# Indicates whether the non-secure port should be enabled for traffic or not.
+# default: true
+  non-secure-port-enabled: true
   # Flag to say that, when guessing a hostname, the IP address of the server should be used in preference to the hostname reported by the OS.
   # default: false
   #   当猜测hostname时, 是否优先使用IP地址
   prefer-ip-address: ${EUREKA_INSTANCE_PREFERIPADDRESS:false}
+  secure-port-enabled: false
 #  registry:
 #    # Value used in determining when leases are cancelled, default to 1 for standalone. Should be set to 0 for peer replicated eurekas
 #    # default: 1
@@ -451,6 +487,7 @@ logbook:
 logging:
   config: classpath:logback-spring.xml
   file: ${LOGGING_FILE:logs/spring.log}
+  #file: ${LOGGING_FILE:${LOG_FILE:${eureka.instance.hostname}-${eureka.instance.secure-port}.log}}
   #path: ${LOGGING_PATH:${LOG_PATH:${user.dir}/data/logs/${spring.application.name}}}
   level:
     jndi: ${LOGGING_LEVEL_ROOT:INFO}
@@ -508,8 +545,9 @@ management:
 
 server:
   address: ${SERVER_ADDRESS:${eureka.instance.ip-address}}
-  servlet.context-path: ${SERVER_SERVLET_CONTEXTPATH:} # since spring-boot 2.x
   #context-path: ${SERVER_CONTEXTPATH:} # deprecated since spring-boot 2.x
+  port: ${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}
+  servlet.context-path: ${SERVER_SERVLET_CONTEXTPATH:} # since spring-boot 2.x
 
 spring:
   aop.auto: false
@@ -525,10 +563,6 @@ spring:
       auto-deregistration: ${SPRING_BOOT_ADMIN_CLIENT_AUTODEREGISTRATION:true}
       auto-registration: ${SPRING_BOOT_ADMIN_CLIENT_AUTOREGISTRATION:true}
       enabled: ${SPRING_BOOT_ADMIN_CLIENT_ENABLED:false}
-      period: 10s
-      register-once: ${SPRING_BOOT_ADMIN_CLIENT_REGISTERONCE:true}
-      username: ${spring.security.user.name:}
-      password: ${spring.security.user.password:}
       instance:
         #health-url: ${SPRING_BOOT_ADMIN_CLIENT_HEALTHURL:}
         #management-url: ${SPRING_BOOT_ADMIN_CLIENT_MANAGEMENTURL:}
@@ -540,6 +574,11 @@ spring:
         prefer-ip: ${SPRING_BOOT_ADMIN_CLIENT_PREFERIP:true}
         #service-base-url: ${SPRING_BOOT_ADMIN_CLIENT_SERVICEBASEURL:}
         #service-url: ${SPRING_BOOT_ADMIN_CLIENT_SERVICEURL:}
+      password: ${spring.security.user.password:}
+      period: 10s
+      register-once: ${SPRING_BOOT_ADMIN_CLIENT_REGISTERONCE:true}
+      username: ${spring.security.user.name:}
+      url: http://${eureka.instance.hostname}:${server.port}${server.servlet.context-path:}
   cloud:
     inetutils:
       preferred-networks: ${SPRING_CLOUD_INETUTILS_PREFERREDNETWORKS:^192\.168\..+, ^172\.30\..+, ^10\..+}
@@ -552,72 +591,16 @@ spring:
       password: ${SPRING_SECURITY_USER_PASSWORD:user_pass}
       roles: ${SPRING_SECURITY_USER_ROLES:ACTUATOR, ADMIN, SUPERUSER, USER}
 
-
----
-spring:
-  profiles: port_nonsecure
-
-eureka.instance:
-  # eureka.instance.instance-id affect Status->instances's url text (not href) value on dashboard
-  instance-id: ${spring.application.name}:${eureka.instance.hostname}:${eureka.instance.non-secure-port}
-#  # Get the unique Id (within the scope of the appName) of this instance to be registered with eureka.
-#  # default: <blank-value>
-#  #   instance的id, 区分同一应用的不同实例
-#  #   eureka.instance.instance-id affect Status->instances's url text (not href) value on dashboard
-#  #   or eureka.instance.ip-address if eureka.instance.prefer-ip-address=true
-#  #   other possible values:
-#  #     ${spring.application.name}:${eureka.instance.ip-address}:${eureka.instance.non-secure-port}:${random.value}
-#  #     ${spring.application.name}:${eureka.instance.hostname}:${eureka.instance.non-secure-port}:${random.value}
-#  instance-id: ${spring.application.name}:${eureka.instance.hostname}:${eureka.instance.non-secure-port}:${random.value}
-#  # Gets the absolute health check page URL for this instance.
-#  # The users can provide the healthCheckUrlPath if the health check page resides in the same instance talking to eureka,
-#  # else in the cases where the instance is a proxy for some other server, users can provide the full URL. If the full URL is provided it takes precedence.
-#  # It is normally used for making educated decisions based on the health of the instance - for example,
-#  # it can be used to determine whether to proceed deployments to an entire farm or stop the deployments without causing further damage.
-#  # The full URL should follow the format http://${eureka.hostname}:7001/ where the value ${eureka.hostname} is replaced at runtime.
-#  # default: <blank-value>
-#  #   健康检查URL, 到Root级别(HTTP)
-#  health-check-url: ${EUREKA_INSTANCE_HEALTHCHECKURL:}
-#  # Gets the metadata name/value pairs associated with this instance. This information is sent to eureka server and can be used by other instances.
-#  # default: <blank-value>
-#  #   实例元数据
-#  #metadataMap:
-#    #hostname: ${eureka.instance.hostname}
-#    #prot: ${server.port}
-#    #instanceId: ${spring.application.name}:${eureka.instance.hostname}:${eureka.instance.non-secure-port}
-#    # or eureka.instance.ip-address if eureka.instance.prefer-ip-address=true
-#    #instanceId: ${spring.application.name}:${eureka.instance.ip-address}:${eureka.instance.non-secure-port}
-  # Get the non-secure port on which the instance should receive traffic.
-  # default: 80
-  #   eureka.instance.non-secure-port affect Status->instances's url href (not text) value on dashboard
-  non-secure-port: ${server.port}
-  # Indicates whether the non-secure port should be enabled for traffic or not.
-  # default: true
-  non-secure-port-enabled: true
-  # Gets the virtual host name defined for this instance.
-  # This is typically the way other instance would find this instance by using the virtual host name.
-  # Think of this as similar to the fully qualified domain name, that the users of your services will need to find this instance.
-  # default: unknown
-  #virtual-host-name: unknown
-  secure-port-enabled: false
-
-#logging:
-#  file: ${LOGGING_FILE:${LOG_FILE:${eureka.instance.hostname}-${eureka.instance.secure-port}.log}}
-
-server:
-  port: ${EUREKA_INSTANCE_NONSECUREPORT:${SERVER_PORT:8761}}
-
-spring.boot.admin:
-  client.url: http://${eureka.instance.hostname}:${server.port}${server.servlet.context-path:}
-
 ---
 spring:
   profiles: port_secure
 
 eureka.instance:
   # eureka.instance.instance-id affect Status->instances's url text (not href) value on dashboard
-  instance-id: ${spring.application.name}:${eureka.instance.hostname}:${eureka.instance.secure-port}
 #  instance-id: ${spring.application.name}:${eureka.instance.hostname}:${eureka.instance.secure-port}:${random.value}
+  instance-id: ${spring.application.name}:${eureka.instance.hostname}:${eureka.instance.secure-port}
+  non-secure-port:
+  non-secure-port-enabled: false
 #  # Gets the absolute secure health check page URL for this instance.
 #  # The users can provide the secureHealthCheckUrl if the health check page resides in the same instance talking to eureka,
 #  # else in the cases where the instance is a proxy for some other server, users can provide the full URL.
@@ -627,7 +610,6 @@ eureka.instance:
 #  # The full URL should follow the format http://${eureka.hostname}:7001/ where the value ${eureka.hostname} is replaced at runtime.
 #  # default: <blank-value>
 #  #   健康检查URL, 到Root级别(HTTPS)
-  non-secure-port-enabled: false
 #  secure-health-check-url: ${EUREKA_INSTANCE_SECUREHEALTHCHECKURL:}
   # Get the Secure port on which the instance should receive traffic.
   # default: 443
@@ -651,15 +633,6 @@ server:
 
 spring.boot.admin:
   client.url: https://${eureka.instance.hostname}:${server.port}${server.servlet.context-path:}
-
-#---
-#spring:
-#  profiles: manual_ip_hostname
-#
-#spring.cloud:
-#  client:
-#    hostname: ${SPRING_CLOUD_CLIENT_HOSTNAME:standalone.eureka}
-#    ip-address: ${SPRING_CLOUD_CLIENT_IPADDRESS:}
 
 ---
 spring:
