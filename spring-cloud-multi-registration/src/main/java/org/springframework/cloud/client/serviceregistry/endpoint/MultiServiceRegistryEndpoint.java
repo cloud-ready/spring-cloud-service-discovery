@@ -32,7 +32,7 @@ import java.util.stream.IntStream;
  * @author haolun zhang
  */
 @SuppressWarnings("unchecked")
-@Endpoint(id = "service-registry")
+@Endpoint(id = "serviceregistry")
 @Slf4j
 public class MultiServiceRegistryEndpoint {
 

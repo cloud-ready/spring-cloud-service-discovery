@@ -1,21 +1,52 @@
-#endpoints: # deprecated since spring-boot 2.x
-#  env.sensitive: ${ENDPOINTS_ENV_SENSITIVE:true}
-#  health.sensitive: ${ENDPOINTS_HEALTH_SENSITIVE:false}
-
 eureka:
   client:
+    enabled: true
+    register-with-eureka: true
+    #registry-fetch-interval-seconds: ${EUREKA_CLIENT_REGISTRYFETCHINTERVALSECONDS:5}
     service-url:
       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://user:user_pass@standalone.eureka:8761/eureka/}
   instance:
     health-check-url: ${sidecar.health-uri}
+    #health-check-url-path: ${server.servlet.context-path}${management.endpoints.web.base-path}/health
+    # eureka.instance.hostname affect Status->instances's url href (not text) value on dashboard
+    hostname: ${SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME:${EUREKA_INSTANCE_HOSTNAME:${SPRING_CLOUD_CLIENT_HOSTNAME:${eureka.instance.ip-address:localhost}}}}
+    ip-address: ${SPRING_CLOUD_CONSUL_DISCOVERY_IPADDRESS:${EUREKA_INSTANCE_IPADDRESS:${HOST_IPADDRESS:${spring.cloud.client.ip-address}}}}
     home-page-url: ${sidecar.home-page-uri}
     instance-id: ${spring.application.name}:${sidecar.hostname}:${SERVER_PORT:5678}
-    prefer-ip-address: ${EUREKA_INSTANCE_PREFERIPADDRESS:true}
-    status-page-url: http://${sidecar.hostname}:${sidecar.port}${SIDECAR_STATUSPAGEURI:/info}
+    metadataMap:
+      applicationId: ${spring.application.name}
+
+      management.context-path: ${server.servlet.context-path}${management.endpoints.web.base-path}
+      management.port: ${management.server.port}
+      health.path: "health"
+      startup: ${random.int}
+      user.name: ${spring.security.user.name:}
+      user.password: ${spring.security.user.password:}
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFERIPADDRESS:false}
+    status-page-url: http://${sidecar.hostname}:${sidecar.port}${eureka.instance.status-page-url-path}
+    status-page-url-path: ${server.servlet.context-path}${management.endpoints.web.base-path}${SIDECAR_STATUSPAGEURI:/info}
+
+# logging request & response info, style can be http, curl, json, splunk
+logbook:
+  #exclude:
+  include: "/**"
+  format:
+    style: ${LOGBOOK_FORMAT_STYLE:http}
+  obfuscate:
+    headers:
+      #- Authorization
+      - X-Secret
+    parameters:
+      - access_token
+      - password
+  write:
+    max-body-size: 2000
 
 logging:
-  #file: ${LOG_FILE:${CONTAINER_HOST_NAME:${spring.cloud.client.hostname:${spring.application.name}-${server.port}}}}.log
-  #path: ${LOG_PATH:${user.dir}/data/logs/${spring.application.name}}
+  config: classpath:logback-spring.xml
+  file: ${LOGGING_FILE:logs/spring.log}
+  #file: ${LOGGING_FILE:${LOG_FILE:${eureka.instance.hostname}-${server.port}.log}}
+  #path: ${LOGGING_PATH:${LOG_PATH:${user.dir}/data/logs/${spring.application.name}}}
   level:
     jndi: ${LOGGING_LEVEL_ROOT:INFO}
     org.springframework.boot.actuate.endpoint.jmx.EndpointMBeanExporter: ${ENDPOINT_LOGGING_LEVEL_ROOT:WARN}
@@ -36,8 +67,12 @@ management:
       show-details: ${MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS:ALWAYS}
       roles: ${MANAGEMENT_ENDPOINT_HEALTH_ROLES:ACTUATOR}
   endpoints:
+    jmx:
+      exposure:
+        exclude: "${MANAGEMENT_ENDPOINTS_JMX_EXPOSURE_EXCLUDE:}"
+        include: "${MANAGEMENT_ENDPOINTS_JMX_EXPOSURE_INCLUDE:*}"
     web: # since spring-boot 2.x
-      #base-path: ${MANAGEMENT_ENDPOINTS_WEB_BASEPATH:} # default: /actuator, do not set this value on sidecar (management.context-path deprecated since spring-boot 2.x)
+      base-path: ${MANAGEMENT_ENDPOINTS_WEB_BASEPATH:/actuator} # do not change this value on sidecar (management.context-path deprecated since spring-boot 2.x)
       exposure:
         include: "${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE:*}"
         exclude: "${MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_EXCLUDE:}"
@@ -45,16 +80,23 @@ management:
 #    enabled: true
 #    roles: SUPERUSER
 #    sessions: stateless
+  server:
+    port: ${server.port}
+
+#endpoints: # deprecated since spring-boot 2.x
+#  env.sensitive: ${ENDPOINTS_ENV_SENSITIVE:true}
+#  health.sensitive: ${ENDPOINTS_HEALTH_SENSITIVE:false}
 
 server:
-  #servlet.context-path: # do not set server.servlet.context-path on sidecar (server.context-path deprecated since spring-boot 2.x)
   port: ${SERVER_PORT:5678}
+  servlet.context-path: ${SERVER_SERVLET_CONTEXTPATH:} # do not change server.servlet.context-path on sidecar, since spring-boot 2.x (server.context-path deprecated since spring-boot 2.x)
+  #context-path: ${SERVER_CONTEXTPATH:} # deprecated since spring-boot 2.x
 
 sidecar:
-  health-uri: http://${sidecar.hostname}:${sidecar.port}${SIDECAR_HEALTHURI:/health} # mandatory
-  home-page-uri: http://${sidecar.hostname}:${sidecar.port}${SIDECAR_HOMEPAGEURI:/} # optional
-  hostname: ${SIDECAR_HOSTNAME:${spring.cloud.client.hostname:${sidecar.ip-address:localhost}}} # optional
-  ip-address: ${SIDECAR_IPADDRESS:${spring.cloud.client.ip-address:}} # optional
+  health-uri: ${SIDECAR_HEALTHURI:http://standalone.eureka:8761/actuator/health} # mandatory
+  home-page-uri: ${SIDECAR_HOMEPAGEURI:http://standalone.eureka:8761} # optional
+  hostname: ${SIDECAR_HOSTNAME:${sidecar.ip-address:standalone.eureka}} # optional
+  ip-address: ${SIDECAR_IPADDRESS:} # optional
   # sidecar.port is the port on which the non-JVM application listens
   port: ${SIDECAR_PORT:8761} # mandatory
 
@@ -68,6 +110,6 @@ spring:
   security:
     enabled: false
     user:
-      name: admin
-      password: ${SPRING_SECURITY_USER_PASSWORD:${random.uuid}}
+      name: ${SPRING_SECURITY_USER_PASSWORD:user}
+      password: ${SPRING_SECURITY_USER_PASSWORD:user_pass}
       roles: ${SPRING_SECURITY_USER_ROLES:ACTUATOR, ADMIN, SUPERUSER, USER}

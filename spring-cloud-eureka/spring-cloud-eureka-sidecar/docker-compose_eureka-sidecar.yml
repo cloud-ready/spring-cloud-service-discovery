@@ -8,15 +8,17 @@ services:
       service: base-eureka-sidecar
     container_name: ${CONTAINER_HOST_NAME:-eureka-sidecar}
     environment:
-    - EUREKA_INSTANCE_PREFERIPADDRESS=${EUREKA_INSTANCE_PREFERIPADDRESS:-true}
+    - EUREKA_INSTANCE_PREFERIPADDRESS=${EUREKA_INSTANCE_PREFERIPADDRESS:-false}
     - LOGGING_LEVEL_ROOT=${LOGGING_LEVEL_ROOT:-INFO}
     - SERVER_PORT=${SERVER_PORT:-5678}
-    - SIDECAR_HEALTHURI=${SIDECAR_HEALTHURI:-/health}
-    - SIDECAR_HOSTNAME=${CONTAINER_HOST_NAME:-eureka-sidecar} # Optional, for instance-id
-    - SIDECAR_IPADDRESS=${SIDECAR_IPADDRESS} # Optional, for instance-id
-    - SIDECAR_PORT=${SIDECAR_PORT:-5678}
+    - SIDECAR_HEALTHURI=${SIDECAR_HEALTHURI:-http://standalone.eureka:8761/actuator/health}
+    - SIDECAR_HOMEPAGEURI=${SIDECAR_HOMEPAGEURI:-http://standalone.eureka:8761}
+    - SIDECAR_HOSTNAME=${SIDECAR_HOSTNAME:-standalone.eureka}
+    - SIDECAR_IPADDRESS=${SIDECAR_IPADDRESS} # Optional
+    - SIDECAR_PORT=${SIDECAR_PORT:-8761}
     - SPRING_APPLICATION_NAME=${SPRING_APPLICATION_NAME:-the-name-of-non-JVM-application-or-service}
-    - SPRING_SECURITY_USER_PASSWORD=${SPRING_SECURITY_USER_PASSWORD:-}
+    - SPRING_SECURITY_USER_NAME=${SPRING_SECURITY_USER_NAME:-user}
+    - SPRING_SECURITY_USER_PASSWORD=${SPRING_SECURITY_USER_PASSWORD:-user_pass}
     hostname: ${CONTAINER_HOST_NAME:-eureka-sidecar}
     network_mode: bridge
     ports:

@@ -30,26 +30,6 @@
         <url>https://github.com/cloud-ready/spring-cloud-service-discovery</url>
     </scm>
 
-    <dependencies>
-        <!-- @formatter:off -->
-        <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><scope>provided</scope></dependency>
-        <!-- @formatter:on -->
-    </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- @formatter:off -->
-            <dependency><groupId>cn.home1</groupId><artifactId>logback-gelf-config</artifactId><version>${log-config.version}</version></dependency>
-            <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>${project.version}</version></dependency>
-            <!-- @formatter:on -->
-        </dependencies>
-    </dependencyManagement>
-
-    <properties>
-        <repositories.releases.updatePolicy>always</repositories.releases.updatePolicy>
-        <repositories.snapshots.updatePolicy>always</repositories.snapshots.updatePolicy>
-    </properties>
-
     <build>
         <pluginManagement>
             <plugins>
@@ -79,6 +59,21 @@
         </plugins>
     </build>
 
+    <dependencies>
+        <!-- @formatter:off -->
+        <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><scope>provided</scope></dependency>
+        <!-- @formatter:on -->
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- @formatter:off -->
+            <dependency><groupId>cn.home1</groupId><artifactId>logback-gelf-config</artifactId><version>${log-config.version}</version></dependency>
+            <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>${project.version}</version></dependency>
+            <!-- @formatter:on -->
+        </dependencies>
+    </dependencyManagement>
+
     <modules>
         <module>spring-cloud-eureka</module>
         <module>spring-cloud-multi-registration</module>
@@ -107,6 +102,11 @@
         </profile>
     </profiles>
     <!-- @formatter:on -->
+
+    <properties>
+        <repositories.releases.updatePolicy>never</repositories.releases.updatePolicy>
+        <repositories.snapshots.updatePolicy>daily</repositories.snapshots.updatePolicy>
+    </properties>
 
     <!-- @formatter:off -->
     <repositories>
