@@ -174,7 +174,7 @@ eureka.client:
   # In some cases, you do not want your instances to be discovered whereas you just want do discover other instances.
   # default: true
   #   是否将服务发布到Eureka
-  register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:true}
+  register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:false}
 #  # Indicates how often(in seconds) to fetch the registry information from the eureka server.
 #  # default: 30
 #  #   单位s, 间隔多长时间从Eureka获取注册信息
@@ -580,6 +580,10 @@ spring:
       username: ${spring.security.user.name:}
       url: http://${eureka.instance.hostname}:${server.port}${server.servlet.context-path:}
   cloud:
+    discovery:
+      client:
+        composite-indicator.enabled: false
+        health-indicator.enabled: false
     inetutils:
       preferred-networks: ${SPRING_CLOUD_INETUTILS_PREFERREDNETWORKS:^192\.168\..+, ^172\.30\..+, ^10\..+}
       ignored-interfaces: ${SPRING_CLOUD_INETUTILS_IGNOREDINTERFACES:^[a-z]?tun[0-9]*, ^awdl[0-9]*, ^lo[0-9]*}
@@ -590,6 +594,25 @@ spring:
       name: ${SPRING_SECURITY_USER_NAME:user}
       password: ${SPRING_SECURITY_USER_PASSWORD:user_pass}
       roles: ${SPRING_SECURITY_USER_ROLES:ACTUATOR, ADMIN, SUPERUSER, USER}
+
+---
+spring:
+  profiles: peer_awareness
+
+eureka:
+  client:
+    fetch-registry: ${EUREKA_CLIENT_FETCHREGISTRY:true}
+    healthcheck.enabled: true
+    register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:true}
+  instance:
+    appname: ${spring.application.name}
+
+spring.application.name: ${SPRING_APPLICATION_NAME:eureka-cluster}
+spring.cloud:
+  discovery:
+    client:
+      composite-indicator.enabled: true
+      health-indicator.enabled: true
 
 ---
 spring:
@@ -633,42 +656,6 @@ server:
 
 spring.boot.admin:
   client.url: https://${eureka.instance.hostname}:${server.port}${server.servlet.context-path:}
-
----
-spring:
-  profiles: peer_awareness
-
-spring.application:
-  name: ${SPRING_APPLICATION_NAME:eureka-cluster}
-
-eureka.client:
-  fetch-registry: ${EUREKA_CLIENT_FETCHREGISTRY:true}
-  healthcheck.enabled: true
-  register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:true}
-
-eureka.instance:
-  appname: ${spring.application.name}
-
----
-spring:
-  profiles: standalone
-
-spring.application:
-  name: ${SPRING_APPLICATION_NAME:standalone.eureka}
-
-spring.cloud:
-  discovery:
-    client:
-      composite-indicator.enabled: false
-      health-indicator.enabled: false
-
-eureka.client:
-  fetch-registry: ${EUREKA_CLIENT_FETCHREGISTRY:false}
-  healthcheck.enabled: false
-  register-with-eureka: ${EUREKA_CLIENT_REGISTERWITHEUREKA:false}
-
-eureka.instance:
-  appname: ${spring.application.name}
 
 ---
 spring.profiles: develop.env

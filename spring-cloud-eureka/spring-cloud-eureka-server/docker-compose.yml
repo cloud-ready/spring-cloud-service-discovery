@@ -24,7 +24,7 @@ services:
     - SPRING_APPLICATION_NAME=standalone.eureka
     - SPRING_CLOUD_CLIENT_HOSTNAME=${CONTAINER_HOST_NAME:-standalone.eureka}
     - SPRING_CLOUD_CLIENT_IPADDRESS=${HOST_IPADDRESS:-172.16.238.10}
-    - SPRING_PROFILES_ACTIVE=develop.env,port_nonsecure,standalone
+    - SPRING_PROFILES_ACTIVE=develop.env,standalone
 
 
 
