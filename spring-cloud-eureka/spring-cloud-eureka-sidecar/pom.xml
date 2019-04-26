@@ -36,6 +36,7 @@
     <!-- @formatter:off -->
     <dependencies>
         <dependency><groupId>javax.servlet</groupId><artifactId>javax.servlet-api</artifactId></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-properties-migrator</artifactId><scope>runtime</scope><optional>true</optional></dependency>
         <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId></dependency>
         <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-security</artifactId></dependency>
         <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-undertow</artifactId><scope>runtime</scope></dependency>
