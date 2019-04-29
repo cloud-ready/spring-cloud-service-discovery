@@ -104,8 +104,6 @@
     <!-- @formatter:on -->
 
     <properties>
-        <repositories.releases.updatePolicy>never</repositories.releases.updatePolicy>
-        <repositories.snapshots.updatePolicy>daily</repositories.snapshots.updatePolicy>
     </properties>
 
     <!-- @formatter:off -->
@@ -115,7 +113,7 @@
             <id>OSSRH-releases</id>
             <name>central releases</name>
             <url>https://oss.sonatype.org/content/repositories/releases/</url>
-            <releases><enabled>true</enabled><updatePolicy>${repositories.releases.updatePolicy}</updatePolicy></releases>
+            <releases><enabled>true</enabled><updatePolicy>never</updatePolicy></releases>
             <snapshots><enabled>false</enabled></snapshots>
         </repository>
         <repository>
@@ -123,7 +121,7 @@
             <name>central snapshots</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
             <releases><enabled>false</enabled></releases>
-            <snapshots><enabled>true</enabled><updatePolicy>${repositories.snapshots.updatePolicy}</updatePolicy></snapshots>
+            <snapshots><enabled>true</enabled><updatePolicy>daily</updatePolicy></snapshots>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -131,7 +129,7 @@
             <id>central</id>
             <name>central</name>
             <url>https://repo1.maven.org/maven2</url>
-            <releases><enabled>true</enabled><updatePolicy>${repositories.releases.updatePolicy}</updatePolicy></releases>
+            <releases><enabled>true</enabled><updatePolicy>never</updatePolicy></releases>
             <snapshots><enabled>false</enabled></snapshots>
         </pluginRepository>
     </pluginRepositories>
