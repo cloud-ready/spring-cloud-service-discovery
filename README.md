@@ -25,5 +25,5 @@ spring-cloud-service-discovery
 ## Build this project
 
 ```bash
-JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-11.0.2.jdk/Contents/Home" mvn -Dskip-artifacts=true -Dskip-quality=true help:active-profiles clean install spotbugs:spotbugs spotbugs:check pmd:pmd pmd:check
+JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-11.0.2.jdk/Contents/Home" mvn -Dmaven.artifacts.skip=true -Dskip-quality=true help:active-profiles clean install spotbugs:spotbugs spotbugs:check pmd:pmd pmd:check
 ```

@@ -2,187 +2,163 @@
 # Issue 3378 Uploading untracked artifacts includes ignored files, see: https://gitlab.com/gitlab-org/gitlab-runner/issues/3378
 # Issue 4072 artifacts ignore paths                              , see: https://gitlab.com/gitlab-org/gitlab-ce/issues/4072
 
-before_script:
-- if [ -f ~/env ]; then source ~/env; fi;
-- set -ex;
-# info
-- echo "HOST_HOSTNAME '${HOST_HOSTNAME}', HOST_IPADDRESS '${HOST_IPADDRESS}'";
-  echo working directory `pwd`;
-  echo CI_PROJECT_URL ${CI_PROJECT_URL} CI_COMMIT_REF_NAME ${CI_COMMIT_REF_NAME}, CI_COMMIT_SHA ${CI_COMMIT_SHA}, CI_PROJECT_NAME ${CI_PROJECT_NAME}, CI_PROJECT_NAMESPACE ${CI_PROJECT_NAMESPACE};
-# environment variables
-- export CI_INFRA_OPT_GIT_HOST=gitlab.com;
-  if [ -z "${CI_INFRA_OPT_GIT_PREFIX}" ]; then export CI_INFRA_OPT_GIT_PREFIX=https://${CI_INFRA_OPT_GIT_HOST}; fi;
-  echo CI_INFRA_OPT_GIT_PREFIX ${CI_INFRA_OPT_GIT_PREFIX} CI_OPT_INFRASTRUCTURE ${CI_OPT_INFRASTRUCTURE} CI_OPT_BUILD_PREFIX ${CI_OPT_BUILD_PREFIX};
-# manual git
-- export GIT_REMOTE="git@${CI_INFRA_OPT_GIT_HOST}:${CI_PROJECT_NAMESPACE}/${CI_OPT_BUILD_PREFIX}${CI_PROJECT_NAME}.git";
-  if [ -d .git ]; then git remote set-url origin ${GIT_REMOTE} && git fetch --all; fi;
-  if [ ! -d .git ]; then echo "clone into non-empty directory"; git init && git remote add origin ${GIT_REMOTE} && git fetch --all && git reset origin/${CI_COMMIT_REF_NAME} > /dev/null 2>&1; fi;
-  if git show-ref --verify refs/tags/${CI_COMMIT_REF_NAME} > /dev/null 2>&1; then
-    echo 'build on tag is not supported'; exit 1;
-  elif git show-ref --verify refs/remotes/origin/${CI_COMMIT_REF_NAME} > /dev/null 2>&1; then
-    echo 'build on branch is supported';
-    git checkout -f origin/${CI_COMMIT_REF_NAME};
-    if [ "$(git rev-parse origin/${CI_COMMIT_REF_NAME})" != "${CI_COMMIT_SHA}" ]; then
-      echo Prevents build of an older commit;
-      PRIVATE_TOKEN_COLON='PRIVATE-TOKEN:';
-      set +x; curl -H "${PRIVATE_TOKEN_COLON} ${CI_INFRA_OPT_GIT_AUTH_TOKEN}" -X POST ${CI_INFRA_OPT_GIT_PREFIX}/api/v4/projects/${CI_PROJECT_ID}/pipelines/${CI_PIPELINE_ID}/cancel; set -x;
-      exit 0;
-    fi;
-    git checkout -f ${CI_COMMIT_SHA};
-    echo "remove untracked files and directories"; git clean -fdx :/ -e artifacts.tar.gz;
-  fi;
+.git_refs_develop_only: &git_refs_develop_only
+  only:
+    - develop
 
-build_snapshots:
+.git_refs_of_snapshots: &git_refs_of_snapshots
+  except:
+    - master
+    - /^hotfix\/.+$/
+    - /^release\/.+$/
+    - /^support\/.*$/
+    - /^v\d+\.\d+(\.\d+)?(-\S*)?/
+
+.git_refs_of_releases: &git_refs_of_releases
+  only:
+    - /^hotfix\/.+$/
+    - /^release\/.+$/
+    - /^support\/.*$/
+    #- temp
+
+.git_strategy_fetch: &git_strategy_fetch
+  variables:
+    GIT_STRATEGY: fetch
+
+.git_strategy_manual: &git_strategy_manual
+  variables:
+    GIT_STRATEGY: none
+
+.script_build: &script_build
+  script:
+    - export CI_OPT_MAVEN_EFFECTIVE_POM=true;
+      ./mvnw -e -ntp -U clean package;
+      echo archive $(git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | wc -l) files into artifacts.tar.gz;
+      git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | tar -czf artifacts.tar.gz -T -;
+      #git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | xargs rm -f
+
+.script_publish: &script_publish
+  script:
+    # force publish on temp branch push
+    #- export CI_OPT_PUBLISH_TO_REPO=true
+    - if [ -f artifacts.tar.gz ]; then tar -xzf artifacts.tar.gz; fi;
+      export CI_OPT_MAVEN_CLEAN_SKIP=true; export CI_OPT_MAVEN_INTEGRATIONTEST_SKIP=true; export CI_OPT_MAVEN_TEST_SKIP=true;
+      ./mvnw -e -ntp deploy;
+      echo archive $(git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | wc -l) files into artifacts.tar.gz;
+      git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | tar -czf artifacts.tar.gz -T -;
+
+.script_site: &script_site
+  script:
+    - if [ -f artifacts.tar.gz ]; then tar -xzf artifacts.tar.gz; fi;
+      export CI_OPT_MAVEN_CLEAN_SKIP=true; export CI_OPT_MAVEN_INTEGRATIONTEST_SKIP=true; export CI_OPT_MAVEN_TEST_SKIP=true;
+      if [[ "${CI_COMMIT_REF_NAME}" =~ ^release/.+ ]] || [[ "${CI_COMMIT_REF_NAME}" =~ ^support/.+ ]]; then export CI_OPT_GITHUB_SITE_PUBLISH=true; else export CI_OPT_GITHUB_SITE_PUBLISH=false; fi;
+      if [[ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]]; then export CI_OPT_SITE_PATH_PREFIX="cloud-ready"; else export CI_OPT_SITE_PATH_PREFIX="${CI_PROJECT_PATH}"; fi;
+      if [ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]; then
+        ./mvnw -e -ntp site site-deploy;
+      else
+        ./mvnw -e -ntp site site:stage site:stage-deploy;
+      fi
+
+.upload_files_for_latter_stages: &upload_files_for_latter_stages
   artifacts:
     expire_in: 1 day
     paths:
-    - artifacts.tar.gz
-  except:
-  - master
-  - /^hotfix\/.+$/
-  - /^release\/.+$/
-  - /^support\/.*$/
-  - /^v\d+\.\d+(\.\d+)?(-\S*)?/
-  script:
-  - export CI_OPT_MAVEN_EFFECTIVE_POM=true;
-    bash ci.sh mvn -e clean package;
-    echo archive $(git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | wc -l) files into artifacts.tar.gz;
-    git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | tar -czf artifacts.tar.gz -T -;
-    #git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | xargs rm -f
+      - artifacts.tar.gz
+
+before_script:
+  - if [ -f ~/env ]; then source ~/env; fi;
+  - set -ex;
+  # info
+  - echo "HOST_HOSTNAME '${HOST_HOSTNAME}', HOST_IPADDRESS '${HOST_IPADDRESS}'";
+    echo working directory `pwd`;
+    echo CI_PROJECT_URL ${CI_PROJECT_URL} CI_COMMIT_REF_NAME ${CI_COMMIT_REF_NAME}, CI_COMMIT_SHA ${CI_COMMIT_SHA}, CI_PROJECT_NAME ${CI_PROJECT_NAME}, CI_PROJECT_NAMESPACE ${CI_PROJECT_NAMESPACE};
+  # environment variables
+  - export CI_OPT_GIT_HOST=gitlab.com;
+    if [ -z "${CI_OPT_GIT_PREFIX}" ]; then export CI_OPT_GIT_PREFIX=https://${CI_OPT_GIT_HOST}; fi;
+    export CI_OPT_GITHUB_SITE_PUBLISH=false;
+    export CI_OPT_GITHUB_GLOBAL_REPOSITORYOWNER="cloud-ready";
+    export CI_OPT_GPG_KEYNAME="59DBF10E";
+    export CI_OPT_INFRASTRUCTURE="opensource";
+    export CI_OPT_MAVEN_EFFECTIVE_POM=false;
+    export CI_OPT_ORIGIN_REPO_SLUG="gitlab-cloud-ready/spring-cloud-service-discovery";
+    export CI_OPT_SITE=true;
+    export CI_OPT_SONAR=true;
+    export CI_OPT_SONAR_ORGANIZATION="home1-oss-github";
+    export CI_OPT_MAVEN_BUILD_OPTS_REPO="${CI_OPT_GIT_PREFIX}/ci-and-cd/maven-build-opts-opensource";
+    export CI_OPT_MAVEN_BUILD_OPTS_REPO_REF="master";
+    echo CI_OPT_GIT_PREFIX ${CI_OPT_GIT_PREFIX} CI_OPT_INFRASTRUCTURE ${CI_OPT_INFRASTRUCTURE} CI_OPT_BUILD_PREFIX ${CI_OPT_BUILD_PREFIX};
+  - ./mvnw -version;
+    export SETTINGS_GLOBAL_XML="/tmp/settings-global-${CI_COMMIT_SHA}.xml";
+    export SETTINGS_GLOBAL_XML_URL="${CI_OPT_MAVEN_BUILD_OPTS_REPO}/raw/${CI_OPT_MAVEN_BUILD_OPTS_REPO_REF}/src/main/maven/settings-global.xml";
+    echo "download ${SETTINGS_GLOBAL_XML_URL} to ${SETTINGS_GLOBAL_XML}";
+    curl -L "${SETTINGS_GLOBAL_XML_URL}" 2>/dev/null | tee ${SETTINGS_GLOBAL_XML};
+    mv -f ${SETTINGS_GLOBAL_XML} ~/.m2/wrapper/dists/apache-maven-3.6.1-bin/38pn40mp89t5c94bjdbeod370m/apache-maven-3.6.1/conf/settings.xml;
+    rm -rf ~/.m2/repository/top/infra/maven-build-extension;
+    rm -f ~/.m2/settings*.xml;
+    rm -f ~/.m2/toolchains*.xml;
+    ls -ahl ~/.m2;
+
+build_snapshots:
+  <<: *git_refs_of_snapshots
+  <<: *script_build
+  <<: *upload_files_for_latter_stages
   stage: build
-  variables:
-    GIT_STRATEGY: none
+  <<: *git_strategy_fetch
 
 analysis:
   dependencies:
-  - build_snapshots
-  only:
-  - develop
-  #- /^feature\/.+$/
+    - build_snapshots
+  <<: *git_refs_develop_only
   stage: analysis
   script:
-  - if [ -f artifacts.tar.gz ]; then tar -xzf artifacts.tar.gz; fi;
-    export CI_OPT_CLEAN_SKIP=true;
-    bash ci.sh mvn -e sonar:sonar;
-  variables:
-    GIT_STRATEGY: none
+    - if [ -f artifacts.tar.gz ]; then tar -xzf artifacts.tar.gz; fi;
+      export CI_OPT_MAVEN_CLEAN_SKIP=true;
+      ./mvnw -e -ntp sonar:sonar;
+  <<: *git_strategy_fetch
 
 publish_snapshots:
-  artifacts:
-    expire_in: 1 day
-    paths:
-    - artifacts.tar.gz
   dependencies:
-  - build_snapshots
-  except:
-  - master
-  - /^hotfix\/.+$/
-  - /^release\/.+$/
-  - /^support\/.*$/
-  - /^v\d+\.\d+(\.\d+)?(-\S*)?/
-  script:
-  - if [ -f artifacts.tar.gz ]; then tar -xzf artifacts.tar.gz; fi;
-    export CI_OPT_CLEAN_SKIP=true; export CI_OPT_INTEGRATION_TEST_SKIP=true; export CI_OPT_TEST_SKIP=true;
-    bash ci.sh mvn -e deploy;
-    echo archive $(git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | wc -l) files into artifacts.tar.gz;
-    git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | tar -czf artifacts.tar.gz -T -;
+    - build_snapshots
+  <<: *git_refs_of_snapshots
+  <<: *script_publish
+  <<: *upload_files_for_latter_stages
   stage: publish
-  variables:
-    GIT_STRATEGY: none
+  <<: *git_strategy_fetch
 
 site_snapshots:
   dependencies:
-  - publish_snapshots
-  only:
-  - develop
-  script:
-  - if [ -f artifacts.tar.gz ]; then tar -xzf artifacts.tar.gz; fi;
-    export CI_OPT_CLEAN_SKIP=true; export CI_OPT_INTEGRATION_TEST_SKIP=true; export CI_OPT_TEST_SKIP=true;
-    if [[ "${CI_COMMIT_REF_NAME}" =~ ^release/.+ ]] || [[ "${CI_COMMIT_REF_NAME}" =~ ^support/.+ ]]; then export CI_OPT_GITHUB_SITE_PUBLISH=true; else export CI_OPT_GITHUB_SITE_PUBLISH=false; fi;
-    if [ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]; then
-      bash ci.sh mvn -e site site-deploy;
-    else
-      bash ci.sh mvn -e site site:stage site:stage-deploy;
-    fi
+    - publish_snapshots
+  <<: *git_refs_develop_only
+  <<: *script_site
   stage: site
-  variables:
-    GIT_STRATEGY: none
+  <<: *git_strategy_fetch
 
 build_releases:
-  artifacts:
-    expire_in: 1 day
-    paths:
-    - artifacts.tar.gz
-  only:
-  - /^hotfix\/.+$/
-  - /^release\/.+$/
-  - /^support\/.*$/
-  script:
-  - export CI_OPT_MAVEN_EFFECTIVE_POM=true;
-    bash ci.sh mvn -e clean package;
-    echo archive $(git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | wc -l) files into artifacts.tar.gz;
-    git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | tar -czf artifacts.tar.gz -T -;
+  <<: *git_refs_of_releases
+  <<: *script_build
+  <<: *upload_files_for_latter_stages
   stage: build
-  variables:
-    GIT_STRATEGY: none
+  <<: *git_strategy_fetch
 
 publish_releases:
   dependencies:
-  - build_releases
-  only:
-  #- temp
-  - /^hotfix\/.+$/
-  - /^release\/.+$/
-  - /^support\/.*$/
-  script:
-  # force publish on temp branch push
-  #- export CI_OPT_PUBLISH_TO_REPO=true
-  - if [ -f artifacts.tar.gz ]; then tar -xzf artifacts.tar.gz; fi;
-    export CI_OPT_CLEAN_SKIP=true; export CI_OPT_INTEGRATION_TEST_SKIP=true; export CI_OPT_TEST_SKIP=true;
-    bash ci.sh mvn -e deploy;
-    echo archive $(git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | wc -l) files into artifacts.tar.gz;
-    git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | tar -czf artifacts.tar.gz -T -;
+    - build_releases
+  <<: *git_refs_of_releases
+  <<: *script_publish
+  <<: *upload_files_for_latter_stages
   stage: publish
-  variables:
-    GIT_STRATEGY: none
+  <<: *git_strategy_fetch
 
 site_releases:
   dependencies:
-  - publish_releases
-  only:
-  - /^release\/.+$/
-  - /^support\/.*$/
-  script:
-  - if [ -f artifacts.tar.gz ]; then tar -xzf artifacts.tar.gz; fi;
-    export CI_OPT_CLEAN_SKIP=true; export CI_OPT_INTEGRATION_TEST_SKIP=true; export CI_OPT_TEST_SKIP=true;
-    if [[ "${CI_COMMIT_REF_NAME}" =~ ^release/.+ ]] || [[ "${CI_COMMIT_REF_NAME}" =~ ^support/.+ ]]; then export CI_OPT_GITHUB_SITE_PUBLISH=true; else export CI_OPT_GITHUB_SITE_PUBLISH=false; fi;
-    if [ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]; then
-      bash ci.sh mvn -e site site-deploy;
-    else
-      bash ci.sh mvn -e site site:stage site:stage-deploy;
-    fi
-
+    - publish_releases
+  <<: *git_refs_of_releases
+  <<: *script_site
   stage: site
-  variables:
-    GIT_STRATEGY: none
-
-#release_to_gitlab:
-##  artifacts:
-##    paths:
-##    - "**/target/pom.xml"
-#  dependencies:
-#  - build_releases
-#  only:
-#  - /^hotfix\/.*$/
-#  - /^release\/.+$/
-#  script:
-#  - echo release artifacts to git service
-#  stage: publish
-#  variables:
-#    GIT_STRATEGY: none
+  <<: *git_strategy_fetch
 
 stages:
-- build
-- analysis
-- publish
-- site
+  - build
+  - analysis
+  - publish
+  - site

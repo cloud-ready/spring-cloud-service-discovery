@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+see:
+[Add ability to easily retrieve core extensions from alternative pluginRepository](https://issues.apache.org/jira/browse/MNG-6327)
+[Maven core extension resolution ignores repositories from activeByDefault profiles in settings.xml](https://issues.apache.org/jira/browse/MNG-5984)
+-->
+<extensions>
+    <extension>
+        <groupId>top.infra</groupId>
+        <artifactId>maven-build-extension</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </extension>
+</extensions>
