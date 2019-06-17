@@ -31,33 +31,43 @@
 
 .script_build: &script_build
   script:
-    - export CI_OPT_MAVEN_EFFECTIVE_POM=true;
-      ./mvnw -e -ntp -U clean package;
+    - if [[ -z "${CI_OPT_MAVEN_EFFECTIVE_POM}" ]]; then export CI_OPT_MAVEN_EFFECTIVE_POM="true"; fi;
+      time ./mvnw -e -ntp -U clean package;
+      find .mvn/profilerReport -name "*.json" | xargs cat | jq -r '.projects[]|"module:", .project, "plugins", (.mojos[]|[.mojo,.time]|@tsv)' | column -t;
       echo archive $(git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | wc -l) files into artifacts.tar.gz;
       git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | tar -czf artifacts.tar.gz -T -;
-      #git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | xargs rm -f
+      #git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | xargs rm -f;
 
 .script_publish: &script_publish
   script:
     # force publish on temp branch push
-    #- export CI_OPT_PUBLISH_TO_REPO=true
+    #- export CI_OPT_PUBLISH_TO_REPO="true";
     - if [ -f artifacts.tar.gz ]; then tar -xzf artifacts.tar.gz; fi;
-      export CI_OPT_MAVEN_CLEAN_SKIP=true; export CI_OPT_MAVEN_INTEGRATIONTEST_SKIP=true; export CI_OPT_MAVEN_TEST_SKIP=true;
-      ./mvnw -e -ntp deploy;
+      export CI_OPT_MAVEN_CLEAN_SKIP="true"; export CI_OPT_MAVEN_INTEGRATIONTEST_SKIP="true"; export CI_OPT_MAVEN_TEST_SKIP="true";
+      time ./mvnw -e -ntp deploy;
+      find .mvn/profilerReport -name "*.json" | xargs cat | jq -r '.projects[]|"module:", .project, "plugins", (.mojos[]|[.mojo,.time]|@tsv)' | column -t;
       echo archive $(git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | wc -l) files into artifacts.tar.gz;
       git ls-files -o | grep -Ev '.+-exec\.jar' | grep -v 'artifacts.tar.gz' | tar -czf artifacts.tar.gz -T -;
 
 .script_site: &script_site
   script:
     - if [ -f artifacts.tar.gz ]; then tar -xzf artifacts.tar.gz; fi;
-      export CI_OPT_MAVEN_CLEAN_SKIP=true; export CI_OPT_MAVEN_INTEGRATIONTEST_SKIP=true; export CI_OPT_MAVEN_TEST_SKIP=true;
-      if [[ "${CI_COMMIT_REF_NAME}" =~ ^release/.+ ]] || [[ "${CI_COMMIT_REF_NAME}" =~ ^support/.+ ]]; then export CI_OPT_GITHUB_SITE_PUBLISH=true; else export CI_OPT_GITHUB_SITE_PUBLISH=false; fi;
-      if [[ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]]; then export CI_OPT_SITE_PATH_PREFIX="cloud-ready"; else export CI_OPT_SITE_PATH_PREFIX="${CI_PROJECT_PATH}"; fi;
-      if [ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]; then
-        ./mvnw -e -ntp site site-deploy;
+      export CI_OPT_MAVEN_CLEAN_SKIP="true"; export CI_OPT_MAVEN_INTEGRATIONTEST_SKIP="true"; export CI_OPT_MAVEN_TEST_SKIP="true";
+      if [[ -z ${CI_OPT_GITHUB_SITE_PUBLISH} ]]; then
+        if [[ "${CI_COMMIT_REF_NAME}" =~ ^release/.+ ]] || [[ "${CI_COMMIT_REF_NAME}" =~ ^support/.+ ]]; then export CI_OPT_GITHUB_SITE_PUBLISH="true"; else export CI_OPT_GITHUB_SITE_PUBLISH="false"; fi;
+      fi;
+      if [[ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]]; then
+        export CI_OPT_GITHUB_GLOBAL_REPOSITORYOWNER="$(echo ${CI_PROJECT_PATH} | awk -F'/' '{print $1}')";
+        export CI_OPT_SITE_PATH_PREFIX="${CI_OPT_GITHUB_GLOBAL_REPOSITORYOWNER}";
       else
-        ./mvnw -e -ntp site site:stage site:stage-deploy;
-      fi
+        export CI_OPT_SITE_PATH_PREFIX="${CI_PROJECT_PATH}";
+      fi;
+      if [ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]; then
+        time ./mvnw -e -ntp site site-deploy;
+      else
+        time ./mvnw -e -ntp site site:stage site:stage-deploy;
+      fi;
+      find .mvn/profilerReport -name "*.json" | xargs cat | jq -r '.projects[]|"module:", .project, "plugins", (.mojos[]|[.mojo,.time]|@tsv)' | column -t;
 
 .upload_files_for_latter_stages: &upload_files_for_latter_stages
   artifacts:
@@ -73,23 +83,32 @@ before_script:
     echo working directory `pwd`;
     echo CI_PROJECT_URL ${CI_PROJECT_URL} CI_COMMIT_REF_NAME ${CI_COMMIT_REF_NAME}, CI_COMMIT_SHA ${CI_COMMIT_SHA}, CI_PROJECT_NAME ${CI_PROJECT_NAME}, CI_PROJECT_NAMESPACE ${CI_PROJECT_NAMESPACE};
   # environment variables
-  - export CI_OPT_GIT_HOST=gitlab.com;
-    if [ -z "${CI_OPT_GIT_PREFIX}" ]; then export CI_OPT_GIT_PREFIX=https://${CI_OPT_GIT_HOST}; fi;
-    export CI_OPT_GITHUB_SITE_PUBLISH=false;
-    export CI_OPT_GITHUB_GLOBAL_REPOSITORYOWNER="cloud-ready";
-    export CI_OPT_GPG_KEYNAME="59DBF10E";
-    export CI_OPT_INFRASTRUCTURE="opensource";
-    export CI_OPT_MAVEN_EFFECTIVE_POM=false;
-    export CI_OPT_ORIGIN_REPO_SLUG="gitlab-cloud-ready/spring-cloud-service-discovery";
-    export CI_OPT_SITE=true;
-    export CI_OPT_SONAR=true;
-    export CI_OPT_SONAR_ORGANIZATION="home1-oss-github";
-    export CI_OPT_MAVEN_BUILD_OPTS_REPO="${CI_OPT_GIT_PREFIX}/ci-and-cd/maven-build-opts-opensource";
-    export CI_OPT_MAVEN_BUILD_OPTS_REPO_REF="master";
-    echo CI_OPT_GIT_PREFIX ${CI_OPT_GIT_PREFIX} CI_OPT_INFRASTRUCTURE ${CI_OPT_INFRASTRUCTURE} CI_OPT_BUILD_PREFIX ${CI_OPT_BUILD_PREFIX};
-  - ./mvnw -version;
-    export SETTINGS_GLOBAL_XML="/tmp/settings-global-${CI_COMMIT_SHA}.xml";
+  # Settings -> CI / CD -> Variables -> Expand -> Save Variables
+  # CI_OPT_GPG_PASSPHRASE
+  # CI_OPT_MAVEN_CENTRAL_PASS
+  # CI_OPT_MAVEN_CENTRAL_USER
+  # CI_OPT_OPENSOURCE_GIT_AUTH_TOKEN
+  # CI_OPT_OPENSOURCE_MVNSITE_PASSWORD
+  # CI_OPT_OPENSOURCE_MVNSITE_USERNAME
+  # CI_OPT_ORIGIN_REPO_SLUG
+  # CI_OPT_SONAR_LOGIN
+  - export CI_OPT_GIT_HOST="${CI_OPT_GIT_HOST:-gitlab.com}";
+    if [ -z "${CI_OPT_GIT_PREFIX}" ]; then export CI_OPT_GIT_PREFIX="https://${CI_OPT_GIT_HOST}"; fi;
+    export CI_OPT_GPG_KEYNAME="${CI_OPT_GPG_KEYNAME:-59DBF10E}";
+    export CI_OPT_INFRASTRUCTURE="${CI_OPT_INFRASTRUCTURE:-opensource}";
+    export CI_OPT_MVN_DEPLOY_PUBLISH_SEGREGATION="true";
+    export CI_OPT_ORIGIN_REPO_SLUG="${CI_OPT_ORIGIN_REPO_SLUG:-gitlab-cloud-ready/spring-cloud-service-discovery}";
+    export CI_OPT_SONAR_ORGANIZATION="${CI_OPT_SONAR_ORGANIZATION:-home1-oss-github}";
+  - export GITLAB_CI="${GITLAB_CI:-true}";
+    if [[ "${CI_OPT_FAST}" != "true" ]]; then export CI_OPT_MAVEN_EFFECTIVE_POM="${CI_OPT_MAVEN_EFFECTIVE_POM:-false}"; fi;
+    if [[ "${CI_OPT_FAST}" != "true" ]]; then export CI_OPT_SITE="${CI_OPT_SITE:-true}"; fi;
+    if [[ "${CI_OPT_FAST}" != "true" ]]; then export CI_OPT_SONAR="${CI_OPT_SONAR:-true}"; fi;
+  - if [[ -z "${CI_OPT_MAVEN_BUILD_OPTS_REPO}" ]]; then export CI_OPT_MAVEN_BUILD_OPTS_REPO="${CI_OPT_GIT_PREFIX}/ci-and-cd/maven-build-opts-${CI_OPT_INFRASTRUCTURE:-opensource}"; fi;
+    export CI_OPT_MAVEN_BUILD_OPTS_REPO_REF="${CI_OPT_MAVEN_BUILD_OPTS_REPO_REF:-master}";
+    export SETTINGS_GLOBAL_XML="${SETTINGS_GLOBAL_XML:-/tmp/settings-global-${CI_COMMIT_SHA}.xml}";
     export SETTINGS_GLOBAL_XML_URL="${CI_OPT_MAVEN_BUILD_OPTS_REPO}/raw/${CI_OPT_MAVEN_BUILD_OPTS_REPO_REF}/src/main/maven/settings-global.xml";
+  - if [[ -z "${MAVEN_OPTS}" ]]; then export MAVEN_OPTS="-XX:TieredStopAtLevel=1 -XX:+UseParallelGC -Dprofile -DprofileFormat=JSON,HTML"; fi;
+    ./mvnw -version;
     echo "download ${SETTINGS_GLOBAL_XML_URL} to ${SETTINGS_GLOBAL_XML}";
     curl -L "${SETTINGS_GLOBAL_XML_URL}" 2>/dev/null | tee ${SETTINGS_GLOBAL_XML};
     mv -f ${SETTINGS_GLOBAL_XML} ~/.m2/wrapper/dists/apache-maven-3.6.1-bin/38pn40mp89t5c94bjdbeod370m/apache-maven-3.6.1/conf/settings.xml;
@@ -112,8 +131,9 @@ analysis:
   stage: analysis
   script:
     - if [ -f artifacts.tar.gz ]; then tar -xzf artifacts.tar.gz; fi;
-      export CI_OPT_MAVEN_CLEAN_SKIP=true;
-      ./mvnw -e -ntp sonar:sonar;
+      export CI_OPT_MAVEN_CLEAN_SKIP="true";
+      time ./mvnw -e -ntp sonar:sonar;
+      find .mvn/profilerReport -name "*.json" | xargs cat | jq -r '.projects[]|"module:", .project, "plugins", (.mojos[]|[.mojo,.time]|@tsv)' | column -t;
   <<: *git_strategy_fetch
 
 publish_snapshots:

@@ -10,16 +10,45 @@ addons:
       - sshpass
       - whois
 before_install:
-  - export CI_OPT_MAVEN_BUILD_OPTS_REPO="${CI_OPT_GIT_PREFIX}/ci-and-cd/maven-build-opts-opensource";
-    export CI_OPT_MAVEN_BUILD_OPTS_REPO_REF="master";
-    export SETTINGS_GLOBAL_XML_URL=${CI_OPT_MAVEN_BUILD_OPTS_REPO}/raw/${CI_OPT_MAVEN_BUILD_OPTS_REPO_REF}/src/main/maven/settings-global.xml;
   - whois $(curl ipinfo.io/ip);
+  # More options -> Settings -> Environment variables -> Add
+  # CI_OPT_GPG_PASSPHRASE
+  # CI_OPT_MAVEN_CENTRAL_PASS
+  # CI_OPT_MAVEN_CENTRAL_USER
+  # CI_OPT_OPENSOURCE_GIT_AUTH_TOKEN
+  # CI_OPT_OPENSOURCE_MVNSITE_PASSWORD
+  # CI_OPT_OPENSOURCE_MVNSITE_USERNAME
+  # CI_OPT_ORIGIN_REPO_SLUG
+  # CI_OPT_SONAR_LOGIN
+  - export CI_OPT_GIT_PREFIX="${CI_OPT_GIT_PREFIX:-https://github.com}";
+    export CI_OPT_GPG_KEYNAME="${CI_OPT_GPG_KEYNAME:-59DBF10E}";
+    export CI_OPT_INFRASTRUCTURE="${CI_OPT_INFRASTRUCTURE:-opensource}";
+    export CI_OPT_ORIGIN_REPO_SLUG="${CI_OPT_ORIGIN_REPO_SLUG:-cloud-ready/spring-cloud-service-discovery}";
+    export CI_OPT_SONAR_ORGANIZATION="${CI_OPT_SONAR_ORGANIZATION:-home1-oss-github}";
+  - export TRAVIS_ENABLED="${TRAVIS_ENABLED:-true}";
+    if [[ "${CI_OPT_FAST}" != "true" ]]; then export CI_OPT_MAVEN_EFFECTIVE_POM="${CI_OPT_MAVEN_EFFECTIVE_POM:-false}"; fi;
+    if [[ "${CI_OPT_FAST}" != "true" ]]; then export CI_OPT_SITE="${CI_OPT_SITE:-true}"; fi;
+    if [[ "${CI_OPT_FAST}" != "true" ]]; then export CI_OPT_SONAR="${CI_OPT_SONAR:-true}"; fi;
+  - if [[ -z ${CI_OPT_GITHUB_SITE_PUBLISH} ]]; then
+      if [[ "${TRAVIS_BRANCH}" =~ ^release/.+ ]] || [[ "${TRAVIS_BRANCH}" =~ ^support/.+ ]]; then export CI_OPT_GITHUB_SITE_PUBLISH="true"; else export CI_OPT_GITHUB_SITE_PUBLISH="false"; fi;
+    fi;
+    if [[ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]]; then
+      export CI_OPT_GITHUB_GLOBAL_REPOSITORYOWNER="$(echo ${TRAVIS_REPO_SLUG} | awk -F'/' '{print $1}')";
+      export CI_OPT_SITE_PATH_PREFIX="${CI_OPT_GITHUB_GLOBAL_REPOSITORYOWNER}";
+    else
+      export CI_OPT_SITE_PATH_PREFIX="${TRAVIS_REPO_SLUG}";
+    fi;
+  - if [[ -z "${CI_OPT_MAVEN_BUILD_OPTS_REPO}" ]]; then export CI_OPT_MAVEN_BUILD_OPTS_REPO="${CI_OPT_GIT_PREFIX}/ci-and-cd/maven-build-opts-${CI_OPT_INFRASTRUCTURE:-opensource}"; fi;
+    export CI_OPT_MAVEN_BUILD_OPTS_REPO_REF="${CI_OPT_MAVEN_BUILD_OPTS_REPO_REF:-master}";
+    export SETTINGS_GLOBAL_XML="${SETTINGS_GLOBAL_XML:-/home/travis/.m2/wrapper/dists/apache-maven-3.6.1-bin/38pn40mp89t5c94bjdbeod370m/apache-maven-3.6.1/conf/settings.xml}"
+    export SETTINGS_GLOBAL_XML_URL="${CI_OPT_MAVEN_BUILD_OPTS_REPO}/raw/${CI_OPT_MAVEN_BUILD_OPTS_REPO_REF}/src/main/maven/settings-global.xml";
   - if [[ -d /usr/lib/jvm/java-8-openjdk-amd64 ]]; then sudo ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/lib/jvm/java-8-openjdk; fi;
   - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh;
     bash install-jdk.sh -F 11 --target $HOME/openjdk11 --workspace $HOME/.cache/install-jdk;
     if [[ -d $HOME/openjdk11 ]]; then sudo ln -s $HOME/openjdk11 /usr/lib/jvm/java-11-openjdk; fi;
-  - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk;
-  - ./mvnw -version;
+  - export JAVA_HOME="/usr/lib/jvm/java-8-openjdk";
+  - if [[ -z "${MAVEN_OPTS}" ]]; then export MAVEN_OPTS="-XX:TieredStopAtLevel=1 -XX:+UseParallelGC -Dprofile -DprofileFormat=JSON,HTML"; fi;
+    ./mvnw -version;
     echo "download ${SETTINGS_GLOBAL_XML_URL} to ${SETTINGS_GLOBAL_XML}";
     curl -L "${SETTINGS_GLOBAL_XML_URL}" 2>/dev/null | tee ${SETTINGS_GLOBAL_XML};
     cat ${SETTINGS_GLOBAL_XML};
@@ -47,18 +76,8 @@ cache:
 dist: xenial
 env:
   global:
-    - TRAVIS_ENABLED=true
-    - CI_OPT_GIT_PREFIX=https://github.com
-    - CI_OPT_GITHUB_SITE_PUBLISH=false
-    - CI_OPT_GPG_KEYNAME=59DBF10E
-    - CI_OPT_INFRASTRUCTURE=opensource
-    - CI_OPT_MAVEN_EFFECTIVE_POM=true
-    - CI_OPT_ORIGIN_REPO_SLUG=cloud-ready/spring-cloud-service-discovery
-    - CI_OPT_SITE=true
-    - CI_OPT_SONAR=true
-    - CI_OPT_SONAR_ORGANIZATION=home1-oss-github
+    - CI_OPT_MVN_DEPLOY_PUBLISH_SEGREGATION=false
     - MAVEN_SKIP_RC=true
-    - SETTINGS_GLOBAL_XML=/home/travis/.m2/wrapper/dists/apache-maven-3.6.1-bin/38pn40mp89t5c94bjdbeod370m/apache-maven-3.6.1/conf/settings.xml
 group: edge
 install: true
 jdk:
@@ -68,19 +87,13 @@ script:
   # When prefixed with `travis_wait 30`, no log output until it is done.
   # see: https://github.com/travis-ci/travis-ci/issues/4190 or https://github.com/HaxeFoundation/hxcpp/issues/709
   - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
-  - if [[ "${TRAVIS_BRANCH}" =~ ^release/.+ ]] || [[ "${TRAVIS_BRANCH}" =~ ^support/.+ ]]; then export CI_OPT_GITHUB_SITE_PUBLISH=true; else export CI_OPT_GITHUB_SITE_PUBLISH=false; fi;
-    if [[ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]]; then
-      export CI_OPT_GITHUB_GLOBAL_REPOSITORYOWNER="$(echo ${TRAVIS_REPO_SLUG} | awk -F'/' '{print $1}')";
-      export CI_OPT_SITE_PATH_PREFIX="${CI_OPT_GITHUB_GLOBAL_REPOSITORYOWNER}";
-    else
-      export CI_OPT_SITE_PATH_PREFIX="${TRAVIS_REPO_SLUG}";
-    fi;
-    if [[ "${TRAVIS_ENABLED}" == "true" ]]; then
+  - if [[ "${TRAVIS_ENABLED}" == "true" ]]; then
       if [[ "${CI_OPT_GITHUB_SITE_PUBLISH}" == "true" ]]; then
-        ./mvnw -e -ntp -U clean install sonar:sonar site deploy site-deploy;
+        time ./mvnw -e -ntp -U clean install sonar:sonar site deploy site-deploy;
       else
-        ./mvnw -e -ntp -U clean install sonar:sonar site deploy site:stage site:stage-deploy;
+        time ./mvnw -e -ntp -U clean install sonar:sonar site deploy site:stage site:stage-deploy;
       fi;
+      find .mvn/profilerReport -name "*.json" | xargs cat | jq -r '.projects[]|"module:", .project, "plugins", (.mojos[]|[.mojo,.time]|@tsv)' | column -t;
     fi
   - kill %1
 services:
