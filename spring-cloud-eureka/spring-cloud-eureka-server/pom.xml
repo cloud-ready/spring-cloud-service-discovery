@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.home1</groupId>
         <artifactId>spring-cloud-eureka</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>spring-cloud-eureka-server</artifactId>
@@ -27,7 +27,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <agent>
-                        <aspectj>${user.home}/.m2/repository/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar</aspectj>
+                        <aspectj>${user.home}/.m2/repository/org/aspectj/aspectjweaver/${version.aspectj}/aspectjweaver-${version.aspectj}.jar</aspectj>
                     </agent>
                     <mainClass>cn.home1.cloud.netflix.eureka.server.EurekaServer</mainClass>
                     <!-- @formatter:off -->
@@ -41,7 +41,7 @@
                     <dependency>
                         <groupId>org.aspectj</groupId>
                         <artifactId>aspectjweaver</artifactId>
-                        <version>${aspectj.version}</version>
+                        <version>${version.aspectj}</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -85,6 +85,6 @@
     <!-- @formatter:on -->
 
     <properties>
-        <aspectj.version>1.8.13</aspectj.version>
+        <version.aspectj>1.8.13</version.aspectj>
     </properties>
 </project>

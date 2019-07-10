@@ -11,10 +11,10 @@
     <parent>
         <artifactId>cloud-ready-parent</artifactId>
         <groupId>top.infra</groupId>
-        <version>2.0.4-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
     <url>https://github.com/cloud-ready/spring-cloud-service-discovery</url>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
 
     <ciManagement>
         <system>Travis CI</system>
@@ -37,7 +37,7 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot.version}</version>
+                    <version>${version.spring-boot}</version>
                     <configuration>
                         <classifier>exec</classifier>
                         <layout>ZIP</layout>
@@ -68,7 +68,6 @@
     <dependencyManagement>
         <dependencies>
             <!-- @formatter:off -->
-            <dependency><groupId>cn.home1</groupId><artifactId>logback-gelf-config</artifactId><version>${log-config.version}</version></dependency>
             <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>${project.version}</version></dependency>
             <!-- @formatter:on -->
         </dependencies>
@@ -110,14 +109,14 @@
     <repositories>
         <!-- Make artifacts in OSSRH repositories available -->
         <repository>
-            <id>OSSRH-releases</id>
+            <id>ossrh-releases</id>
             <name>central releases</name>
             <url>https://oss.sonatype.org/content/repositories/releases/</url>
             <releases><enabled>true</enabled><updatePolicy>never</updatePolicy></releases>
             <snapshots><enabled>false</enabled></snapshots>
         </repository>
         <repository>
-            <id>OSSRH-snapshots</id>
+            <id>ossrh-snapshots</id>
             <name>central snapshots</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
             <releases><enabled>false</enabled></releases>
