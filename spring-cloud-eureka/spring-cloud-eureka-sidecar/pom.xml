@@ -47,4 +47,10 @@
         <!--<dependency><groupId>io.github.openfeign</groupId><artifactId>feign-httpclient</artifactId></dependency>-->
     </dependencies>
     <!-- @formatter:on -->
+
+    <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
 </project>
