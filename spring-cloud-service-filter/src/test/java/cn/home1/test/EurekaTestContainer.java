@@ -17,21 +17,21 @@ import com.spotify.docker.client.messages.ContainerInfo;
 import com.spotify.docker.client.messages.HostConfig;
 import com.spotify.docker.client.messages.PortBinding;
 
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-
 import java.net.ServerSocket;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+
 import top.infra.test.NetUtils;
 
 @Slf4j
 public final class EurekaTestContainer {
 
-    private static final String DEFAULT_IMAGE = "cloudready/spring-cloud-eureka-server:2.0.1-SNAPSHOT";
+    private static final String DEFAULT_IMAGE = "cloudready/spring-cloud-eureka-server:3.0.0-SNAPSHOT";
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -72,7 +72,11 @@ public final class EurekaTestContainer {
     @SneakyThrows
     private String createContainer() {
         log.info("pull {}", this.image);
-        this.dockerClient.pull(this.image);
+        try {
+            this.dockerClient.pull(this.image);
+        } catch (final Exception ex) {
+            log.info("error pulling image, use local image.", ex);
+        }
 
         log.info("create container from image {}", this.image);
         final PortBinding eurekaPortOnHost = PortBinding.of("0.0.0.0", this.eurekaPortOnHost.getLocalPort());

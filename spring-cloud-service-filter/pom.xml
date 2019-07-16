@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>cn.home1</groupId>
+        <groupId>top.infra.cloud-ready.service-discovery</groupId>
         <artifactId>spring-cloud-service-discovery</artifactId>
         <version>3.0.0-SNAPSHOT</version>
     </parent>
@@ -41,7 +41,7 @@
 
     <dependencies>
         <!-- @formatter:off -->
-        <dependency><groupId>cn.home1</groupId><artifactId>logback-test-config</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>cn.home1.log-config</groupId><artifactId>logback-test-config</artifactId><scope>test</scope></dependency>
 
         <dependency><groupId>com.google.guava</groupId><artifactId>guava</artifactId></dependency>
         <dependency><groupId>com.spotify</groupId><artifactId>docker-client</artifactId><classifier>shaded</classifier></dependency>
@@ -56,6 +56,11 @@
         <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId><scope>runtime</scope></dependency>
         <!--<dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-consul-discovery</artifactId><scope>provided</scope></dependency>-->
         <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-netflix-eureka-client</artifactId><scope>provided</scope></dependency>
+
+        <!--
+        <dependency><artifactId>spring-cloud-eureka-server</artifactId><groupId>top.infra.cloud-ready.service-discovery</groupId><scope>test</scope><type>docker-info</type></dependency>
+        -->
+        <dependency><artifactId>spring-cloud-eureka-server</artifactId><groupId>top.infra.cloud-ready.service-discovery</groupId><scope>test</scope></dependency>
         <!-- @formatter:on -->
     </dependencies>
 

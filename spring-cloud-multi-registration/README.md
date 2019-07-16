@@ -61,11 +61,11 @@ spring:
 ```
 
 Only snapshots available for now `https://oss.sonatype.org/content/repositories/snapshots/cn/home1/spring-cloud-multi-registration/`
-To access these snapshots, you may need to add ossrh-snapshots (sonatype-snapshots) into your `pom.xml`
+To access these snapshots, you may need to add ossrh-nexus2-snapshots (sonatype-snapshots) into your `pom.xml`
 ```xml
 <repository>
-    <id>ossrh-snapshots</id>
-    <name>central snapshots</name>
+    <id>ossrh-nexus2-snapshots</id>
+    <name>ossrh nexus2 snapshots</name>
     <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     <releases><enabled>false</enabled></releases>
     <snapshots><enabled>true</enabled><updatePolicy>${repositories.snapshots.updatePolicy}</updatePolicy></snapshots>

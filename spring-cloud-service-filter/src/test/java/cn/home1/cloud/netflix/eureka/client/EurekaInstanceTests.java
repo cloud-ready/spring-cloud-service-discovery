@@ -6,6 +6,11 @@ import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.shared.Application;
 
+import java.net.ServerSocket;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.joda.time.DateTime;
@@ -19,11 +24,6 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.cloud.netflix.eureka.CloudEurekaClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.net.ServerSocket;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
 @Slf4j
@@ -50,7 +50,11 @@ public class EurekaInstanceTests {
 
     @AfterClass
     public static void eurekaRemove() {
-        EurekaInstanceTests.eurekaContainer.remove();
+        try {
+            EurekaInstanceTests.eurekaContainer.remove();
+        } catch (final Exception ex) {
+            // ignored
+        }
     }
 
     public DiscoveryClient getDiscoveryClient() {

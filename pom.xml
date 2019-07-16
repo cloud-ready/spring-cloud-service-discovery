@@ -3,15 +3,15 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <artifactId>spring-cloud-service-discovery</artifactId>
+    <groupId>top.infra.cloud-ready.service-discovery</groupId>
     <description>spring-cloud-service-discovery</description>
-    <groupId>cn.home1</groupId>
     <modelVersion>4.0.0</modelVersion>
     <name>spring-cloud-service-discovery</name>
     <packaging>pom</packaging>
     <parent>
         <artifactId>cloud-ready-parent</artifactId>
-        <groupId>top.infra</groupId>
-        <version>3.0.0-SNAPSHOT</version>
+        <groupId>top.infra.cloud-ready</groupId>
+        <version>3.0.3-SNAPSHOT</version>
     </parent>
     <url>https://github.com/cloud-ready/spring-cloud-service-discovery</url>
     <version>3.0.0-SNAPSHOT</version>
@@ -68,7 +68,9 @@
     <dependencyManagement>
         <dependencies>
             <!-- @formatter:off -->
-            <dependency><groupId>cn.home1</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>${project.version}</version></dependency>
+            <dependency><groupId>top.infra.cloud-ready.service-discovery</groupId><artifactId>spring-cloud-multi-registration</artifactId><version>${project.version}</version></dependency>
+            <dependency><groupId>top.infra.cloud-ready.service-discovery</groupId><artifactId>spring-cloud-eureka-server</artifactId><type>docker-info</type><version>${project.version}</version></dependency>
+            <dependency><groupId>top.infra.cloud-ready.service-discovery</groupId><artifactId>spring-cloud-eureka-server</artifactId><version>${project.version}</version></dependency>
             <!-- @formatter:on -->
         </dependencies>
     </dependencyManagement>
@@ -81,13 +83,6 @@
 
     <!-- @formatter:off -->
     <profiles>
-        <profile>
-            <id>default-docker-image-prefix</id>
-            <activation><property><name>!docker.image.prefix</name></property><activeByDefault>false</activeByDefault></activation>
-            <properties>
-                <docker.image.prefix>cloudready/</docker.image.prefix>
-            </properties>
-        </profile>
         <profile>
             <!-- Build examples at local, skip build examples on CI -->
             <id>build-examples</id>
@@ -103,6 +98,8 @@
     <!-- @formatter:on -->
 
     <properties>
+        <docker.image.prefix>cloudready/</docker.image.prefix>
+
         <java.version>8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -112,15 +109,15 @@
     <repositories>
         <!-- Make artifacts in OSSRH repositories available -->
         <repository>
-            <id>ossrh-releases</id>
-            <name>central releases</name>
+            <id>ossrh-nexus2-releases</id>
+            <name>ossrh nexus2 releases</name>
             <url>https://oss.sonatype.org/content/repositories/releases/</url>
             <releases><enabled>true</enabled><updatePolicy>never</updatePolicy></releases>
             <snapshots><enabled>false</enabled></snapshots>
         </repository>
         <repository>
-            <id>ossrh-snapshots</id>
-            <name>central snapshots</name>
+            <id>ossrh-nexus2-snapshots</id>
+            <name>ossrh nexus2 snapshots</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
             <releases><enabled>false</enabled></releases>
             <snapshots><enabled>true</enabled><updatePolicy>daily</updatePolicy></snapshots>
