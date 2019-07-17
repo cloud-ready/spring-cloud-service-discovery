@@ -85,7 +85,7 @@ before_script:
 #  - |
 #    export MAVEN_GLOBAL_SETTINGS="--global-settings ${SETTINGS_GLOBAL_XML}";
   - |
-    rm -rf ~/.m2/repository/top/infra/maven/maven-build-extension;
+    rm -rf ~/.m2/repository/top/infra/maven;
     if [[ -z "${MAVEN_OPTS}" ]]; then export MAVEN_OPTS="-XX:+UseParallelGC -Dprofile=title -DprofileFormat=JSON,HTML"; fi;
     ls -ahl ~/.m2;
     ./mvnw ${MAVEN_GLOBAL_SETTINGS} -version;
