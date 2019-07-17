@@ -11,7 +11,7 @@
     <parent>
         <artifactId>cloud-ready-parent</artifactId>
         <groupId>top.infra.cloud-ready</groupId>
-        <version>3.0.3-SNAPSHOT</version>
+        <version>3.0.3</version>
     </parent>
     <url>https://github.com/cloud-ready/spring-cloud-service-discovery</url>
     <version>3.0.0-SNAPSHOT</version>
