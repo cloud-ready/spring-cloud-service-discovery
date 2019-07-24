@@ -8,19 +8,32 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 /.mvn/profiler-report/
-/.mvn/*Repository/
+/.mvn/wagonRepository/
+/.m2/
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
+/.profiler
 
-*.iml
 .idea/
+*.iml
+*.ipr
+*.iws
 
 .DS_Store
 
 *.asc
 git.properties
+*.versionsBackup
+/settings-security.xml
+.vagrant
 
+*.log
+
+/*.tar.gz
+/*.zip
+
+snapshot
 **/src/site/markdown/README.md
 **/src/site/markdown/src/readme
 **/src/site/resources

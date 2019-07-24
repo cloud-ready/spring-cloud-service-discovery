@@ -23,17 +23,17 @@ before_install:
   # CI_OPT_OSSRH_NEXUS2_PASS
   # CI_OPT_OSSRH_NEXUS2_USER
   # CI_OPT_OSSRH_SONAR_LOGIN
-  - export CI_OPT_MVN_DEPLOY_PUBLISH_SEGREGATION="false";
-    source circ.sh;
   - if [[ -d /usr/lib/jvm/java-8-openjdk-amd64 ]]; then sudo ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/lib/jvm/java-8-openjdk; fi;
-  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh;
-    bash install-jdk.sh -F 11 --target $HOME/openjdk11 --workspace $HOME/.cache/install-jdk;
+    if [[ -d /usr/lib/jvm/java-11-openjdk-amd64 ]]; then sudo ln -s /usr/lib/jvm/java-11-openjdk-amd64 /usr/lib/jvm/java-11-openjdk; fi;
+  - curl -sSL https://github.com/sormuras/bach/raw/master/install-jdk.sh | bash -s -- -F 11 --target $HOME/openjdk11 --workspace $HOME/.cache/install-jdk;
     if [[ -d $HOME/openjdk11 ]]; then sudo ln -s $HOME/openjdk11 /usr/lib/jvm/java-11-openjdk; fi;
   - export JAVA_HOME="/usr/lib/jvm/java-11-openjdk";
-#  - export MAVEN_GLOBAL_SETTINGS="--global-settings ${SETTINGS_GLOBAL_XML}";
-  - rm -rf ~/.m2/repository/top/infra/maven;
-    if [[ -z "${MAVEN_OPTS}" ]]; then export MAVEN_OPTS="-XX:+UseParallelGC -Dprofile=title -DprofileFormat=JSON,HTML"; fi;
-    ls -ahl ~/.m2;
+  - export CI_OPT_MVN_MULTI_STAGE_BUILD="false";
+    source circ.sh;
+  #- export MAVEN_GLOBAL_SETTINGS="--global-settings ${SETTINGS_GLOBAL_XML}";
+  - if [[ -z "${MAVEN_OPTS}" ]]; then export MAVEN_OPTS="-XX:+UseParallelGC -Dmaven.repo.local=.m2/repository -Dprofile=title -DprofileFormat=JSON,HTML"; fi;
+    if [[ -d ${HOME}/.m2 ]]; then rm -rf ${HOME}/.m2/repository/top/infra/maven; ls -ahl ${HOME}/.m2; fi;
+    export MAVEN_USER_HOME="${PWD}/.m2";
     ./mvnw ${MAVEN_GLOBAL_SETTINGS} -version;
 branches:
   only:
@@ -60,6 +60,7 @@ group: edge
 install: true
 jdk:
   - openjdk8
+  #- openjdk11
 #language: java
 language: ruby
 rvm:
@@ -72,10 +73,10 @@ script:
       time CI_OPT_SONAR="true" ./mvnw ${MAVEN_GLOBAL_SETTINGS} -e -ntp -U clean deploy;
       if type -p column > /dev/null; then find .mvn/profiler-report -name "*.json" | xargs cat | jq -r '.projects[]|"module:", .project, "plugins", (.mojos[]|[.mojo,.time]|@tsv)' | column -t; fi; rm -rf .mvn/profiler-report;
 
-      time CI_OPT_FAST="true" CI_OPT_INFRASTRUCTURE="custom" CI_OPT_MAVEN_PACKAGES_SKIP="true" CI_OPT_MVN_DEPLOY_PUBLISH_SEGREGATION="true" CI_OPT_NEXUS2_STAGING="false" ./mvnw ${MAVEN_GLOBAL_SETTINGS} -e -ntp -Dmaven.clean.skip=true -Dmaven.install.skip=true deploy;
+      time CI_OPT_FAST="true" CI_OPT_INFRASTRUCTURE="custom" CI_OPT_MVN_MULTI_STAGE_BUILD="true" CI_OPT_NEXUS2_STAGING="false" ./mvnw ${MAVEN_GLOBAL_SETTINGS} -e -ntp deploy;
       if type -p column > /dev/null; then find .mvn/profiler-report -name "*.json" | xargs cat | jq -r '.projects[]|"module:", .project, "plugins", (.mojos[]|[.mojo,.time]|@tsv)' | column -t; fi; rm -rf .mvn/profiler-report;
 
-      time ./mvnw ${MAVEN_GLOBAL_SETTINGS} -e -ntp -Dmaven.clean.skip=true site-deploy;
+      time ./mvnw ${MAVEN_GLOBAL_SETTINGS} -e -ntp site-deploy;
       if type -p column > /dev/null; then find .mvn/profiler-report -name "*.json" | xargs cat | jq -r '.projects[]|"module:", .project, "plugins", (.mojos[]|[.mojo,.time]|@tsv)' | column -t; fi; rm -rf .mvn/profiler-report;
     fi
   - kill %1
